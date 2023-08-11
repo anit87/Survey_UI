@@ -31,18 +31,43 @@ export const surveyFormSchema = Yup.object().shape({
         .required('Please enter the required value.'),
     registeredVoter: Yup.string()
         .required('Please enter the required value.'),
-    ageGroupOfMembers: Yup.string()
+    ageGroupOfMembers: Yup.array()
         .required('Please enter the required value.'),
-    assemblyConstituencyMembers: Yup.string()
-        .required('Please enter the required value.'),
-    voterIDsList: Yup.string()
-        .required('Please enter the required value.'),
+    ageGroupOfMembers: Yup.array()
+        .of(
+            Yup.object().shape({
+                name: Yup.string().min(4, 'Too Short').required('Required'),
+                age: Yup.number().required('Required'),
+                gender: Yup.string().required('Required'),
+            })
+        )
+        .required('Must have friends') // these constraints are shown if and only if inner constraints are satisfied
+        .min(3, 'Minimum of 3 friends'),
+    assemblyConstituencyMembers: Yup.array()
+        .of(
+            Yup.object().shape({
+                name: Yup.string().min(3, 'Too Short').required('Required'),
+                age: Yup.number().required('Required'),
+                gender: Yup.string().required('Required'),
+                assemblyName: Yup.string().min(3, 'Too Short').required('Required'),
+            })
+        )
+        .required('Must have friends'),
+    voterIDsList: Yup.array()
+        .of(
+            Yup.object().shape({
+                name: Yup.string().min(3, 'Too Short').required('Required'),
+                age: Yup.number().required('Required'),
+                gender: Yup.string().required('Required'),
+                assemblyName: Yup.string().min(3, 'Too Short').required('Required'),
+            })
+        )
+        .required('Must have friends'),
     maritalStatus: Yup.string()
         .required('Please enter the required value.'),
     occupationStatus: Yup.string()
         .required('Please enter the required value.'),
     monthlyHouseholdIncome: Yup.string()
         .required('Please enter the required value.'),
-
 
 });

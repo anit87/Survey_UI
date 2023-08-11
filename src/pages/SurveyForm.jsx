@@ -6,7 +6,6 @@ import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import { surveyFormSchema } from "../utils/schemas/surveyForm"
 import TextInput from '../components/TextInput'
 import SelectInput from '../components/SelectInput'
-import FieldArray1 from '../components/FieldArray';
 
 // import { Button } from 'react-bootstrap'
 
@@ -107,13 +106,13 @@ const SurveyForm = () => {
     return (
         <>
             <Container maxWidth="fixed">
-                <Box sx={{ height: '100%', mt: 1, p: 1 }} >
+                <Box sx={{ height: '100%', mt: 1, p: 4 }} >
                     <Formik
                         initialValues={initialValues}
-                        // validationSchema={surveyFormSchema}
+                        validationSchema={surveyFormSchema}
                         onSubmit={(values, { setSubmitting }) => {
-                            console.log("formik ", values);
-                            alertfn()
+                            console.log("formik ",values);
+                            // alertfn()
                             setSubmitting(false);
                         }}
                     >
@@ -149,6 +148,7 @@ const SurveyForm = () => {
                                         <Grid item md={6} xs={12}>
                                             <TextInput
                                                 label="PINCODE"
+                                                title="Enter Your Area Pincode"
                                                 name="pincode"
                                                 type="number"
                                                 placeholder="454545"
@@ -158,6 +158,7 @@ const SurveyForm = () => {
                                         <Grid item md={6} xs={12}>
                                             <TextInput
                                                 label="MOBILE No"
+                                                title="Enter your Mobile No"
                                                 name="mobileNo"
                                                 type="number"
                                                 placeholder="9874563210"
@@ -167,6 +168,7 @@ const SurveyForm = () => {
                                         <Grid item md={6} xs={12}>
                                             <TextInput
                                                 label="FROM HOW MANY YEARS ARE YOU RESIDING IN THIS LOCATION?"
+                                                title="How many years have you lived here?"
                                                 name="residingYears"
                                                 type="number"
                                                 placeholder="Years at current location"
@@ -206,6 +208,7 @@ const SurveyForm = () => {
                                         <Grid item md={6} xs={12}>
                                             <TextInput
                                                 label="RELIGION, CASTE & SUB COMMUNITY"
+                                                title="Religion, Caste & Sub-community Information"
                                                 name="religionAndCaste"
                                                 type="text"
                                                 placeholder="Kindly indicate your religion, caste, and sub-community"
@@ -262,17 +265,17 @@ const SurveyForm = () => {
                                             />
                                         </Grid>
                                     </>
-                                    <Grid item xs={12} sx={{ mt: 3 }}>
+                                    <Grid item xs={12} sx={{ mt: 1 }}>
                                         <FieldArray
                                             name="ageGroupOfMembers"
                                             render={arrayHelpers => (
                                                 <div>
                                                     <Stack direction="row" spacing={4}>
-                                                        <Typography variant="subtitle2" gutterBottom>LIST THE AGE GROUP OF YOUR FAMILY MEMBERS RESPONDENT AGE</Typography>
-                                                        <IconButton onClick={() => arrayHelpers.push({ name: '', age: '', gender: "" })}><AddCircle /></IconButton>
+                                                        <Typography variant="subtitle2" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE AGE GROUP OF YOUR FAMILY MEMBERS RESPONDENT AGE</Typography>
+                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "" })}><AddCircle fontSize="small" /></IconButton>
                                                     </Stack>
-                                                    {values.ageGroupOfMembers.map((friend, index) => (
-                                                        <Stack key={index} direction="row" spacing={4}>
+                                                    {values.ageGroupOfMembers.map((item, index) => (
+                                                        <Stack key={index} sx={{mb:1}} direction="row" spacing={4}>
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -295,7 +298,7 @@ const SurveyForm = () => {
                                                                 name={`ageGroupOfMembers[${index}].gender`}
                                                                 options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
                                                             />
-                                                            <IconButton onClick={() => arrayHelpers.remove(index)}><RemoveCircle /></IconButton>
+                                                            <IconButton size="small" onClick={() => arrayHelpers.remove(index)}><RemoveCircle fontSize="small" /></IconButton>
                                                         </Stack>
                                                     ))}
 
@@ -314,17 +317,17 @@ const SurveyForm = () => {
                                         />
                                     </Grid> */}
 
-                                    <Grid item xs={12} sx={{ mt: 3 }}>
+                                    <Grid item xs={12} sx={{ mt: 1 }}>
                                         <FieldArray
                                             name="assemblyConstituencyMembers"
                                             render={arrayHelpers => (
                                                 <div>
                                                     <Stack direction="row" spacing={4}>
-                                                        <Typography variant="subtitle2" gutterBottom>LIST THE FAMILY MEMBERS WITH ASSEMBLY CONSTITUENCY NAME</Typography>
-                                                        <IconButton onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}><AddCircle /></IconButton>
+                                                        <Typography variant="subtitle2" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH ASSEMBLY CONSTITUENCY NAME</Typography>
+                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}><AddCircle fontSize="small" /></IconButton>
                                                     </Stack>
-                                                    {values.assemblyConstituencyMembers.map((friend, index) => (
-                                                        <Stack key={index} direction="row" spacing={4}>
+                                                    {values.assemblyConstituencyMembers.map((item, index) => (
+                                                        <Stack key={index} sx={{mb:1}} direction="row" spacing={4}>
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -355,7 +358,7 @@ const SurveyForm = () => {
                                                                 placeholder="Assembly Constituency Name"
 
                                                             />
-                                                            <IconButton onClick={() => arrayHelpers.remove(index)}><RemoveCircle /></IconButton>
+                                                            <IconButton size="small" onClick={() => arrayHelpers.remove(index)}><RemoveCircle fontSize="small" /></IconButton>
                                                         </Stack>
                                                     ))}
                                                 </div>
@@ -372,17 +375,17 @@ const SurveyForm = () => {
                                         />
                                     </Grid> */}
 
-                                    <Grid item xs={12} sx={{ mt: 3 }}>
+                                    <Grid item xs={12} sx={{ mt: 1 }}>
                                         <FieldArray
                                             name="voterIDsList"
                                             render={arrayHelpers => (
                                                 <div>
                                                     <Stack direction="row" spacing={4}>
-                                                        <Typography variant="subtitle2" gutterBottom>LIST THE FAMILY MEMBERS WITH VOTER ID's</Typography>
-                                                        <IconButton onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}><AddCircle /></IconButton>
+                                                        <Typography variant="subtitle2" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH VOTER ID's</Typography>
+                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}><AddCircle fontSize="small" /></IconButton>
                                                     </Stack>
-                                                    {values.voterIDsList.map((friend, index) => (
-                                                        <Stack key={index} direction="row" spacing={4}>
+                                                    {values.voterIDsList.map((item, index) => (
+                                                        <Stack key={index} sx={{mb:1}} direction="row" spacing={4}>
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -413,7 +416,7 @@ const SurveyForm = () => {
                                                                 placeholder="Assembly Constituency Name"
 
                                                             />
-                                                            <IconButton onClick={() => arrayHelpers.remove(index)}><RemoveCircle /></IconButton>
+                                                            <IconButton size="small" onClick={() => arrayHelpers.remove(index)}><RemoveCircle fontSize="small" /></IconButton>
                                                         </Stack>
                                                     ))}
                                                 </div>

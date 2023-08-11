@@ -27,142 +27,142 @@
 
 // // export default BasicExample;
 
-// // import React, { useState } from 'react';
-// // import { Button, Container, Typography, Box } from '@mui/material';
-// // import { Formik, FieldArray, Form } from 'formik';
-// // import { TextField, IconButton } from '@mui/material';
-// // import { RemoveCircle } from '@mui/icons-material';
+// import React, { useState } from 'react';
+// import { Button, Container, Typography, Box } from '@mui/material';
+// import { Formik, FieldArray, Form } from 'formik';
+// import { TextField, IconButton } from '@mui/material';
+// import { RemoveCircle } from '@mui/icons-material';
 
-// // const DynamicInputField = ({ field, index, onRemove }) => {
-// //   return (
-// //     <Box key={field.id} display="flex" alignItems="center">
-// //       <TextField
-// //         label={`Field ${index + 1}`}
-// //         variant="outlined"
-// //         fullWidth
-// //         margin="normal"
-// //         {...field}
-// //       />
-// //       <IconButton onClick={() => onRemove(field.id)}>
-// //         <RemoveCircle />
-// //       </IconButton>
-// //     </Box>
-// //   );
-// // };
+// const DynamicInputField = ({ field, index, onRemove }) => {
+//   return (
+//     <Box key={field.id} display="flex" alignItems="center">
+//       <TextField
+//         label={`Field ${index + 1}`}
+//         variant="outlined"
+//         fullWidth
+//         margin="normal"
+//         {...field}
+//       />
+//       <IconButton onClick={() => onRemove(field.id)}>
+//         <RemoveCircle />
+//       </IconButton>
+//     </Box>
+//   );
+// };
 
-// // const DynamicForm = () => {
-// //   const [fieldCounter, setFieldCounter] = useState(0);
+// const DynamicForm = () => {
+//   const [fieldCounter, setFieldCounter] = useState(0);
 
-// //   const handleAddField = () => {
-// //     setFieldCounter(fieldCounter + 1);
-// //   };
+//   const handleAddField = () => {
+//     setFieldCounter(fieldCounter + 1);
+//   };
 
-// //   const handleRemoveField = (id) => {
-// //     setFieldCounter(fieldCounter - 1);
-// //   };
+//   const handleRemoveField = (id) => {
+//     setFieldCounter(fieldCounter - 1);
+//   };
 
-// //   const initialValues = {
-// //     fields: [],
-// //   };
+//   const initialValues = {
+//     fields: [],
+//   };
 
-// //   const handleSubmit = (values) => {
-// //     console.log("v  ",values);
-// //   };
+//   const handleSubmit = (values) => {
+//     console.log("v  ",values);
+//   };
 
-// //   return (
-// //     <Container maxWidth="sm">
-// //       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-// //         {(formik) => (
-// //           <Form>
-// //             <FieldArray name="fields">
-// //               {(arrayHelpers) => (
-// //                 <div>
-// //                   {formik.values.fields.map((field, index) => (
-// //                     <DynamicInputField
-// //                       key={field.id}
-// //                       field={field}
-// //                       form={formik}
-// //                       index={index}
-// //                       onRemove={(id) => {
-// //                         console.log("arr ", arrayHelpers);
-// //                         arrayHelpers.remove(index);
-// //                         handleRemoveField(id);
-// //                       }}
-// //                     />
-// //                   ))}
-// //                   <Button
-// //                     type="button"
-// //                     onClick={(v) => {
-// //                       arrayHelpers.push({ id: fieldCounter });
-// //                       handleAddField();
-// //                     }}
-// //                   >
-// //                     Add Field
-// //                   </Button>
-// //                 </div>
-// //               )}
-// //             </FieldArray>
-// //             <Box mt={2}>
-// //               <Button type="submit" variant="contained" color="primary">
-// //                 Submit
-// //               </Button>
-// //             </Box>
-// //           </Form>
-// //         )}
-// //       </Formik>
-// //     </Container>
-// //   );
-// // };
+//   return (
+//     <Container maxWidth="sm">
+//       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+//         {(formik) => (
+//           <Form>
+//             <FieldArray name="fields">
+//               {(arrayHelpers) => (
+//                 <div>
+//                   {formik.values.fields.map((field, index) => (
+//                     <DynamicInputField
+//                       key={field.id}
+//                       field={field}
+//                       form={formik}
+//                       index={index}
+//                       onRemove={(id) => {
+//                         console.log("arr ", arrayHelpers);
+//                         arrayHelpers.remove(index);
+//                         handleRemoveField(id);
+//                       }}
+//                     />
+//                   ))}
+//                   <Button
+//                     type="button"
+//                     onClick={(v) => {
+//                       arrayHelpers.push({ id: fieldCounter });
+//                       handleAddField();
+//                     }}
+//                   >
+//                     Add Field
+//                   </Button>
+//                 </div>
+//               )}
+//             </FieldArray>
+//             <Box mt={2}>
+//               <Button type="submit" variant="contained" color="primary">
+//                 Submit
+//               </Button>
+//             </Box>
+//           </Form>
+//         )}
+//       </Formik>
+//     </Container>
+//   );
+// };
 
-// // export default DynamicForm;
+// export default DynamicForm;
 
-// // import React from 'react';
-// // import { Formik, Form, Field, FieldArray } from 'formik';
+import React from 'react';
+import { Formik, Form, Field, FieldArray } from 'formik';
 
 
-// // const FriendList = () => (
-// //   <div>
-// //     <Formik
-// //       initialValues={{ friends: ['jared'] }}
-// //       onSubmit={values =>
-// //         setTimeout(() => {
-// //           alert(JSON.stringify(values, null, 2));
-// //         }, 500)
-// //       }
-// //       children={({ values }) => (
-// //         <Form>
-// //           <FieldArray
-// //             name="friends"
-// //             render={arrayHelpers => (
-// //               <div>
-// //                 {values.friends.map((friend, index) => (
-// //                   <div key={index}>
-// //                     <Field name={`friends[${index}].name`} />
-// //                     <Field name={`friends.${index}.age`} />
+const FriendList = () => (
+  <div>
+    <Formik
+      initialValues={{ friends: ['jared'] }}
+      onSubmit={values =>
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2));
+        }, 500)
+      }
+      children={({ values }) => (
+        <Form>
+          <FieldArray
+            name="friends"
+            render={arrayHelpers => (
+              <div>
+                {values.friends.map((friend, index) => (
+                  <div key={index}>
+                    <Field name={`friends[${index}].name`} />
+                    <Field name={`friends.${index}.age`} />
 
-// //                     <button type="button" onClick={() => arrayHelpers.remove(index)}>
-// //                       -
-// //                     </button>
-// //                   </div>
-// //                 ))}
-// //                 <button
-// //                   type="button"
-// //                   onClick={() => arrayHelpers.push({ name: '', age: '' })}
-// //                 >
-// //                   +
-// //                 </button>
-// //                 <div>
-// //                   <button type="submit">Submit</button>
-// //                 </div>
-// //               </div>
-// //             )}
-// //           />
-// //         </Form>
-// //       )}
-// //     />
-// //   </div>
-// // );
-// // export default FriendList
+                    <button type="button" onClick={() => arrayHelpers.remove(index)}>
+                      -
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => arrayHelpers.push({ name: '', age: '' })}
+                >
+                  +
+                </button>
+                <div>
+                  <button type="submit">Submit</button>
+                </div>
+              </div>
+            )}
+          />
+        </Form>
+      )}
+    />
+  </div>
+);
+export default FriendList
 
 
 // import React, { useState } from 'react';
@@ -248,91 +248,91 @@
 
 
 
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import Popper from '@mui/material/Popper';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import InfoIcon from '@mui/icons-material/Info';
+// import React, { useState } from 'react';
+// import TextField from '@mui/material/TextField';
+// import IconButton from '@mui/material/IconButton';
+// import Popper from '@mui/material/Popper';
+// import Paper from '@mui/material/Paper';
+// import Typography from '@mui/material/Typography';
+// import ClickAwayListener from '@mui/material/ClickAwayListener';
+// import InfoIcon from '@mui/icons-material/Info';
 
-const FormWithPopper = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [helperText, setHelperText] = useState('');
+// const FormWithPopper = () => {
+//   const [anchorEl, setAnchorEl] = useState(null);
+//   const [helperText, setHelperText] = useState('');
 
-  const handleHelperIconClick = (event, text) => {
-    setAnchorEl(event.currentTarget);
-    setHelperText(text);
-  };
+//   const handleHelperIconClick = (event, text) => {
+//     setAnchorEl(event.currentTarget);
+//     setHelperText(text);
+//   };
 
-  const handlePopperClose = () => {
-    setAnchorEl(null);
-  };
+//   const handlePopperClose = () => {
+//     setAnchorEl(null);
+//   };
 
-  const open = Boolean(anchorEl);
+//   const open = Boolean(anchorEl);
 
-  return (
-    <form>
-      <TextField
-        label="First Name"
-        InputProps={{
-          endAdornment: (
-            <IconButton
-              aria-label="helper"
-              onClick={(event) =>
-                handleHelperIconClick(event, 'Additional information for First Name field')
-              }
-            >
-              <InfoIcon />
-            </IconButton>
-          ),
-        }}
-      />
-      <br />
-      <TextField
-        label="Last Name"
-        InputProps={{
-          endAdornment: (
-            <IconButton
-              aria-label="helper"
-              onClick={(event) =>
-                handleHelperIconClick(event, 'Additional information for Last Name field')
-              }
-            >
-              <InfoIcon />
-            </IconButton>
-          ),
-        }}
-      />
-      <br />
-      <TextField
-        label="Emaill"
-        InputProps={{
-          endAdornment: (
-            <IconButton
-              aria-label="helper"
-              onClick={(event) =>
-                handleHelperIconClick(event, 'Additional information for Email field')
-              }
-            >
-              <InfoIcon />
-            </IconButton>
-          ),
-        }}
-      />
-      <Popper open={open} anchorEl={anchorEl} placement="bottom-start">
-        <ClickAwayListener onClickAway={handlePopperClose}>
-          <Paper>
-            <Typography sx={{ p: 2 }}>{helperText}</Typography>
-          </Paper>
-        </ClickAwayListener>
-      </Popper>
-    </form>
-  );
-};
+//   return (
+//     <form>
+//       <TextField
+//         label="First Name"
+//         InputProps={{
+//           endAdornment: (
+//             <IconButton
+//               aria-label="helper"
+//               onClick={(event) =>
+//                 handleHelperIconClick(event, 'Additional information for First Name field')
+//               }
+//             >
+//               <InfoIcon />
+//             </IconButton>
+//           ),
+//         }}
+//       />
+//       <br />
+//       <TextField
+//         label="Last Name"
+//         InputProps={{
+//           endAdornment: (
+//             <IconButton
+//               aria-label="helper"
+//               onClick={(event) =>
+//                 handleHelperIconClick(event, 'Additional information for Last Name field')
+//               }
+//             >
+//               <InfoIcon />
+//             </IconButton>
+//           ),
+//         }}
+//       />
+//       <br />
+//       <TextField
+//         label="Emaill"
+//         InputProps={{
+//           endAdornment: (
+//             <IconButton
+//               aria-label="helper"
+//               onClick={(event) =>
+//                 handleHelperIconClick(event, 'Additional information for Email field')
+//               }
+//             >
+//               <InfoIcon />
+//             </IconButton>
+//           ),
+//         }}
+//       />
+//       <Popper open={open} anchorEl={anchorEl} placement="bottom-start">
+//         <ClickAwayListener onClickAway={handlePopperClose}>
+//           <Paper>
+//             <Typography sx={{ p: 2 }}>{helperText}</Typography>
+//           </Paper>
+//         </ClickAwayListener>
+//       </Popper>
+//     </form>
+//   );
+// };
 
-export default FormWithPopper;
+// export default FormWithPopper;
 
 
 

@@ -6,7 +6,7 @@ import TestForm from './pages/TestForm'
 function App() {
   return (
     <>
-      <TestForm/>
+      {/* <TestForm/> */}
       <SurveyForm />
 
     </>
