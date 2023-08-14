@@ -41,8 +41,7 @@ export const surveyFormSchema = Yup.object().shape({
                 gender: Yup.string().required('Required'),
             })
         )
-        .required('Must have friends') // these constraints are shown if and only if inner constraints are satisfied
-        .min(3, 'Minimum of 3 friends'),
+        .required('Must have friends'),
     assemblyConstituencyMembers: Yup.array()
         .of(
             Yup.object().shape({

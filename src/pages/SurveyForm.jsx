@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Box, Grid, Typography, Container, Button, Stack, IconButton } from "@mui/material"
+import { Box, Grid, Typography, Container, Button, Stack, IconButton, TextField, useMediaQuery, useTheme } from "@mui/material"
 import { Formik, Form, FieldArray } from "formik"
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
+import axios from 'axios';
 
 import { surveyFormSchema } from "../utils/schemas/surveyForm"
-import TextInput from '../components/TextInput'
-import SelectInput from '../components/SelectInput'
+import TextInput from '../components/inputs/TextInput'
+import SelectInput from '../components/inputs/SelectInput'
+import Alert from '../components/Alert';
 
 // import { Button } from 'react-bootstrap'
 
@@ -97,26 +99,32 @@ const initialValues = {
 }
 
 const SurveyForm = () => {
-    const [userDetails, setUserDetails] = useState(null)
     const [alert, setAlert] = useState(false);
+    const [savedResp, setSavedResp] = useState({});
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
+    console.log(savedResp);
     return (
         <>
+            <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
             <Container maxWidth="fixed">
-                <Box sx={{ height: '100%', mt: 1, p: 4 }} >
+                <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
                         initialValues={initialValues}
                         validationSchema={surveyFormSchema}
-                        onSubmit={(values, { setSubmitting }) => {
-                            console.log("formik ",values);
-                            // alertfn()
+                        onSubmit={async (values, { setSubmitting }) => {
+                            const resp = await axios.post("http://localhost:4000/forms", values)
+                            setSavedResp(resp.data)
+                            console.log("formik ", resp);
+                            alertfn()
                             setSubmitting(false);
                         }}
                     >
-                        {({ values }) => (
+                        {({ values, errors }) => (
                             < Form >
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item xs={12}>
@@ -270,12 +278,20 @@ const SurveyForm = () => {
                                             name="ageGroupOfMembers"
                                             render={arrayHelpers => (
                                                 <div>
-                                                    <Stack direction="row" spacing={4}>
-                                                        <Typography variant="subtitle2" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE AGE GROUP OF YOUR FAMILY MEMBERS RESPONDENT AGE</Typography>
-                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "" })}><AddCircle fontSize="small" /></IconButton>
+                                                    <Stack direction="row">
+                                                        <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE AGE GROUP OF YOUR FAMILY MEMBERS RESPONDENT AGE</Typography>
+                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "" })}>
+                                                            <AddCircle fontSize="small" />
+                                                        </IconButton>
                                                     </Stack>
                                                     {values.ageGroupOfMembers.map((item, index) => (
-                                                        <Stack key={index} sx={{mb:1}} direction="row" spacing={4}>
+                                                        <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
+                                                            <Stack direction="row" >
+                                                                <Typography variant="subtitle2" gutterBottom>Member {index + 1}</Typography>
+                                                                <IconButton disabled={values.ageGroupOfMembers.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
+                                                                    <RemoveCircle fontSize="small" />
+                                                                </IconButton>
+                                                            </Stack>
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -298,7 +314,10 @@ const SurveyForm = () => {
                                                                 name={`ageGroupOfMembers[${index}].gender`}
                                                                 options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
                                                             />
-                                                            <IconButton size="small" onClick={() => arrayHelpers.remove(index)}><RemoveCircle fontSize="small" /></IconButton>
+                                                            <br />
+                                                            {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
+
+
                                                         </Stack>
                                                     ))}
 
@@ -307,27 +326,27 @@ const SurveyForm = () => {
                                         />
                                     </Grid>
 
-                                    {/* <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="LIST THE AGE GROUP OF YOUR FAMILY MEMBERS RESPONDENT AGE"
-                                            title="Can you please list the age group of your family members Respondent age"
-                                            name="ageGroupOfMembers"
-                                            type="text"
-                                            placeholder="Indicate the age group of your family members and your own age"
-                                        />
-                                    </Grid> */}
-
                                     <Grid item xs={12} sx={{ mt: 1 }}>
                                         <FieldArray
                                             name="assemblyConstituencyMembers"
                                             render={arrayHelpers => (
                                                 <div>
-                                                    <Stack direction="row" spacing={4}>
-                                                        <Typography variant="subtitle2" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH ASSEMBLY CONSTITUENCY NAME</Typography>
-                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}><AddCircle fontSize="small" /></IconButton>
+                                                    <Stack direction="row" >
+                                                        <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH ASSEMBLY CONSTITUENCY NAME</Typography>
+                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}>
+                                                            <AddCircle fontSize="small" />
+                                                        </IconButton>
                                                     </Stack>
                                                     {values.assemblyConstituencyMembers.map((item, index) => (
-                                                        <Stack key={index} sx={{mb:1}} direction="row" spacing={4}>
+                                                        <Stack key={index} sx={{ mb: 1, mt: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
+                                                            <Stack direction="row" >
+                                                                <Typography variant="subtitle2" gutterBottom>Member {index + 1}</Typography>
+
+                                                                <IconButton disabled={values.assemblyConstituencyMembers.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
+                                                                    <RemoveCircle fontSize="small" />
+                                                                </IconButton>
+
+                                                            </Stack>
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -358,34 +377,38 @@ const SurveyForm = () => {
                                                                 placeholder="Assembly Constituency Name"
 
                                                             />
-                                                            <IconButton size="small" onClick={() => arrayHelpers.remove(index)}><RemoveCircle fontSize="small" /></IconButton>
+                                                            <br />
+                                                            {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
+
                                                         </Stack>
                                                     ))}
                                                 </div>
                                             )}
                                         />
                                     </Grid>
-                                    {/* <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="LIST THE FAMILY MEMBERS WITH ASSEMBLY CONSTITUENCY NAME"
-                                            title="Can you please list the family members with Assembly Constituency Name"
-                                            name="assemblyConstituencyMembers"
-                                            type="text"
-                                            placeholder=""
-                                        />
-                                    </Grid> */}
 
                                     <Grid item xs={12} sx={{ mt: 1 }}>
                                         <FieldArray
                                             name="voterIDsList"
                                             render={arrayHelpers => (
                                                 <div>
-                                                    <Stack direction="row" spacing={4}>
-                                                        <Typography variant="subtitle2" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH VOTER ID's</Typography>
-                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}><AddCircle fontSize="small" /></IconButton>
+                                                    <Stack direction="row" >
+                                                        <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH VOTER ID's</Typography>
+                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}>
+                                                            <AddCircle fontSize="small" />
+                                                        </IconButton>
                                                     </Stack>
                                                     {values.voterIDsList.map((item, index) => (
-                                                        <Stack key={index} sx={{mb:1}} direction="row" spacing={4}>
+                                                        <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
+                                                            <Stack direction="row" >
+                                                                <Typography variant="subtitle2" gutterBottom>{`Member`}</Typography>
+                                                                <Typography variant="subtitle2" gutterBottom>&nbsp;{`${index + 1}`}</Typography>
+
+                                                                <IconButton disabled={values.voterIDsList.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
+                                                                    <RemoveCircle fontSize="small" />
+                                                                </IconButton>
+
+                                                            </Stack>
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -416,23 +439,14 @@ const SurveyForm = () => {
                                                                 placeholder="Assembly Constituency Name"
 
                                                             />
-                                                            <IconButton size="small" onClick={() => arrayHelpers.remove(index)}><RemoveCircle fontSize="small" /></IconButton>
+                                                            <br />
+                                                            {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
                                                         </Stack>
                                                     ))}
                                                 </div>
                                             )}
                                         />
                                     </Grid>
-
-                                    {/* <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="LIST THE FAMILY MEMBERS WITH VOTER ID's"
-                                            title="Can you please list the family members with Voter ID's"
-                                            name="voterIDsList"
-                                            type="text"
-                                            placeholder="List family members with Voter IDs"
-                                        />
-                                    </Grid> */}
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput

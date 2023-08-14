@@ -7,7 +7,7 @@ const Navbar = () => {
         <AppBar sx={{ boxShadow: 0 }} color="transparent" position="static">
             <Toolbar>
                 <Typography variant="h6" style={{ flexGrow: 1 }}>
-                    My App
+                     
                 </Typography>
 
                 <Link to="/signin" >

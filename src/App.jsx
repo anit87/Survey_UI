@@ -1,14 +1,27 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import './App.css'
 import SurveyForm from './pages/SurveyForm'
-import TestForm from './pages/TestForm'
+import ProtectedRoute from "./components/ProtectedRoute"
+import LoginSignUp from './pages/LoginSignUp'
+import SignIn from './components/forms/LoginForm'
+import SignUp from './components/forms/SignUp'
+import Navbar from './components/Navbar'
 
 function App() {
   return (
     <>
-      {/* <TestForm/> */}
-      <SurveyForm />
-
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<LoginSignUp />}>
+            <Route index element={<SignIn />} />
+            <Route path='/' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+          </Route>
+          <Route path='/form' element={<ProtectedRoute><SurveyForm /></ProtectedRoute>} />
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }

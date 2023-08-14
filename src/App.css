@@ -1,6 +1,18 @@
 #root {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
+}
+::placeholder,label,span,.MuiInputLabel-root,h6 { /* Chrome, Firefox, Opera, Safari 10.1+ */
+ text-transform: capitalize !important;
+  
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  text-transform: capitalize !important;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  text-transform: capitalize !important;
 }
