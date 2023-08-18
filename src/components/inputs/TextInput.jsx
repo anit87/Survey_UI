@@ -21,42 +21,51 @@ const TextInput = ({ label, title, ...props }) => {
     };
 
     const open = Boolean(anchorEl);
+    const labelStyles= {
+        padding: '10px',
+        position: "absolute",
+        marginTop: '-29px',
+        marginLeft: '-9px'
+    }
 
     return (
         <>
-            <TextField
-                margin="normal"
-                fullWidth
-                size="small"
-                InputLabelProps={{
-                    sx: { fontSize: '.8rem' }
-                }}
-                label={label}
-                variant="outlined"
-                title={title}
-                InputProps={{
-                    endAdornment: (
-                        !title
-                            ? null
-                            : <IconButton
-                                size="small"
-                                aria-label="helper"
-                                onClick={(event) =>
-                                    handleHelperIconClick(event, title)
-                                }
-                            >
-                                <InfoIcon fontSize="small" />
-                            </IconButton>
-                    ),
-                }}
-                error={Boolean(meta.touched && meta.error)}
-                helperText={Boolean(meta.touched && meta.error) ? meta.error : ``}
-                {...field} {...props}
-
-            />
-            <Popper
-                open={open} anchorEl={anchorEl} helperText={helperTextInfo} handlePopperClose={handlePopperClose}
-            />
+            <div className="mb-3">
+                <FormLabel style={labelStyles}>{label}</FormLabel> 
+                <TextField
+                    margin="normal"
+                    fullWidth
+                    size="small"
+                    InputLabelProps={{
+                        sx: { fontSize: '.8rem' }
+                    }}
+                    label=""
+                    // label={label}
+                    variant="outlined"
+                    title={title}
+                    InputProps={{
+                        endAdornment: (
+                            !title
+                                ? null
+                                : <IconButton
+                                    size="small"
+                                    aria-label="helper"
+                                    onClick={(event) =>
+                                        handleHelperIconClick(event, title)
+                                    }
+                                >
+                                    <InfoIcon fontSize="small" />
+                                </IconButton>
+                        ),
+                    }}
+                    error={Boolean(meta.touched && meta.error)}
+                    helperText={Boolean(meta.touched && meta.error) ? meta.error : ``}
+                    {...field} {...props}
+                />
+                <Popper
+                    open={open} anchorEl={anchorEl} helperText={helperTextInfo} handlePopperClose={handlePopperClose}
+                />
+            </div>
         </>
     );
 }

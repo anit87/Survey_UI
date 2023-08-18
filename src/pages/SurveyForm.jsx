@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Grid, Typography, Container, Button, Stack, IconButton, TextField, useMediaQuery, useTheme } from "@mui/material"
+import { Box, Grid, Typography, Container, Button, Stack, IconButton, useMediaQuery, useTheme } from "@mui/material"
 import { Formik, Form, FieldArray } from "formik"
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import axios from 'axios';
@@ -9,7 +9,28 @@ import TextInput from '../components/inputs/TextInput'
 import SelectInput from '../components/inputs/SelectInput'
 import Alert from '../components/Alert';
 
-// import { Button } from 'react-bootstrap'
+
+
+const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
+    return (
+        <Stack direction="row">
+            <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>{label}</Typography>
+            <IconButton size="small" onClick={() => arrayHelpers.push(object)}>
+                <AddCircle fontSize="small" />
+            </IconButton>
+        </Stack>
+    )
+}
+const FieldArrayRemoveIcon = ({ index, arrayHelpers, array }) => {
+    return (
+        <Stack direction="row" >
+            <Typography variant="subtitle2" gutterBottom sx={{ pt: 1.5 }} > Member&nbsp;{index + 1} </Typography>
+            <IconButton disabled={array.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
+                <RemoveCircle fontSize="small" />
+            </IconButton>
+        </Stack>
+    )
+}
 
 
 const trueFalseOptions = [
@@ -107,7 +128,7 @@ const SurveyForm = () => {
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
-    console.log(savedResp);
+
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -278,20 +299,15 @@ const SurveyForm = () => {
                                             name="ageGroupOfMembers"
                                             render={arrayHelpers => (
                                                 <div>
-                                                    <Stack direction="row">
-                                                        <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE AGE GROUP OF YOUR FAMILY MEMBERS RESPONDENT AGE</Typography>
-                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "" })}>
-                                                            <AddCircle fontSize="small" />
-                                                        </IconButton>
-                                                    </Stack>
+                                                    <FieldArrayAddIcon
+                                                        label="LIST THE AGE GROUP OF YOUR FAMILY MEMBERS RESPONDENT AGE"
+                                                        arrayHelpers={arrayHelpers}
+                                                        object={{ name: '', age: '', gender: "" }}
+                                                    />
                                                     {values.ageGroupOfMembers.map((item, index) => (
                                                         <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
-                                                            <Stack direction="row" >
-                                                                <Typography variant="subtitle2" gutterBottom>Member {index + 1}</Typography>
-                                                                <IconButton disabled={values.ageGroupOfMembers.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
-                                                                    <RemoveCircle fontSize="small" />
-                                                                </IconButton>
-                                                            </Stack>
+
+                                                            <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} />
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -331,22 +347,16 @@ const SurveyForm = () => {
                                             name="assemblyConstituencyMembers"
                                             render={arrayHelpers => (
                                                 <div>
-                                                    <Stack direction="row" >
-                                                        <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH ASSEMBLY CONSTITUENCY NAME</Typography>
-                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}>
-                                                            <AddCircle fontSize="small" />
-                                                        </IconButton>
-                                                    </Stack>
+
+                                                    <FieldArrayAddIcon
+                                                        label="LIST THE FAMILY MEMBERS WITH ASSEMBLY CONSTITUENCY NAME"
+                                                        arrayHelpers={arrayHelpers}
+                                                        object={{ name: '', age: '', gender: "", assemblyName: "" }}
+                                                    />
                                                     {values.assemblyConstituencyMembers.map((item, index) => (
                                                         <Stack key={index} sx={{ mb: 1, mt: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
-                                                            <Stack direction="row" >
-                                                                <Typography variant="subtitle2" gutterBottom>Member {index + 1}</Typography>
 
-                                                                <IconButton disabled={values.assemblyConstituencyMembers.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
-                                                                    <RemoveCircle fontSize="small" />
-                                                                </IconButton>
-
-                                                            </Stack>
+                                                            <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.assemblyConstituencyMembers} />
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
@@ -392,30 +402,21 @@ const SurveyForm = () => {
                                             name="voterIDsList"
                                             render={arrayHelpers => (
                                                 <div>
-                                                    <Stack direction="row" >
-                                                        <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>LIST THE FAMILY MEMBERS WITH VOTER ID's</Typography>
-                                                        <IconButton size="small" onClick={() => arrayHelpers.push({ name: '', age: '', gender: "", assemblyName: "" })}>
-                                                            <AddCircle fontSize="small" />
-                                                        </IconButton>
-                                                    </Stack>
+                                                    <FieldArrayAddIcon
+                                                        label="LIST THE FAMILY MEMBERS WITH VOTER ID's"
+                                                        arrayHelpers={arrayHelpers}
+                                                        object={{ name: '', age: '', gender: "", assemblyName: "" }}
+                                                    />
                                                     {values.voterIDsList.map((item, index) => (
                                                         <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
-                                                            <Stack direction="row" >
-                                                                <Typography variant="subtitle2" gutterBottom>{`Member`}</Typography>
-                                                                <Typography variant="subtitle2" gutterBottom>&nbsp;{`${index + 1}`}</Typography>
 
-                                                                <IconButton disabled={values.voterIDsList.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
-                                                                    <RemoveCircle fontSize="small" />
-                                                                </IconButton>
-
-                                                            </Stack>
+                                                            <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.voterIDsList} />
                                                             <TextInput
                                                                 label="Members Name"
                                                                 title="Please enter Name of members"
                                                                 name={`voterIDsList[${index}].name`}
                                                                 type="text"
                                                                 placeholder="Name"
-
                                                             />
                                                             <TextInput
                                                                 label="Age"

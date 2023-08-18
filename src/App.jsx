@@ -6,7 +6,10 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import LoginSignUp from './pages/LoginSignUp'
 import SignIn from './components/forms/LoginForm'
 import SignUp from './components/forms/SignUp'
+import ResetPassword from './components/forms/ResetPassword'
 import Navbar from './components/Navbar'
+import Layout from './components/admin/Layout'
+import CreateUser from './components/forms/CreateUser'
 
 function App() {
   return (
@@ -14,12 +17,14 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path='/' element={<SurveyForm />}>
+          <Route path='/' element={<ProtectedRoute><LoginSignUp /></ProtectedRoute>}>
             <Route index element={<SignIn />} />
             <Route path='/' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
+            <Route path='/reset' element={<ResetPassword />} />
           </Route>
           <Route path='/form' element={<ProtectedRoute><SurveyForm /></ProtectedRoute>} />
+          <Route path='/createuser' element={<ProtectedRoute><Layout><CreateUser/></Layout></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </>

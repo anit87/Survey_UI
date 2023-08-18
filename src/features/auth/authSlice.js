@@ -2,18 +2,29 @@ import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import axios from "axios"
 
 const initialState = {
-    data: null,
+    status: false,
     loading: false,
     error: null,
     msg: null,
     token: null,
-    isVerified: false
+    isVerified: false,
+    data: null,
 }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        reset: (state, action) => {
+            state.status = false;
+            state.loading = false;
+            state.error = null;
+            state.msg = null;
+            state.token = null;
+            state.isVerified = false;
+            state.data = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchAuthData.pending, (state, action) => {
@@ -21,13 +32,16 @@ const authSlice = createSlice({
             })
             .addCase(fetchAuthData.fulfilled, (state, action) => {
                 if (action.payload.status) {
+                    state.status = action.payload.status;
                     state.loading = false;
                     state.data = action.payload;
                     state.error = !action.payload.status;
                     state.msg = action.payload.msg;
                     state.token = action.payload.token || null;
                     // state.isVerified = action.payload.isVerified;
-                    localStorage.setItem("surveyApp", action.payload.token);
+                    if (action.payload.token) {
+                        localStorage.setItem("surveyApp", action.payload.token);
+                    }
                 } else {
                     state.loading = false;
                     state.error = !action.payload.status;
@@ -44,12 +58,16 @@ const authSlice = createSlice({
 
 export const fetchAuthData = createAsyncThunk('auth/fetchData', async (apiData) => {
     try {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem("surveyApp"),
+          };
         const { apiUrl, bodyOfRequest, method } = apiData
         let response
         if (method === 'GET') {
-            response = await axios.get(apiUrl);
+            response = await axios.get(apiUrl,{headers});
         } else if (method === 'POST') {
-            response = await axios.post(apiUrl, bodyOfRequest);
+            response = await axios.post(apiUrl, bodyOfRequest,{headers});
         }
         return response.data;
     } catch (error) {
@@ -58,4 +76,5 @@ export const fetchAuthData = createAsyncThunk('auth/fetchData', async (apiData) 
     }
 });
 
+export const { reset } = authSlice.actions
 export default authSlice.reducer; 

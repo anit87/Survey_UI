@@ -11,37 +11,34 @@ const ProtectedRoute = ({ children }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
-    // dispatch(fetchAuthData(
-    //     {
-    //         apiUrl: `${import.meta.env.VITE_API_URL}/auth/verifytoken`,
-    //         bodyOfRequest: {token},
-    //         method: "POST"
-    //     }
-    // ));
-
-
-    // const str = useSelector(state => state.auth)
-    // console.log("str ", str);
-
-    const isAuthenticated = verifyUser();
-
-    // useEffect(() => {
-    //     dispatch(fetchAuthData(
-    //         {
-    //             apiUrl: `${import.meta.env.VITE_API_URL}/auth/verifytoken`,
-    //             bodyOfRequest: { token },
-    //             method: "POST"
-    //         }
-    //     ));
-    // }, [token])
+    const { isVerified } = useSelector(state => state.auth)
 
     useEffect(() => {
-        verifyUser().then(resp => {
-            if (!resp.status) {
-                navigate("/")
-            }
-        })
-    }, [isAuthenticated])
+        dispatch(fetchAuthData({
+            apiUrl: `${import.meta.env.VITE_API_URL}/auth/verifytoken`,
+            bodyOfRequest: { token },
+            method: "POST"
+        }))
+            .unwrap()
+            .then((originalPromiseResult) => {
+                if (!originalPromiseResult.isVerified) {
+                    navigate("/")
+                }
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log("rejectedValueOrSerializedError ", rejectedValueOrSerializedError);
+            })
+    }, [token])
+
+    // const isAuthenticated = verifyUser();
+
+    // useEffect(() => {
+    //     verifyUser().then(resp => {
+    //         if (!resp.status) {
+    //             navigate("/")
+    //         }
+    //     })
+    // }, [isAuthenticated])
 
     return children;
 };

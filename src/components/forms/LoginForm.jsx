@@ -24,18 +24,22 @@ const SignIn = () => {
   const [loginDetails, setLoginDetails] = useState("")
   const [alert, setAlert] = useState(false);
 
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("surveyApp")
 
   useEffect(() => {
-    verifyUser().then(resp => {
-      if (resp.status) {
-        navigate("/form ")
+    if (!token) {
+      navigate("/")
+    } else {
+      const resp = verifyUser()
+      if (resp) {
+        console.log(resp);
+        navigate("/createuser")
       }
-    })
-  }, [])
+    }
+  }, [token])
 
 
-  const { data, error, loading, msg } = useSelector(state => state.auth)
+  const { error, loading, msg } = useSelector(state => state.auth)
 
   const alertfn = () => {
     setTimeout(() => setAlert(true), 100);
@@ -53,7 +57,13 @@ const SignIn = () => {
               bodyOfRequest: values,
               method: "POST"
             }
-          ));
+          ))
+            .unwrap()
+            .then((originalPromiseResult) => {
+              if (originalPromiseResult.status) {
+                navigate("/createuser")
+              }
+            })
           alertfn()
           setSubmitting(false);
         }}
@@ -89,12 +99,12 @@ const SignIn = () => {
             </Form>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  {/* Forgot password? */}
+                <Link className='textDecoration' to="/reset" variant="body2">
+                  Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/signup" variant="body2">
+                <Link className='textDecoration' to="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

@@ -4,6 +4,10 @@
   padding: 1rem;
   text-align: center;
 }
+
+.textDecoration {
+  text-decoration: none;
+}
 ::placeholder,label,span,.MuiInputLabel-root,h6 { /* Chrome, Firefox, Opera, Safari 10.1+ */
  text-transform: capitalize !important;
   

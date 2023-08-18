@@ -23,3 +23,15 @@ export const signInSchema = Yup.object().shape({
         .min(6, 'Password must be at least 6 characters')
         .required('Password is required')
 });
+
+export const resetPasswordSchema = Yup.object().shape({
+    email: Yup.string()
+        .email('Invalid email')
+        .required('Email is required')
+});
+export const resetPasswordCode = Yup.object().shape({
+    email: 
+        Yup.string()
+        .length(6, 'Code must be 6 characters')
+        .required('Required')
+});
