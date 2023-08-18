@@ -22,7 +22,7 @@ const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
     )
 }
 const FieldArrayRemoveIcon = ({ index, arrayHelpers, array }) => {
-    return (     
+    return (
         <Box
             display="flex"
             justifyContent="center"
@@ -161,7 +161,6 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
                                     <Grid item md={6} xs={12}>
-                                        {/* <label>aaaaaaaaa</label> */}
                                         <TextInput
                                             label="Respondent Name"
                                             title="Please Enter Your Name"
@@ -370,7 +369,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                                                 title="Please Enter Age of Member"
                                                                 name={`ageGroupOfMembers[${index}].age`}
                                                                 type="number"
-                                                                placeholder="Name"
+                                                                placeholder="Age"
                                                             />
                                                             <SelectInput
                                                                 label="Gender"
@@ -379,7 +378,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                                                 name={`ageGroupOfMembers[${index}].gender`}
                                                                 options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
                                                             />
-                                                            
+
                                                             {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
                                                         </Stack>
                                                     ))}
@@ -415,7 +414,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                                                 title="Please Enter Age of Member"
                                                                 name={`assemblyConstituencyMembers[${index}].age`}
                                                                 type="number"
-                                                                placeholder="Name"
+                                                                placeholder="Age"
                                                             />
                                                             <SelectInput
                                                                 label="Gender"
@@ -468,7 +467,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                                                 title="Please Enter Age Of Member"
                                                                 name={`voterIDsList[${index}].age`}
                                                                 type="number"
-                                                                placeholder="Name"
+                                                                placeholder="Age"
                                                             />
                                                             <SelectInput
                                                                 label="Gender"
@@ -496,7 +495,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
 
                                 </Grid>}
 
-                                <Button disabled= {!submitDisabled} variant='contained' type='submit' sx={{ mt: 3, mb: 2, pl: 3, pr: 3 }} >Submit</Button>
+                                <Button disabled={!submitDisabled} variant='contained' type='submit' sx={{ mt: 3, mb: 2, pl: 3, pr: 3 }} >Submit</Button>
 
                             </Form>
                         )}

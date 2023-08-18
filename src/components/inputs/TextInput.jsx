@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextField, FormControl, FormLabel, IconButton, Typography } from "@mui/material"
+import { TextField, FormControl, FormLabel, IconButton, Typography, Stack } from "@mui/material"
 import InfoIcon from '@mui/icons-material/Info';
 import { useField } from "formik"
 import PropTypes from 'prop-types';
@@ -33,7 +33,10 @@ const TextInput = ({ label, title, ...props }) => {
         <>
             {/* <div className="mb-3"> */}
             <FormControl fullWidth>
-                <Typography variant="subtitle1" gutterBottom>{label}</Typography>
+                <Stack direction="row">
+                    {/* <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>{label}</Typography> */}
+                    <Typography variant="subtitle1" gutterBottom>{label}</Typography>
+                </Stack>
                 <TextField
                     margin="normal"
                     fullWidth

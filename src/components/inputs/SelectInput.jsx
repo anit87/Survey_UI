@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, MenuItem, IconButton, FormControl, FormLabel, InputLabel, Typography } from '@mui/material';
+import { TextField, MenuItem, IconButton, FormControl, FormLabel, InputLabel, Typography, Stack } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { useField } from "formik"
 import Popper from '../Popper';
@@ -38,7 +38,10 @@ export default function SelectTextFields({ id, label, title, options, ...props }
                 <FormLabel style={labelStyles}>{label}</FormLabel>  */}
             <FormControl fullWidth>
                 {/* <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel> */}
-                <Typography variant="subtitle1" gutterBottom>{label}</Typography>
+                <Stack direction="row">
+                    {/* <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>{label}</Typography> */}
+                    <Typography variant="subtitle1" gutterBottom>{label}</Typography>
+                </Stack>
                 <TextField
                     margin="normal"
                     id={id}
