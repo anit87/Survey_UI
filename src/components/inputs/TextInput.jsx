@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextField, FormControl, FormLabel, IconButton } from "@mui/material"
+import { TextField, FormControl, FormLabel, IconButton, Typography } from "@mui/material"
 import InfoIcon from '@mui/icons-material/Info';
 import { useField } from "formik"
 import PropTypes from 'prop-types';
@@ -21,17 +21,19 @@ const TextInput = ({ label, title, ...props }) => {
     };
 
     const open = Boolean(anchorEl);
-    const labelStyles= {
-        padding: '10px',
-        position: "absolute",
-        marginTop: '-29px',
-        marginLeft: '-9px'
+    const labelStyles = {
+        // alignItems: "start",
+        // position: "absolute",
+        // fontWeight: "600",
+        // padding: "-7px 13px",
+        // marginTop: "-14px"
     }
 
     return (
         <>
-            <div className="mb-3">
-                <FormLabel style={labelStyles}>{label}</FormLabel> 
+            {/* <div className="mb-3"> */}
+            <FormControl fullWidth>
+                <Typography variant="subtitle1" gutterBottom>{label}</Typography>
                 <TextField
                     margin="normal"
                     fullWidth
@@ -65,7 +67,7 @@ const TextInput = ({ label, title, ...props }) => {
                 <Popper
                     open={open} anchorEl={anchorEl} helperText={helperTextInfo} handlePopperClose={handlePopperClose}
                 />
-            </div>
+            </FormControl>
         </>
     );
 }

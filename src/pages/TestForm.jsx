@@ -116,53 +116,53 @@
 
 // export default DynamicForm;
 
-import React from 'react';
-import { Formik, Form, Field, FieldArray } from 'formik';
+// import React from 'react';
+// import { Formik, Form, Field, FieldArray } from 'formik';
 
 
-const FriendList = () => (
-  <div>
-    <Formik
-      initialValues={{ friends: ['jared'] }}
-      onSubmit={values =>
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-        }, 500)
-      }
-      children={({ values }) => (
-        <Form>
-          <FieldArray
-            name="friends"
-            render={arrayHelpers => (
-              <div>
-                {values.friends.map((friend, index) => (
-                  <div key={index}>
-                    <Field name={`friends[${index}].name`} />
-                    <Field name={`friends.${index}.age`} />
+// const FriendList = () => (
+//   <div>
+//     <Formik
+//       initialValues={{ friends: ['jared'] }}
+//       onSubmit={values =>
+//         setTimeout(() => {
+//           alert(JSON.stringify(values, null, 2));
+//         }, 500)
+//       }
+//       children={({ values }) => (
+//         <Form>
+//           <FieldArray
+//             name="friends"
+//             render={arrayHelpers => (
+//               <div>
+//                 {values.friends.map((friend, index) => (
+//                   <div key={index}>
+//                     <Field name={`friends[${index}].name`} />
+//                     <Field name={`friends.${index}.age`} />
 
-                    <button type="button" onClick={() => arrayHelpers.remove(index)}>
-                      -
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => arrayHelpers.push({ name: '', age: '' })}
-                >
-                  +
-                </button>
-                <div>
-                  <button type="submit">Submit</button>
-                </div>
-              </div>
-            )}
-          />
-        </Form>
-      )}
-    />
-  </div>
-);
-export default FriendList
+//                     <button type="button" onClick={() => arrayHelpers.remove(index)}>
+//                       -
+//                     </button>
+//                   </div>
+//                 ))}
+//                 <button
+//                   type="button"
+//                   onClick={() => arrayHelpers.push({ name: '', age: '' })}
+//                 >
+//                   +
+//                 </button>
+//                 <div>
+//                   <button type="submit">Submit</button>
+//                 </div>
+//               </div>
+//             )}
+//           />
+//         </Form>
+//       )}
+//     />
+//   </div>
+// );
+// export default FriendList
 
 
 // import React, { useState } from 'react';
@@ -381,3 +381,57 @@ export default FriendList
 // };
 
 // export default FormWithHelperIcons;
+
+
+import React, { useState } from 'react';
+import { Stepper, Step, StepLabel, Button } from '@mui/material';
+
+const steps = ['Step 1', 'Step 2', 'Step 3']; // Define your steps here
+
+const MultiStepForm = () => {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevStep) => prevStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevStep) => prevStep - 1);
+  };
+
+  return (
+    <div>
+      <Stepper activeStep={activeStep} alternativeLabel>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <div>
+        {activeStep === steps.length ? (
+          <div>
+            <p>All steps completed</p>
+          </div>
+        ) : (
+          <div>
+            {/* Render the form content for the current step */}
+            {activeStep === 0 && <Step1Form />}
+            {activeStep === 1 && <Step2Form />}
+            {activeStep === 2 && <Step3Form />}
+
+            {/* Navigation buttons */}
+            <Button disabled={activeStep === 0} onClick={handleBack}>
+              Back
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleNext}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default MultiStepForm;
