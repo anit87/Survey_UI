@@ -61,13 +61,13 @@ export const fetchAuthData = createAsyncThunk('auth/fetchData', async (apiData) 
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': localStorage.getItem("surveyApp"),
-          };
+        };
         const { apiUrl, bodyOfRequest, method } = apiData
         let response
         if (method === 'GET') {
-            response = await axios.get(apiUrl,{headers});
+            response = await axios.get(apiUrl, { headers });
         } else if (method === 'POST') {
-            response = await axios.post(apiUrl, bodyOfRequest,{headers});
+            response = await axios.post(apiUrl, bodyOfRequest, { headers });
         }
         return response.data;
     } catch (error) {

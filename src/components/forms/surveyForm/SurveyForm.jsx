@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Grid, Typography, Container, Button, Stack, IconButton, useMediaQuery, useTheme, Toolbar } from "@mui/material"
 import { Formik, Form, FieldArray } from "formik"
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
@@ -8,7 +8,7 @@ import { surveyFormSchema } from '../../../utils/schemas/surveyForm';
 import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
-
+import { verifyUser } from '../../../utils/functions/verifyUser';
 
 
 const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
@@ -33,12 +33,6 @@ const FieldArrayRemoveIcon = ({ index, arrayHelpers, array }) => {
                 <RemoveCircle fontSize="small" />
             </IconButton>
         </Box>
-        // <Stack direction="row" >
-        //     <Typography variant="subtitle2" gutterBottom sx={{ pt: 2.5 }} > Member&nbsp;{index + 1} </Typography>
-        //     <IconButton disabled={array.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
-        //         <RemoveCircle fontSize="small" />
-        //     </IconButton>
-        // </Stack>
     )
 }
 
@@ -107,38 +101,45 @@ const ageOptions = [
 ]
 
 const initialValues = {
-    respondentName: '',
-    address: '',
+    respondentName: 'User',
+    address: 'Hno 1',
     pincode: '',
-    mobileNo: '',
-    residingYears: '',
+    mobileNo: '9874563210',
+    residingYears: '2',
     isOwnProperty: '',
-    totalMembers: '',
-    stayingMembers: '',
-    religionAndCaste: '',
-    cweEducation: '',
-    respondentEducation: '',
-    isParticipated: '',
+    totalMembers: '6',
+    stayingMembers: '4',
+    religionAndCaste: 'Indian',
+    cweEducation: '5',
+    respondentEducation: '4',
+    isParticipated: '1',
     birthdayDate: '',
     registeredVoter: '',
-    ageGroupOfMembers: [{ name: '', age: '', gender: "" }],
-    assemblyConstituencyMembers: [{ name: '', age: '', gender: "", assemblyName: "" }],
-    voterIDsList: [{ name: '', age: '', gender: "", assemblyName: "" }],
-    maritalStatus: '',
-    occupationStatus: '',
-    monthlyHouseholdIncome: '',
+    ageGroupOfMembers: [{ name: 'user', age: '20', gender: "male" }],
+    assemblyConstituencyMembers: [{ name: 'user', age: '20', gender: "female", assemblyName: "user" }],
+    voterIDsList: [{ name: 'user', age: '20', gender: "male", assemblyName: "user" }],
+    maritalStatus: '1',
+    occupationStatus: '2',
+    monthlyHouseholdIncome: '4',
 }
 
 const SurveyForm = ({ activeStep, submitDisabled }) => {
+    const [userId, setUserId] = useState(" ")
     const [alert, setAlert] = useState(false);
     const [savedResp, setSavedResp] = useState({});
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+    useEffect(() => {
+        const { id } = verifyUser()
+        setUserId(id)
+    }, [userId])
+
+
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
-    console.log(activeStep, " ", submitDisabled);
+    console.log(userId, " ", userId);
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -148,7 +149,8 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                         initialValues={initialValues}
                         validationSchema={surveyFormSchema}
                         onSubmit={async (values, { setSubmitting }) => {
-                            const resp = await axios.post("http://localhost:4000/forms", values)
+                            console.log("user id ",userId);
+                            const resp = await axios.post("http://localhost:4000/forms", { ...values, filledBy: userId })
                             setSavedResp(resp.data)
                             console.log("formik ", resp);
                             alertfn()
@@ -508,5 +510,3 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
 }
 
 export default SurveyForm
-
-

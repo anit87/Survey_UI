@@ -11,6 +11,7 @@ import Navbar from './components/Navbar'
 import Layout from './components/admin/Layout'
 import CreateUser from './components/forms/CreateUser'
 import SurveyMultiStepForm from './components/forms/surveyForm/SurveyMultiSteps'
+import CollapsibleTable from './components/dataGrid/allUsers'
 
 function App() {
   return (
@@ -18,14 +19,15 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          {/* <Route path='/' element={<ProtectedRoute><LoginSignUp /></ProtectedRoute>}>
+          <Route path='/' element={<ProtectedRoute><LoginSignUp /></ProtectedRoute>}>
             <Route index element={<SignIn />} />
             <Route path='/' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/reset' element={<ResetPassword />} />
-          </Route> */}
-          <Route path='/' element={<SurveyMultiStepForm />} />
-          {/* <Route path='/form' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} /> */}
+          </Route>
+          {/* <Route path='/' element={<SurveyMultiStepForm />} /> */}
+          <Route path='/form' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
+          <Route path='/allusers' element={<ProtectedRoute><Layout><CollapsibleTable/></Layout></ProtectedRoute>} />
           <Route path='/createuser' element={<ProtectedRoute><Layout><CreateUser/></Layout></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>

@@ -31,11 +31,9 @@ const TextInput = ({ label, title, ...props }) => {
 
     return (
         <>
-            {/* <div className="mb-3"> */}
             <FormControl fullWidth>
                 <Stack direction="row">
-                    {/* <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>{label}</Typography> */}
-                    <Typography variant="subtitle1" gutterBottom>{label}</Typography>
+                    <Typography variant="h6" style={{fontSize:"1rem", fontWeight:"bold"}} gutterBottom>{label}</Typography>
                 </Stack>
                 <TextField
                     margin="normal"
@@ -45,7 +43,6 @@ const TextInput = ({ label, title, ...props }) => {
                         sx: { fontSize: '.8rem' }
                     }}
                     label=""
-                    // label={label}
                     variant="outlined"
                     title={title}
                     InputProps={{

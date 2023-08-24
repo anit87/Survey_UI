@@ -42,8 +42,7 @@ const CreateUser = () => {
     }
     useEffect(() => {
         const {userRole} = verifyUser()
-        setUserRole(userRole)
-      
+        setUserRole(userRole)     
     }, [userRole])
     
     console.log(userRole);

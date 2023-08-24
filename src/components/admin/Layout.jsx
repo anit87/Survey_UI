@@ -1,67 +1,35 @@
-// // src/components/Layout.js
-// import React from 'react';
-// import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-// import { Dashboard as DashboardIcon } from '@mui/icons-material';
-// import PersonAddIcon from '@mui/icons-material/PersonAdd';
-
-// const Layout = ({children}) => {
-//     return (
-//         <div>
-//             <Drawer variant="permanent">
-//                 <List>
-//                     <ListItem>
-//                         <ListItemIcon>
-//                             <DashboardIcon />
-//                         </ListItemIcon>
-//                         <ListItemText primary="Dashboard" />
-//                     </ListItem>
-//                     <ListItem>
-//                         <ListItemIcon>
-//                             <PersonAddIcon />
-//                         </ListItemIcon>
-//                         <ListItemText primary="Create User" />
-//                     </ListItem>
-//                 </List>
-//             </Drawer>
-//             {/* Content */}
-//             {children}
-//         </div>
-//     );
-// };
-
-// export default Layout;
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import { Dashboard as DashboardIcon } from '@mui/icons-material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { useNavigate } from 'react-router-dom';
 
 const list = [
-    { label: "Dashboard", icon: DashboardIcon },
-    { label: "Create User", icon: PersonAddIcon },
-    { label: "All Users", icon: PersonAddIcon }
+    { label: "Dashboard", icon: DashboardIcon, url: "/createuser" },
+    { label: "Create User", icon: PersonAddIcon, url: "/createuser" },
+    { label: "All Users", icon: PersonAddIcon, url: "/allusers" },
+    { label: "Create Form", icon: PersonAddIcon, url: "/form" },
 ]
 
 const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
     const { window } = props;
+    const navigate = useNavigate()
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -75,10 +43,10 @@ function ResponsiveDrawer(props) {
             <Divider />
             <List>
                 {list.map((obj, index) => (
-                    <ListItem key={index} disablePadding>
+                    <ListItem key={index} disablePadding onClick={() => navigate(obj.url)}  >
                         <ListItemButton>
                             <ListItemIcon>
-                                { <obj.icon /> }
+                                {<obj.icon />}
                             </ListItemIcon>
                             <ListItemText primary={obj.label} />
                         </ListItemButton>
@@ -86,18 +54,6 @@ function ResponsiveDrawer(props) {
                 ))}
             </List>
             <Divider />
-            {/* <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List> */}
         </div>
     );
 
@@ -105,14 +61,13 @@ function ResponsiveDrawer(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            {/* <CssBaseline /> */}
             <AppBar
                 // position="fixed"
                 color="transparent"
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-                    mt:10,
+                    mt: 10,
                     boxShadow: 0
                 }}
             >
@@ -125,7 +80,7 @@ function ResponsiveDrawer(props) {
                         sx={{ mr: 2, display: { sm: 'none' } }}
                     >
                         <MenuIcon />
-                    </IconButton>                 
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Box
@@ -165,9 +120,6 @@ function ResponsiveDrawer(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                {/* <Typography paragraph>
-                    Lorem ipsum dolor sit amet
-                </Typography> */}
                 {props.children}
             </Box>
         </Box>

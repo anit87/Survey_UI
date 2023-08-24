@@ -3,17 +3,6 @@ import { TextField, MenuItem, IconButton, FormControl, FormLabel, InputLabel, Ty
 import InfoIcon from '@mui/icons-material/Info';
 import { useField } from "formik"
 import Popper from '../Popper';
-const labelStyles = {
-    // padding: '10px',
-    // position: "absolute",
-    // marginTop: '-29px',
-    // marginLeft: '-9px'
-    alignItems: "start",
-    position: "absolute",
-    fontWeight: "600",
-    padding: "-7px 13px",
-    marginTop: "-14px"
-}
 
 export default function SelectTextFields({ id, label, title, options, ...props }) {
     const [field, meta] = useField(props);
@@ -34,12 +23,8 @@ export default function SelectTextFields({ id, label, title, options, ...props }
 
     return (
         <>
-            {/* <div className="mb-3">
-                <FormLabel style={labelStyles}>{label}</FormLabel>  */}
             <FormControl fullWidth>
-                {/* <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel> */}
                 <Stack direction="row">
-                    {/* <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>{label}</Typography> */}
                     <Typography variant="subtitle1" gutterBottom>{label}</Typography>
                 </Stack>
                 <TextField
