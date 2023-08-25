@@ -132,6 +132,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [editable, setEditable] = useState(formId)
+    const [loading, setloading] = useState(false)
     // const [formsDetail, setFormsDetail] = useState(initialValues)
 
     useEffect(() => {
@@ -142,16 +143,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
         setCounter(counter++)
 
     }, [formsDetail])
-
-
-    // useEffect(() => {
-    //     getUsers()
-    // }, [formId])
-
-    // const getUsers = async () => {
-    //     const response = await axios.post(apiUrl, { id: formId })
-    //     setFormsDetail(response.data.data)
-    // }
 
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
@@ -164,7 +155,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
             <Container maxWidth="fixed">
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
-                        initialValues={formsDetail ? formsDetail : initialValues}
+                        initialValues={formsDetail}
                         // validationSchema={surveyFormSchema}
                         onSubmit={async (values, { setSubmitting }) => {
                             console.log("user id ", userId);
@@ -177,9 +168,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                     >
                         {({ values, errors }) => (
                             < Form >
-
-                                {/* {console.log("err ", errors)} */}
-                                <br />
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
                                     <Grid item md={6} xs={12}>
@@ -189,8 +177,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="respondentName"
                                             type="text"
                                             placeholder="Please Provide Your Full Name"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.respondentName}
 
                                         />
                                     </Grid>
@@ -202,8 +188,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="address"
                                             type="text"
                                             placeholder="Enter Your Full Mailing Address Here"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.address}
                                         />
                                     </Grid>
 
@@ -214,8 +198,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="pincode"
                                             type="number"
                                             placeholder="454545"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.pincode}
                                         />
                                     </Grid>
 
@@ -226,8 +208,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="mobileNo"
                                             type="number"
                                             placeholder="9874563210"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.mobileNo}
                                         />
                                     </Grid>
 
@@ -238,8 +218,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             id="maritalStatus"
                                             name="maritalStatus"
                                             options={[{ label: "Single", value: "1" }, { label: "Married", value: "2" }]}
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.maritalStatus==1?"Single":"Married"}
                                         />
                                     </Grid>
 
@@ -255,13 +233,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                                 { label: "Part-time/freelancer", value: "3" },
                                                 { label: "Home maker", value: "4" }
                                             ]}
-                                            editable={Boolean(formsDetail)}
-                                            textValue={
-                                                formsDetail.occupationStatus==1?"Self-employed":
-                                                formsDetail.occupationStatus==2?"Full-time":
-                                                formsDetail.occupationStatus==3?"Part-time/freelancer":
-                                                formsDetail.occupationStatus==4?"Home maker":""                                               
-                                            }
                                         />
                                     </Grid>
 
@@ -278,13 +249,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                                 { label: "Rs. 1,00,000 to Rs. 3,00,000.", value: "4" },
                                                 { label: "Above Rs. 3,00,000.", value: "5" },
                                             ]}
-                                            editable={Boolean(formsDetail)}
-                                            textValue={
-                                                formsDetail.monthlyHouseholdIncome==1?"Below Rs. 20,000.":
-                                                formsDetail.monthlyHouseholdIncome==2?"Rs. 20,000 to Rs. 50,000.":
-                                                formsDetail.monthlyHouseholdIncome==3?"Rs. 50,000 to Rs. 1,00,000.":
-                                                formsDetail.monthlyHouseholdIncome==4?"Rs. 1,00,000 to Rs. 3,00,000.":"Above Rs. 3,00,000."                                               
-                                            }
                                         />
                                     </Grid>
 
@@ -295,9 +259,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="residingYears"
                                             type="number"
                                             placeholder="Years at Current Location"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.residingYears}
-                                            
                                         />
                                     </Grid>
 
@@ -308,8 +269,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="isOwnProperty"
                                             id="isOwnProperty"
                                             options={trueFalseOptions}
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.isOwnProperty==true?"Yes":"No"}
                                         />
                                     </Grid>
                                 </Grid>}
@@ -333,15 +292,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             placeholder="Number Staying Here?"
                                         />
                                     </Grid>
-                                    {/* <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="Religion"
-                                            title="Religion"
-                                            name="religionAndCaste"
-                                            type="text"
-                                            placeholder="Kindly Select Your Religion"
-                                        />
-                                    </Grid> */}
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Religion"
@@ -483,113 +433,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             )}
                                         />
                                     </Grid>
-                                    {/* 
-                                    <Grid item xs={12} sx={{ mt: 1 }}>
-                                        <FieldArray
-                                            name="assemblyConstituencyMembers"
-                                            render={arrayHelpers => (
-                                                <div>
-                                                    <FieldArrayAddIcon
-                                                        label="List the Family Members with Assembly Constituency Name"
-                                                        arrayHelpers={arrayHelpers}
-                                                        object={{ name: '', age: '', gender: "", assemblyName: "" }}
-                                                    />
-                                                    {values.assemblyConstituencyMembers.map((item, index) => (
-                                                        <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
-
-                                                            <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.assemblyConstituencyMembers} />
-                                                            <TextInput
-                                                                label="Members Name"
-                                                                title="Please Enter Name Of Members"
-                                                                name={`assemblyConstituencyMembers[${index}].name`}
-                                                                type="text"
-                                                                placeholder="Name"
-
-                                                            />
-                                                            <TextInput
-                                                                label="Age"
-                                                                title="Please Enter Age of Member"
-                                                                name={`assemblyConstituencyMembers[${index}].age`}
-                                                                type="number"
-                                                                placeholder="Age"
-                                                            />
-                                                            <SelectInput
-                                                                label="Gender"
-                                                                title="Select Gender"
-                                                                id={`assemblyConstituencyMembers[${index}].gender`}
-                                                                name={`assemblyConstituencyMembers[${index}].gender`}
-                                                                options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
-                                                            />
-                                                            <TextInput
-                                                                label="Assembly Constituency Name"
-                                                                title="Please Enter Assembly Constituency Name of Member"
-                                                                name={`assemblyConstituencyMembers[${index}].assemblyName`}
-                                                                type="text"
-                                                                placeholder="Assembly Constituency Name"
-
-                                                            />
-                                                            <br />
-                                                            {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
-
-                                                        </Stack>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        />
-                                    </Grid>
-
-                                    <Grid item xs={12} sx={{ mt: 1 }}>
-                                        <FieldArray
-                                            name="voterIDsList"
-                                            render={arrayHelpers => (
-                                                <div>
-                                                    <FieldArrayAddIcon
-                                                        label="List the Family Members with Voter IDs"
-                                                        arrayHelpers={arrayHelpers}
-                                                        object={{ name: '', age: '', gender: "", assemblyName: "" }}
-                                                    />
-                                                    {values.voterIDsList.map((item, index) => (
-                                                        <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
-
-                                                            <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.voterIDsList} />
-                                                            <TextInput
-                                                                label="Members Name"
-                                                                title="Please Enter Name Of Members"
-                                                                name={`voterIDsList[${index}].name`}
-                                                                type="text"
-                                                                placeholder="Name"
-                                                            />
-                                                            <TextInput
-                                                                label="Age"
-                                                                title="Please Enter Age Of Member"
-                                                                name={`voterIDsList[${index}].age`}
-                                                                type="number"
-                                                                placeholder="Age"
-                                                            />
-                                                            <SelectInput
-                                                                label="Gender"
-                                                                title="Select Gender"
-                                                                id={`voterIDsList[${index}].gender`}
-                                                                name={`voterIDsList[${index}].gender`}
-                                                                options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
-                                                            />
-                                                            <TextInput
-                                                                label="Assembly Constituency Name"
-                                                                title="Please Enter Assembly Constituency Name of Member"
-                                                                name={`voterIDsList[${index}].assemblyName`}
-                                                                type="text"
-                                                                placeholder="Assembly Constituency Name"
-
-                                                            />
-                                                            <br />
-                                                            {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
-                                                        </Stack>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        />
-                                    </Grid> */}
-
                                 </Grid>}
                                 <div className='d-flex flex-row-reverse bd-highlight'>
                                     {submitDisabled && <Button variant='contained' style={{ textAlign: "right" }} type='submit' sx={{ mt: 2, pl: 3, pr: 3 }} >Submit</Button>}

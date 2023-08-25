@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stepper, Step, StepLabel, Button, Typography, Toolbar, useMediaQuery, useTheme } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import india from "../../../assets/india1440.png"
 import india1 from "../../../assets/india420.png"
 import ImageWithText from '../../imageWithText/ImageWithText';
+import axios from "axios"
+
+const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
+
 const steps = ['Basic Details', 'About Family', 'Qualifications', 'General', 'Family Details']; // Define your steps here
 
 const SurveyMultiSteps = () => {
-  const [activeStep, setActiveStep] = useState(0);
+
   const theme = useTheme();
+  let { id } = useParams();
+  const navigate = useNavigate()
+
+  const [activeStep, setActiveStep] = useState(0);
+  const [formsDetail, setFormsDetail] = useState({})
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  console.log("111111111", isSmallScreen);
+
+  console.log("formsDetail  ", formsDetail);
+  useEffect(() => {
+    getUsers()
+  }, [id])
+
+  const getUsers = async () => {
+    const response = await axios.post(apiUrl, { id: id })
+    setFormsDetail(response.data.data)
+  }
+
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
@@ -18,17 +38,9 @@ const SurveyMultiSteps = () => {
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
-
+  console.log("id is ", id, "*");
   return (
     <div>
-      {/* <div className='d-flex align-items-center' style={{ backgroundColor: 'grey' }} >
-        <Typography variant="h6" color='primary' gutterBottom
-          style={{ fontSize: "18px", fontWeight: "bold", textAlign: "center", marginBottom: "1rem" }}
-        >
-          Survey Form
-        </Typography>
-      </div>
-      <img src={india} /> */}
       <ImageWithText image={isSmallScreen ? india1 : india} />
       <Toolbar />
 
@@ -42,7 +54,9 @@ const SurveyMultiSteps = () => {
       </Stepper>
       <div>
         <div >
-          {<SurveyForm activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)} />}
+          {!id && <SurveyForm activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)} />}
+          {id && <SurveyForm activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)} formsDetail={formsDetail} />}
+
           <div style={{ margin: activeStep !== steps.length - 1 ? "1.5rem" : "0px" }}  >
             {activeStep !== 0 &&
               <Button disabled={activeStep === 0} onClick={handleBack} variant="contained" color="primary" sx={{ mr: '1rem' }} >
