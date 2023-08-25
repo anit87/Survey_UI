@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { Stepper, Step, StepLabel, Button, Typography } from '@mui/material';
+import { Stepper, Step, StepLabel, Button, Typography, Toolbar, useMediaQuery, useTheme } from '@mui/material';
 import SurveyForm from './SurveyForm';
-import india from "../../../assets/india.jpg"
-
+import india from "../../../assets/india1440.png"
+import india1 from "../../../assets/india420.png"
+import ImageWithText from '../../imageWithText/ImageWithText';
 const steps = ['Basic Details', 'About Family', 'Qualifications', 'General', 'Family Details']; // Define your steps here
 
 const SurveyMultiSteps = () => {
   const [activeStep, setActiveStep] = useState(0);
-
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  console.log("111111111", isSmallScreen);
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
@@ -18,16 +21,18 @@ const SurveyMultiSteps = () => {
 
   return (
     <div>
-      <div className='d-flex align-items-center' style={{ backgroundColor: 'grey' }} >
-        <img width='100px' src={india} />
+      {/* <div className='d-flex align-items-center' style={{ backgroundColor: 'grey' }} >
         <Typography variant="h6" color='primary' gutterBottom
           style={{ fontSize: "18px", fontWeight: "bold", textAlign: "center", marginBottom: "1rem" }}
         >
           Survey Form
         </Typography>
       </div>
-      
-      <br/>
+      <img src={india} /> */}
+      <ImageWithText image={isSmallScreen ? india1 : india} />
+      <Toolbar />
+
+      <br />
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>

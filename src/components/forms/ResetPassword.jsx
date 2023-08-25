@@ -11,7 +11,7 @@ import Alert from '../Alert'
 const apiUrl = `/auth/resetpassword`
 
 const initialValues = {
-    email: 'user@email.com',
+    email: '',
     resetCode: ''
 }
 

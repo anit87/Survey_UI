@@ -11,10 +11,10 @@ import Alert from '../Alert'
 const apiUrl = `/auth/signup`
 
 const initialValues = {
-    displayName: 'user',
-    email: 'user@email.com',
-    password: '123456',
-    confirmPassword: '123456'
+    displayName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
 }
 
 const SignUp = () => {

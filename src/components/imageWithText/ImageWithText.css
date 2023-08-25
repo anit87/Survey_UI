@@ -1,0 +1,24 @@
+/* ImageWithText.css */
+
+.image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .img {
+    max-width: 90vw;
+    height: auto;
+  }
+  
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: #1976d2;
+    padding: 10px;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+  }
+  

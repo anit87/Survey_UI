@@ -40,8 +40,8 @@ function Row(props) {
         </TableCell>
         <TableCell scope="row">{row.displayName}</TableCell>
         <TableCell >{row.email}</TableCell>
-        <TableCell align="right">{row.userRole}</TableCell>
-        <TableCell align="right">
+        <TableCell>{row.userRole}</TableCell>
+        <TableCell>
           <Button color="primary" onClick={() =>navigate(`/allRecords/${row._id}`)} >View</Button >
         </TableCell>
       </TableRow>
@@ -58,20 +58,21 @@ function Row(props) {
                 {row.fieldUsers.length > 0 && <Table size="small" aria-label="purchases">
                   <TableBody>
                     {row.fieldUsers.map((historyRow) => (
-                      <TableRow key={historyRow._id}>
-                        <TableCell>
+                      <TableRow key={historyRow._id} sx={{ '& > *': { borderBottom: 'unset' } }}>
+                        <TableCell style={{visibility:'hidden'}} >
                           <IconButton
                             aria-label="expand row"
                             size="small"
                           >
+                            <KeyboardArrowUpIcon />
                           </IconButton>
                         </TableCell>
-                        <TableCell sx={{ color: subText }} component="th" scope="row">
+                        <TableCell sx={{ color: subText }}  scope="row">
                           {historyRow.displayName}
                         </TableCell>
                         <TableCell sx={{ color: subText }}>{historyRow.email}</TableCell>
-                        <TableCell sx={{ color: subText }} align="right">{historyRow.userRole}</TableCell>
-                        <TableCell sx={{ color: subText }} align="right">
+                        <TableCell sx={{ color: subText }}>{historyRow.userRole}</TableCell>
+                        <TableCell sx={{ color: subText }}>
                           <Button color="primary" onClick={() =>navigate(`/allRecords/${historyRow._id}`)} >View</Button >
                         </TableCell>
                       </TableRow>
