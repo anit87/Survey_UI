@@ -53,11 +53,11 @@ const educationalOptions = [
         value: 1
     },
     {
-        label: "Literate but no formal schooling/school up to 4 years",
+        label: "Literate but no formal education (0-4 years)",
         value: 2
     },
     {
-        label: "School 5 to 9 years",
+        label: "School 5-9 years",
         value: 3
     },
     {
@@ -65,15 +65,15 @@ const educationalOptions = [
         value: 4
     },
     {
-        label: "Some College but not graduate",
+        label: "Undergraduate",
         value: 5
     },
     {
-        label: "Graduate/Postgraduate - General",
+        label: "Postgraduate",
         value: 6
     },
     {
-        label: "Graduate/Postgraduate - Professional",
+        label: "Professional (Lawyer, Doctor, CA)",
         value: 7
     }
 ]
@@ -109,15 +109,16 @@ const initialValues = {
     isOwnProperty: '',
     totalMembers: '6',
     stayingMembers: '4',
-    religionAndCaste: 'Indian',
+    religion: '',
+    caste: 'Indian',
     cweEducation: '5',
     respondentEducation: '4',
     isParticipated: '1',
     birthdayDate: '',
     registeredVoter: '',
-    ageGroupOfMembers: [{ name: 'user', age: '20', gender: "male" }],
-    assemblyConstituencyMembers: [{ name: 'user', age: '20', gender: "female", assemblyName: "user" }],
-    voterIDsList: [{ name: 'user', age: '20', gender: "male", assemblyName: "user" }],
+    ageGroupOfMembers: [{ name: 'user', age: '20', gender: "male",assembly:"", voterId:"" }],
+    // assemblyConstituencyMembers: [{ name: 'user', age: '20', gender: "female", assemblyName: "user" }],
+    // voterIDsList: [{ name: 'user', age: '20', gender: "male", assemblyName: "user" }],
     maritalStatus: '1',
     occupationStatus: '2',
     monthlyHouseholdIncome: '4',
@@ -159,13 +160,14 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                     >
                         {({ values, errors }) => (
                             < Form >
-                                {/* <Toolbar variant='dense' /> */}
+                            
+                                {console.log("err ", errors)}
                                 <br />
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Respondent Name"
+                                            label="Applicant Name"
                                             title="Please Enter Your Name"
                                             name="respondentName"
                                             type="text"
@@ -195,7 +197,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Mobile No"
+                                            label="Mobile Number"
                                             title="Enter Your Mobile No"
                                             name="mobileNo"
                                             type="number"
@@ -219,7 +221,12 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                             title="Can You Please Tell Me Your Occupation Status?"
                                             id="occupationStatus"
                                             name="occupationStatus"
-                                            options={[{ label: "Working-Part time/Full time", value: "1" }, { label: "Home Maker/Housewife", value: "2" }]}
+                                            options={[
+                                                { label: "Self-employed", value: "1" },
+                                                { label: "Full-time", value: "2" },
+                                                { label: "Part-time/freelancer", value: "3" },
+                                                { label: "Home maker", value: "4" }
+                                            ]}
                                         />
                                     </Grid>
 
@@ -231,16 +238,17 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                             name="monthlyHouseholdIncome"
                                             options={[
                                                 { label: "Below Rs. 20,000.", value: "1" },
-                                                { label: "Above Rs. 20,000 to Below Rs. 30,000.", value: "2" },
-                                                { label: "Above Rs. 30,000 to Below Rs. 50,000.", value: "3" },
-                                                { label: "Above Rs. 50,000 to Below Rs. 75,000.", value: "4" },
+                                                { label: "Rs. 20,000 to Rs. 50,000.", value: "2" },
+                                                { label: "Rs. 50,000 to Rs. 1,00,000.", value: "3" },
+                                                { label: "Rs. 1,00,000 to Rs. 3,00,000.", value: "4" },
+                                                { label: "Above Rs. 3,00,000.", value: "5" },
                                             ]}
                                         />
                                     </Grid>
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="From How Many Years Are You Residing in This Location?"
+                                            label="Years of Residence in Current Location"
                                             title="How Many Years Have You Lived Here?"
                                             name="residingYears"
                                             type="number"
@@ -250,7 +258,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Is This Your Own Property?"
+                                            label="Do You Own This Property?"
                                             title="Is This Your Own Property?"
                                             name="isOwnProperty"
                                             id="isOwnProperty"
@@ -278,13 +286,38 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                             placeholder="Number Staying Here?"
                                         />
                                     </Grid>
-                                    <Grid item md={6} xs={12}>
+                                    {/* <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Religion, Caste & Sub Community"
-                                            title="Religion, Caste & Sub-community Information"
+                                            label="Religion"
+                                            title="Religion"
                                             name="religionAndCaste"
                                             type="text"
-                                            placeholder="Kindly Indicate Your Religion, Caste, and Sub-community"
+                                            placeholder="Kindly Select Your Religion"
+                                        />
+                                    </Grid> */}
+                                    <Grid item md={6} xs={12}>
+                                        <SelectInput
+                                            label="Religion"
+                                            title="Kindly Select Your Religion"
+                                            id="religion"
+                                            name="religion"
+                                            options={[
+                                                { label: "Hindu", value: "1" },
+                                                { label: "Muslim", value: "2" },
+                                                { label: "Christianity", value: "3" },
+                                                { label: "Sikh", value: "4" },
+                                                { label: "Other", value: "5" }
+                                            ]}
+                                        />
+                                    </Grid>
+
+                                    <Grid item md={6} xs={12}>
+                                        <TextInput
+                                            label="Caste"
+                                            title="Caste"
+                                            name="caste"
+                                            type="text"
+                                            placeholder="Kindly Indicate Your Caste"
                                         />
                                     </Grid>
                                 </Grid>}
@@ -302,8 +335,8 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Select Education Details of Respondent"
-                                            title="Provide Respondent's Education Details"
+                                            label="Applicant's Highest Level of Education"
+                                            title="Provide Applicant's Education Details"
                                             id="respondentEducation"
                                             name="respondentEducation"
                                             options={educationalOptions}
@@ -324,7 +357,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Could You Tell Me Your Age Please, Basis Your Last Birthday?"
+                                            label="Applicant's age"
                                             title="Please Provide Your Age Based On Your Last Birthday."
                                             id="birthdayDate"
                                             name="birthdayDate"
@@ -334,7 +367,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Are You a Registered Voter in This Assembly Constituency?"
+                                            label="Is The Applicant a Registered Voter In This Assembly Constituency?"
                                             title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
                                             name="registeredVoter"
                                             id="registeredVoter"
@@ -351,7 +384,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                             render={arrayHelpers => (
                                                 <div>
                                                     <FieldArrayAddIcon
-                                                        label="List the Age Group of Your Family Members Respondent Age"
+                                                        label="Information On Family Members"
                                                         arrayHelpers={arrayHelpers}
                                                         object={{ name: '', age: '', gender: "" }}
                                                     />
@@ -381,6 +414,20 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                                                 name={`ageGroupOfMembers[${index}].gender`}
                                                                 options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
                                                             />
+                                                            <TextInput
+                                                                label="Assembly/Constituency"
+                                                                title="Assembly/Constituency "
+                                                                name={`ageGroupOfMembers[${index}].assembly`}
+                                                                type="text"
+                                                                placeholder="Assembly/Constituency"
+                                                            />
+                                                            <SelectInput
+                                                                label="Voter ID"
+                                                                title="Have you Voter ID?"
+                                                                id={`ageGroupOfMembers[${index}].voterId`}
+                                                                name={`ageGroupOfMembers[${index}].voterId`}
+                                                                options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
+                                                            />
 
                                                             {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
                                                         </Stack>
@@ -389,7 +436,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                             )}
                                         />
                                     </Grid>
-
+                                    {/* 
                                     <Grid item xs={12} sx={{ mt: 1 }}>
                                         <FieldArray
                                             name="assemblyConstituencyMembers"
@@ -494,7 +541,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                                 </div>
                                             )}
                                         />
-                                    </Grid>
+                                    </Grid> */}
 
                                 </Grid>}
                                 <div className='d-flex flex-row-reverse bd-highlight'>

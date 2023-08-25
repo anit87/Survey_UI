@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
-
+import { useParams } from 'react-router-dom';
 const apiUrl = import.meta.env.VITE_API_URL + '/users'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -31,9 +31,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const rows = [];
+const rows = [{
+  name: "aa",
+  fat: "aa"
+},
+{
+  name: "bb",
+  fat: "bb"
+}];
 
-export default function CustomizedTables() {
+export default function RecordsbyUser() {
+  let { id } = useParams();
+  console.log(id);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -52,10 +61,10 @@ export default function CustomizedTables() {
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
               <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
+              <StyledTableCell align="right">{row.fat}</StyledTableCell>
+              <StyledTableCell align="right">{row.fat}</StyledTableCell>
+              <StyledTableCell align="right">{row.fat}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

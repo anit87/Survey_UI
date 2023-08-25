@@ -24,10 +24,11 @@ const apiUrl = import.meta.env.VITE_API_URL + '/users'
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate()
 
   return (
     <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} onClick={() => console.log(row)} >
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -40,7 +41,9 @@ function Row(props) {
         <TableCell scope="row">{row.displayName}</TableCell>
         <TableCell >{row.email}</TableCell>
         <TableCell align="right">{row.userRole}</TableCell>
-        <TableCell align="right">{row.surveyRecords.length}</TableCell>
+        <TableCell align="right">
+          <Button color="primary" onClick={() =>navigate(`/allRecords/${row._id}`)} >View</Button >
+        </TableCell>
       </TableRow>
       {row.userRole !== "fielduser" &&
         <TableRow>
@@ -55,7 +58,7 @@ function Row(props) {
                 {row.fieldUsers.length > 0 && <Table size="small" aria-label="purchases">
                   <TableBody>
                     {row.fieldUsers.map((historyRow) => (
-                      <TableRow key={historyRow._id} onClick={() => console.log(historyRow)} >
+                      <TableRow key={historyRow._id}>
                         <TableCell>
                           <IconButton
                             aria-label="expand row"
@@ -68,7 +71,9 @@ function Row(props) {
                         </TableCell>
                         <TableCell sx={{ color: subText }}>{historyRow.email}</TableCell>
                         <TableCell sx={{ color: subText }} align="right">{historyRow.userRole}</TableCell>
-                        <TableCell sx={{ color: subText }} align="right">{historyRow.surveyRecords.length}</TableCell>
+                        <TableCell sx={{ color: subText }} align="right">
+                          <Button color="primary" onClick={() =>navigate(`/allRecords/${historyRow._id}`)} >View</Button >
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -130,18 +135,18 @@ export default function CollapsibleTable() {
   return (
     <>
       <div className='d-flex flex-row-reverse bd-highlight mb-2'>
-        <Button variant="contained" color="primary" onClick={()=>navigate('/createuser')} > Create User </Button >
+        <Button variant="contained" color="primary" onClick={() => navigate('/createuser')} > Create User </Button >
       </div >
 
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableBody>
-          {users.status && users.result.map((row) => (
-            <Row key={row._id} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableBody>
+            {users.status && users.result.map((row) => (
+              <Row key={row._id} row={row} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 }

@@ -19,7 +19,9 @@ export const surveyFormSchema = Yup.object().shape({
         .required('Please enter the required value.'),
     stayingMembers: Yup.number()
         .required('Please enter the required value.'),
-    religionAndCaste: Yup.string()
+    religion: Yup.string()
+        .required('Please enter the required value.'),
+    caste: Yup.string()
         .required('Please enter the required value.'),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
@@ -39,29 +41,28 @@ export const surveyFormSchema = Yup.object().shape({
                 name: Yup.string().min(4, 'Too Short').required('Required'),
                 age: Yup.number().required('Required'),
                 gender: Yup.string().required('Required'),
+                assembly: Yup.string(),
+                voterId: Yup.string().required('Required'),
             })
-        )
-        .required('Must have friends'),
+        ),
     assemblyConstituencyMembers: Yup.array()
         .of(
             Yup.object().shape({
-                name: Yup.string().min(3, 'Too Short').required('Required'),
-                age: Yup.number().required('Required'),
-                gender: Yup.string().required('Required'),
-                assemblyName: Yup.string().min(3, 'Too Short').required('Required'),
+                name: Yup.string().min(3, 'Too Short'),
+                age: Yup.number(),
+                gender: Yup.string(),
+                assemblyName: Yup.string().min(3, 'Too Short'),
             })
-        )
-        .required('Must have friends'),
+        ),
     voterIDsList: Yup.array()
         .of(
             Yup.object().shape({
-                name: Yup.string().min(3, 'Too Short').required('Required'),
-                age: Yup.number().required('Required'),
-                gender: Yup.string().required('Required'),
-                assemblyName: Yup.string().min(3, 'Too Short').required('Required'),
+                name: Yup.string().min(3, 'Too Short'),
+                age: Yup.number(),
+                gender: Yup.string(),
+                assemblyName: Yup.string().min(3, 'Too Short'),
             })
-        )
-        .required('Must have friends'),
+        ),
     maritalStatus: Yup.string()
         .required('Please enter the required value.'),
     occupationStatus: Yup.string()
