@@ -14,7 +14,7 @@ import { verifyUser } from '../../../utils/functions/verifyUser';
 const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
     return (
         <Stack direction="row">
-            <Typography variant="subtitle1" sx={{ pt: 1, pb: 1 }} gutterBottom>{label}</Typography>
+            <Typography variant="subtitle1" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} sx={{ pt: 1, pb: 1 }} gutterBottom>{label}</Typography>
             <IconButton size="small" onClick={() => arrayHelpers.push(object)}>
                 <AddCircle fontSize="small" />
             </IconButton>
@@ -25,10 +25,10 @@ const FieldArrayRemoveIcon = ({ index, arrayHelpers, array }) => {
     return (
         <Box
             display="flex"
-            justifyContent="center"
+            justifyContent="left"
             alignItems="center"
         >
-            <Typography variant="subtitle2" gutterBottom > Member&nbsp;{index + 1} </Typography>
+            <Typography variant="subtitle2" style={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom > Member&nbsp;{index + 1} </Typography>
             <IconButton disabled={array.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
                 <RemoveCircle fontSize="small" />
             </IconButton>
@@ -149,7 +149,7 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                         initialValues={initialValues}
                         validationSchema={surveyFormSchema}
                         onSubmit={async (values, { setSubmitting }) => {
-                            console.log("user id ",userId);
+                            console.log("user id ", userId);
                             const resp = await axios.post("http://localhost:4000/forms", { ...values, filledBy: userId })
                             setSavedResp(resp.data)
                             console.log("formik ", resp);
@@ -159,7 +159,8 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                     >
                         {({ values, errors }) => (
                             < Form >
-                                <Toolbar />
+                                {/* <Toolbar variant='dense' /> */}
+                                <br />
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
                                     <Grid item md={6} xs={12}>
@@ -496,8 +497,9 @@ const SurveyForm = ({ activeStep, submitDisabled }) => {
                                     </Grid>
 
                                 </Grid>}
-
-                                <Button disabled={!submitDisabled} variant='contained' type='submit' sx={{ mt: 3, mb: 2, pl: 3, pr: 3 }} >Submit</Button>
+                                <div className='d-flex flex-row-reverse bd-highlight'>
+                                    {submitDisabled && <Button variant='contained' style={{ textAlign: "right" }} type='submit' sx={{ mt: 2, pl: 3, pr: 3 }} >Submit</Button>}
+                                </div>
 
                             </Form>
                         )}

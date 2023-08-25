@@ -25,50 +25,50 @@ export default function SelectTextFields({ id, label, title, options, ...props }
         <>
             <FormControl fullWidth>
                 <Stack direction="row">
-                    <Typography variant="subtitle1" gutterBottom>{label}</Typography>
+                    <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign:"left" }} gutterBottom>{label}</Typography>
                 </Stack>
-                <TextField
-                    margin="normal"
-                    id={id}
-                    select
-                    fullWidth
-                    size="small"
-                    InputLabelProps={{
-                        style: { fontSize: '.8rem', mt: 5 }
-                    }}
-                    label=""
-                    // label={label}
-                    title={title}
-                    defaultValue={null}
-                    variant="outlined"
-                    error={Boolean(meta.touched && meta.error)}
-                    helperText={Boolean(meta.touched && meta.error) ? meta.error : `   `}
-                    InputProps={{
-                        endAdornment: (
-                            !title
-                                ? null
-                                : <IconButton
-                                    size="small"
-                                    aria-label="helper"
-                                    onClick={(event) =>
-                                        handleHelperIconClick(event, title)
-                                    }
-                                    sx={{ pr: 1 }}
-                                >
-                                    <InfoIcon fontSize="small" />
-                                </IconButton>
-                        ),
-                    }}
-                    {...field} {...props}
-                >
-                    {
-                        options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))
-                    }
-                </TextField>
+                <Stack direction="row">
+                    <TextField
+                        margin="none"
+                        id={id}
+                        select
+                        fullWidth
+                        size="small"
+                        InputLabelProps={{
+                            style: { fontSize: '14px', mb: "8px" }
+                        }}
+                        InputProps={{
+                            sx: { fontSize: '14px'}
+                        }}
+                        label=""
+                        title={title}
+                        defaultValue={null}
+                        variant="outlined"
+                        error={Boolean(meta.touched && meta.error)}
+                        helperText={Boolean(meta.touched && meta.error) ? meta.error : `   `}
+                        {...field} {...props}
+                    >
+                        {
+                            options.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                    {!title
+                        ? null
+                        : <IconButton
+                            size="small"
+                            aria-label="helper"
+                        >
+                            <InfoIcon fontSize="small"
+                                onClick={(event) =>
+                                    handleHelperIconClick(event, title)
+                                }
+                            />
+                        </IconButton>}
+                </Stack>
                 <Popper
                     open={open} anchorEl={anchorEl} helperText={helperTextInfo} handlePopperClose={handlePopperClose}
                 />

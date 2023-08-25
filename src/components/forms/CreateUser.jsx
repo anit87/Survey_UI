@@ -23,6 +23,8 @@ const roles = [
         value: "fielduser"
     }
 ]
+const userRoleOp = [{ label: "User", value: "user" }]
+const fieldRoleOp = [{ label: "Field User", value: "fielduser" }]
 
 const initialValues = {
     displayName: 'user',
@@ -121,7 +123,9 @@ const CreateUser = () => {
                                         name="userRole"
                                         id="userRole"
                                         options={roles}
-                                        disabled={userRole !== 'admin'}
+                                        // disabled={userRole !== 'admin'}
+                                        disabled={true}
+                                        value={userRole === 'admin'? 'user': 'fielduser'}
                                     />
                                 </Grid>
                             </Grid>

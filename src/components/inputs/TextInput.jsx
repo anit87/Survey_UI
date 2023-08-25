@@ -21,49 +21,46 @@ const TextInput = ({ label, title, ...props }) => {
     };
 
     const open = Boolean(anchorEl);
-    const labelStyles = {
-        // alignItems: "start",
-        // position: "absolute",
-        // fontWeight: "600",
-        // padding: "-7px 13px",
-        // marginTop: "-14px"
-    }
 
     return (
         <>
             <FormControl fullWidth>
                 <Stack direction="row">
-                    <Typography variant="h6" style={{fontSize:"1rem", fontWeight:"bold"}} gutterBottom>{label}</Typography>
+                    <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>{label}</Typography>
                 </Stack>
-                <TextField
-                    margin="normal"
-                    fullWidth
-                    size="small"
-                    InputLabelProps={{
-                        sx: { fontSize: '.8rem' }
-                    }}
-                    label=""
-                    variant="outlined"
-                    title={title}
-                    InputProps={{
-                        endAdornment: (
-                            !title
-                                ? null
-                                : <IconButton
-                                    size="small"
-                                    aria-label="helper"
+                <Stack direction="row">
+                    <TextField
+                        margin="none"
+                        fullWidth
+                        size="small"
+                        InputLabelProps={{
+                            sx: { fontSize: '.8rem', mb: "8px" }
+                        }}
+                        InputProps={{
+                            sx: { fontSize: '14px'}
+                        }}
+                        label=""
+                        variant="outlined"
+                        title={title}
+                        error={Boolean(meta.touched && meta.error)}
+                        helperText={Boolean(meta.touched && meta.error) ? meta.error : ``}
+                        {...field} {...props}
+                    />
+                    {
+                        !title
+                            ? null
+                            : <IconButton
+                                size="small"
+                                aria-label="helper"
+                            >
+                                <InfoIcon fontSize="small"
                                     onClick={(event) =>
                                         handleHelperIconClick(event, title)
                                     }
-                                >
-                                    <InfoIcon fontSize="small" />
-                                </IconButton>
-                        ),
-                    }}
-                    error={Boolean(meta.touched && meta.error)}
-                    helperText={Boolean(meta.touched && meta.error) ? meta.error : ``}
-                    {...field} {...props}
-                />
+                                />
+                            </IconButton>
+                    }
+                </Stack>
                 <Popper
                     open={open} anchorEl={anchorEl} helperText={helperTextInfo} handlePopperClose={handlePopperClose}
                 />

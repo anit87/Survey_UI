@@ -8,13 +8,13 @@ import { createTheme } from "@mui/material"
 
 
 const darkTheme = createTheme({
-    components: {
-      MuiButtonBase: {
-        defaultProps: {
-          disableRipple: true, 
-        },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
       },
     },
-  });
+  },
+});
 
-export {darkTheme}
+export { darkTheme }

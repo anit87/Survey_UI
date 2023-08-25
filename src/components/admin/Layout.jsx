@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 const list = [
     { label: "Dashboard", icon: DashboardIcon, url: "/createuser" },
-    { label: "Create User", icon: PersonAddIcon, url: "/createuser" },
+    // { label: "Create User", icon: PersonAddIcon, url: "/createuser" },
     { label: "All Users", icon: PersonAddIcon, url: "/allusers" },
     { label: "Create Form", icon: PersonAddIcon, url: "/form" },
 ]

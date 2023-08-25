@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
+import { Box, Button } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
@@ -15,6 +15,9 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import axios from 'axios';
 import { verifyUser } from '../../utils/functions/verifyUser';
+import { grey } from '@mui/material/colors'
+import { useNavigate } from "react-router-dom"
+const subText = grey[600];
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users'
 
@@ -35,53 +38,45 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell scope="row">{row.displayName}</TableCell>
-        <TableCell align="right" >{row.email}</TableCell>
+        <TableCell >{row.email}</TableCell>
         <TableCell align="right">{row.userRole}</TableCell>
         <TableCell align="right">{row.surveyRecords.length}</TableCell>
       </TableRow>
-      {row.userRole !== "fielduser" && <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                {row.fieldUsers.length < 1
-                  ? "No user"
-                  : "Field Users"}
-              </Typography>
-              {row.fieldUsers.length > 0 && <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell align="right">Email</TableCell>
-                    <TableCell align="right">Role</TableCell>
-                    <TableCell align="right">Forms Filled</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {row.fieldUsers.map((historyRow) => (
-                    <TableRow key={historyRow._id} onClick={() => console.log(historyRow)} >
-                      <TableCell>
-                        <IconButton
-                          aria-label="expand row"
-                          size="small"
-                        >
-                        </IconButton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {historyRow.displayName}
-                      </TableCell>
-                      <TableCell align="right">{historyRow.email}</TableCell>
-                      <TableCell align="right">{historyRow.userRole}</TableCell>
-                      <TableCell align="right">{historyRow.surveyRecords.length}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>}
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>}
+      {row.userRole !== "fielduser" &&
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1 }}>
+                <Typography variant="h6" gutterBottom component="div">
+                  {row.fieldUsers.length < 1
+                    ? "No user"
+                    : ""}
+                </Typography>
+                {row.fieldUsers.length > 0 && <Table size="small" aria-label="purchases">
+                  <TableBody>
+                    {row.fieldUsers.map((historyRow) => (
+                      <TableRow key={historyRow._id} onClick={() => console.log(historyRow)} >
+                        <TableCell>
+                          <IconButton
+                            aria-label="expand row"
+                            size="small"
+                          >
+                          </IconButton>
+                        </TableCell>
+                        <TableCell sx={{ color: subText }} component="th" scope="row">
+                          {historyRow.displayName}
+                        </TableCell>
+                        <TableCell sx={{ color: subText }}>{historyRow.email}</TableCell>
+                        <TableCell sx={{ color: subText }} align="right">{historyRow.userRole}</TableCell>
+                        <TableCell sx={{ color: subText }} align="right">{historyRow.surveyRecords.length}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>}
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>}
     </React.Fragment>
   );
 }
@@ -105,6 +100,7 @@ Row.propTypes = {
 
 
 export default function CollapsibleTable() {
+  const navigate = useNavigate()
   const [users, setUsers] = useState({
     status: false,
     result: [],
@@ -133,50 +129,22 @@ export default function CollapsibleTable() {
   console.log("userDetail ", userDetail);
   return (
     <>
-      <Typography variant="h6">User Information</Typography>
-      <Typography> User Name: {userDetail.displayName} </Typography>
-      <Typography> Email: {userDetail.email} </Typography>
-      <Typography> Role: {userDetail.userRole} </Typography>
-      <Typography>Forms Filled: 5</Typography>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Email</TableCell>
-              <TableCell align="right">Role&nbsp;</TableCell>
-              <TableCell align="right">Forms Filled&nbsp;</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.status && users.result.map((row) => (
-              <Row key={row._id} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Typography variant="h6" gutterBottom component="div"> Total Forms filled {users.totalResults} </Typography>
+      <div className='d-flex flex-row-reverse bd-highlight mb-2'>
+        <Button variant="contained" color="primary" onClick={()=>navigate('/createuser')} > Create User </Button >
+      </div >
+
+    <TableContainer component={Paper}>
+      <Table aria-label="collapsible table">
+        <TableBody>
+          {users.status && users.result.map((row) => (
+            <Row key={row._id} row={row} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </>
   );
 }
 
 
-
-const UserInfoCard = ({ userName, role, formsFilled }) => {
-  return (
-    <Paper className={classes.root}>
-      <Typography variant="h6">User Information</Typography>
-      <Typography>
-        User Name: {userName}
-      </Typography>
-      <Typography>
-        Role: {role}
-      </Typography>
-      <Typography>
-        Forms Filled: {formsFilled}
-      </Typography>
-    </Paper>
-  )
-}
 
