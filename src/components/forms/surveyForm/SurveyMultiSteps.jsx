@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Stepper, Step, StepLabel, Button, Typography, Toolbar, useMediaQuery, useTheme } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
+import SurveyFormNoneEdit from "./SurveyFormNoneEdit"
 import india from "../../../assets/india1440.png"
 import india1 from "../../../assets/india420.png"
 import ImageWithText from '../../imageWithText/ImageWithText';
@@ -55,7 +56,11 @@ const SurveyMultiSteps = () => {
       <div>
         <div >
           {!id && <SurveyForm activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)} />}
-          {id && <SurveyForm activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)} formsDetail={formsDetail} />}
+          {id &&
+            <SurveyFormNoneEdit
+              activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)}
+              formsDetail={formsDetail}
+            />}
 
           <div style={{ margin: activeStep !== steps.length - 1 ? "1.5rem" : "0px" }}  >
             {activeStep !== 0 &&
