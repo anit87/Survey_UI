@@ -123,9 +123,9 @@ const CreateUser = () => {
                                         name="userRole"
                                         id="userRole"
                                         options={roles}
-                                        // disabled={userRole !== 'admin'}
-                                        // disabled={true}
-                                        // value={userRole === 'admin'? 'user': 'fielduser'}
+                                    // disabled={userRole !== 'admin'}
+                                    // disabled={true}
+                                    // value={userRole === 'admin'? 'user': 'fielduser'}
                                     />
                                 </Grid>
                             </Grid>

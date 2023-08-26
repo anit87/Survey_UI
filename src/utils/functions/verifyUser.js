@@ -1,11 +1,13 @@
 import axios from "axios"
 import jwt from "jwt-decode";
+import { useSelector } from "react-redux";
 
-const token = localStorage.getItem("surveyApp")
+const localtoken = localStorage.getItem("surveyApp")
 const secret = import.meta.env.VITE_JWT_SECRET_KEY
 
-export const verifyUser = function () {
+export const verifyUser = function (mytoken) {
     try {
+        const token = mytoken || localtoken
         const decoded = jwt(token, secret);
         if (decoded) {
             return decoded;

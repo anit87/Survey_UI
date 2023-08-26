@@ -168,11 +168,9 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                     <Formik
                         initialValues={formsDetail ? formsDetail : initialValues}
                         // validationSchema={surveyFormSchema}
-                        onSubmit={async (values, { setSubmitting }) => {
-                            console.log("user id ", userId);
-                            const resp = await axios.post("http://localhost:4000/forms", { ...values, filledBy: userId })
-                            setSavedResp(resp.data)
-                            console.log("formik ", resp);
+                        onSubmit={async (values, { setSubmitting }) => {                          
+                          setSavedResp(resp.data)
+                            // console.log("formik ", resp);
                             alertfn()
                             setSubmitting(false);
                         }}

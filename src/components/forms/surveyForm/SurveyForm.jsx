@@ -3,13 +3,15 @@ import { Box, Grid, Typography, Container, Button, Stack, IconButton, useMediaQu
 import { Formik, Form, FieldArray } from "formik"
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import { surveyFormSchema } from '../../../utils/schemas/surveyForm';
 import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
+const apiUrl = import.meta.env.VITE_API_URL + '/forms'
+// const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
 const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
     return (
@@ -133,11 +135,15 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [editable, setEditable] = useState(formId)
     // const [formsDetail, setFormsDetail] = useState(initialValues)
-
+    const token = localStorage.getItem('surveyApp')
+    const mydata = useSelector(state => state.auth)
+    // console.log("token ", mydata.token);
     useEffect(() => {
-        const { id } = verifyUser()
+        const data = mydata.token||token
+        const { id } = verifyUser(data)
         setUserId(id)
-    }, [userId])
+    }, [userId, token])
+
     useEffect(() => {
         setCounter(counter++)
 
@@ -156,8 +162,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
-    // console.log(userId, " ", userId);
-    console.log("dettt", formsDetail);
+    // console.log("userId", " ", userId);
+    // console.log("dettt", formsDetail);
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -167,12 +173,12 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                         initialValues={formsDetail ? formsDetail : initialValues}
                         // validationSchema={surveyFormSchema}
                         onSubmit={async (values, { setSubmitting }) => {
-                            console.log("user id ", userId);
-                            const resp = await axios.post("http://localhost:4000/forms", { ...values, filledBy: userId })
+                            // console.log("user id ", userId);
+                            const resp = await axios.post(apiUrl, { ...values, filledBy: userId })
                             setSavedResp(resp.data)
-                            console.log("formik ", resp);
+                            // console.log("formik ", resp);
                             alertfn()
-                            setSubmitting(false);
+                            setSubmitting(false); 
                         }}
                     >
                         {({ values, errors }) => (
@@ -189,8 +195,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="respondentName"
                                             type="text"
                                             placeholder="Please Provide Your Full Name"
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={formsDetail.respondentName}
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={formsDetail.respondentName}
 
                                         />
                                     </Grid>
@@ -202,8 +208,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="address"
                                             type="text"
                                             placeholder="Enter Your Full Mailing Address Here"
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={formsDetail.address}
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={formsDetail.address}
                                         />
                                     </Grid>
 
@@ -214,8 +220,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="pincode"
                                             type="number"
                                             placeholder="454545"
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={formsDetail.pincode}
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={formsDetail.pincode}
                                         />
                                     </Grid>
 
@@ -226,8 +232,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="mobileNo"
                                             type="number"
                                             placeholder="9874563210"
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={formsDetail.mobileNo}
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={formsDetail.mobileNo}
                                         />
                                     </Grid>
 
@@ -238,8 +244,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             id="maritalStatus"
                                             name="maritalStatus"
                                             options={[{ label: "Single", value: "1" }, { label: "Married", value: "2" }]}
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={formsDetail.maritalStatus==1?"Single":"Married"}
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={formsDetail.maritalStatus==1?"Single":"Married"}
                                         />
                                     </Grid>
 
@@ -255,13 +261,13 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                                 { label: "Part-time/freelancer", value: "3" },
                                                 { label: "Home maker", value: "4" }
                                             ]}
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={
-                                            //     formsDetail.occupationStatus==1?"Self-employed":
-                                            //     formsDetail.occupationStatus==2?"Full-time":
-                                            //     formsDetail.occupationStatus==3?"Part-time/freelancer":
-                                            //     formsDetail.occupationStatus==4?"Home maker":""                                               
-                                            // }
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={
+                                        //     formsDetail.occupationStatus==1?"Self-employed":
+                                        //     formsDetail.occupationStatus==2?"Full-time":
+                                        //     formsDetail.occupationStatus==3?"Part-time/freelancer":
+                                        //     formsDetail.occupationStatus==4?"Home maker":""                                               
+                                        // }
                                         />
                                     </Grid>
 
@@ -278,13 +284,13 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                                 { label: "Rs. 1,00,000 to Rs. 3,00,000.", value: "4" },
                                                 { label: "Above Rs. 3,00,000.", value: "5" },
                                             ]}
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={
-                                            //     formsDetail.monthlyHouseholdIncome==1?"Below Rs. 20,000.":
-                                            //     formsDetail.monthlyHouseholdIncome==2?"Rs. 20,000 to Rs. 50,000.":
-                                            //     formsDetail.monthlyHouseholdIncome==3?"Rs. 50,000 to Rs. 1,00,000.":
-                                            //     formsDetail.monthlyHouseholdIncome==4?"Rs. 1,00,000 to Rs. 3,00,000.":"Above Rs. 3,00,000."                                               
-                                            // }
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={
+                                        //     formsDetail.monthlyHouseholdIncome==1?"Below Rs. 20,000.":
+                                        //     formsDetail.monthlyHouseholdIncome==2?"Rs. 20,000 to Rs. 50,000.":
+                                        //     formsDetail.monthlyHouseholdIncome==3?"Rs. 50,000 to Rs. 1,00,000.":
+                                        //     formsDetail.monthlyHouseholdIncome==4?"Rs. 1,00,000 to Rs. 3,00,000.":"Above Rs. 3,00,000."                                               
+                                        // }
                                         />
                                     </Grid>
 
@@ -295,9 +301,9 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="residingYears"
                                             type="number"
                                             placeholder="Years at Current Location"
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={formsDetail.residingYears}
-                                            
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={formsDetail.residingYears}
+
                                         />
                                     </Grid>
 
@@ -308,8 +314,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             name="isOwnProperty"
                                             id="isOwnProperty"
                                             options={trueFalseOptions}
-                                            // editable={Boolean(formsDetail)}
-                                            // textValue={formsDetail.isOwnProperty==true?"Yes":"No"}
+                                        // editable={Boolean(formsDetail)}
+                                        // textValue={formsDetail.isOwnProperty==true?"Yes":"No"}
                                         />
                                     </Grid>
                                 </Grid>}
