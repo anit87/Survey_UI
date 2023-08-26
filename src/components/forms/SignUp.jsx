@@ -63,14 +63,14 @@ const SignUp = () => {
                                 label="Name"
                                 name="displayName"
                                 type="text"
-                                placeholder="Jane"
+                                placeholder="Please Enter Your Name"
                             />
 
                             <TextInput
                                 label="Email"
                                 name="email"
                                 type="email"
-                                placeholder="test@email.com"
+                                placeholder="Please Enter Your Email"
                             />
 
                             <TextInput

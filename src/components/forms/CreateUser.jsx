@@ -15,7 +15,7 @@ const apiUrl = `/auth/signup`
 
 const roles = [
     {
-        label: "User",
+        label: "Admin",
         value: "user"
     },
     {
@@ -88,7 +88,7 @@ const CreateUser = () => {
                                         label="Name"
                                         name="displayName"
                                         type="text"
-                                        placeholder="Jane"
+                                        placeholder="Please Enter Your Name"
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -97,14 +97,14 @@ const CreateUser = () => {
                                         label="Email"
                                         name="email"
                                         type="email"
-                                        placeholder="test@email.com"
+                                        placeholder="Please Enter Your Email"
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                     <TextInput
                                         label="Password"
                                         name="password"
-                                        type="text"
+                                        type="password"
                                         placeholder="*******"
                                     />
                                 </Grid>
@@ -112,7 +112,7 @@ const CreateUser = () => {
                                     <TextInput
                                         label="Confirm Password"
                                         name="confirmPassword"
-                                        type="text"
+                                        type="password"
                                         placeholder="*******"
                                     />
                                 </Grid>
@@ -124,8 +124,8 @@ const CreateUser = () => {
                                         id="userRole"
                                         options={roles}
                                         // disabled={userRole !== 'admin'}
-                                        disabled={true}
-                                        value={userRole === 'admin'? 'user': 'fielduser'}
+                                        // disabled={true}
+                                        // value={userRole === 'admin'? 'user': 'fielduser'}
                                     />
                                 </Grid>
                             </Grid>

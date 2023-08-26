@@ -40,7 +40,7 @@ function Row(props) {
         </TableCell>
         <TableCell scope="row">{row.displayName}</TableCell>
         <TableCell >{row.email}</TableCell>
-        <TableCell>{row.userRole}</TableCell>
+        <TableCell>{row.userRole==='user'?'Admin':row.userRole}</TableCell>
         <TableCell>
           <Button color="primary" onClick={() =>navigate(`/allRecords/${row._id}`)} >View</Button >
         </TableCell>
