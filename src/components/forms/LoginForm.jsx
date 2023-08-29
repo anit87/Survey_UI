@@ -82,7 +82,6 @@ const SignIn = () => {
             <Form>
               <TextInput
                 label="Email"
-                title="Enter your email"
                 name="email"
                 type="email"
                 placeholder="Please Enter Your Email"
@@ -90,7 +89,6 @@ const SignIn = () => {
 
               <TextInput
                 label="Password"
-                title="11"
                 name="password"
                 type="password"
                 placeholder="*******"

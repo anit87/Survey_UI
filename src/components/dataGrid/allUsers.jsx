@@ -18,6 +18,8 @@ import axios from 'axios';
 import { verifyUser } from '../../utils/functions/verifyUser';
 import { grey } from '@mui/material/colors'
 import { useNavigate } from "react-router-dom"
+import TreeTable from './TreeTable';
+
 const subText = grey[600];
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users'
@@ -34,7 +36,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 function Row(props) {
-  const { row, index } = props;
+  const { row, index, userDetail } = props;
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate()
 
@@ -42,18 +44,22 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
         <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+          {
+            userDetail.userRole !== "2" &&
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          }
         </TableCell>
         <TableCell >{parseInt(index) + 1}</TableCell>
         <TableCell >{row.displayName}</TableCell>
+        {/* <TableCell >{row.phoneNumber||"- - -"}</TableCell> */}
         <TableCell >{row.email}</TableCell>
-        <TableCell>{row.userRole === 'user' ? 'Admin' : row.userRole}</TableCell>
+        <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell>
         <TableCell  >
           <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
         </TableCell>
@@ -85,8 +91,9 @@ function Row(props) {
                         <TableCell sx={{ color: subText }} align='center' >
                           {historyRow.displayName}
                         </TableCell>
+                        {/* <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber||"- - -"}</TableCell> */}
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
-                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole}</TableCell>
+                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center'>
                           <Button color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
                         </TableCell>
@@ -167,6 +174,7 @@ export default function CollapsibleTable() {
               <StyledTableCell></StyledTableCell>
               <StyledTableCell>S.No</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Phone</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
               <StyledTableCell>Role</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
@@ -174,11 +182,14 @@ export default function CollapsibleTable() {
           </TableHead>
           <TableBody>
             {users.status && users.result.map((row, index) => (
-              <Row key={row._id} row={row} index={index} />
+              <Row key={row._id} row={row} index={index} userDetail={userDetail} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <br />
+
+      {/* {users.status && <TreeTable data={users.result} />} */}
     </>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -19,14 +20,22 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import axios from 'axios';
 import { useDrawerData } from '../../utils/DrawerDataContext';
+import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyUser';
+import { useDispatch, useSelector } from 'react-redux';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users/allrecords'
+
+
+const formatDate = (dateString) => {
+    const parsedDate = moment(dateString);
+    const formattedDate = parsedDate.format("DD-MM-YYYY HH:mm");
+    return formattedDate
+}
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: "#1565c0",
-        // backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -97,7 +106,7 @@ TablePaginationActions.propTypes = {
 
 
 
-export default function DataGridTable() {
+export default function SurveyForms() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [rows, setRows] = useState({
@@ -107,17 +116,30 @@ export default function DataGridTable() {
 
     const { filterData } = useDrawerData();
 
+    const [userDetail, setUserDetail] = useState({})
+    const token = useSelector(state => state.auth.token)
+    useEffect(() => {
+        const user = verifyUser(token)
+        setUserDetail(user)
+    }, [])
+    console.log("userDetail dash ", userDetail);
+
     useEffect(() => {
         getData()
     }, [filterData])
 
     const getData = async () => {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem("surveyApp"),
+        };
+        const url = `${apiUrl}?birthdayDate=${filterData.birthdayDate || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}`
         // const response = await axios.get(`${apiUrl}?birthdayDate=${filterData.birthdayDate}&maritalStatus=${filterData.maritalStatus}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`)
-        const response = await axios.get(`${apiUrl}?birthdayDate=${filterData.birthdayDate||""}&maritalStatus=${filterData.maritalStatus||""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome||""}`)
+        const response = await axios.get(url, { headers })
         setRows(response.data)
     }
 
-    console.log("filters ", filterData);
+    console.log("filters ", rows);
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -131,19 +153,20 @@ export default function DataGridTable() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-   
+
     return (
-        
+
         <TableContainer component={Paper}>
-              <h6 className=''  style={{fontSize:"20px", fontWeight:"bold"}} >All Survey's</h6>
+            <h6 className='' style={{ fontSize: "20px", fontWeight: "bold" }} >All Survey's</h6>
             {rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                 <TableHead>
                     <TableRow>
+                        <StyledTableCell>S.No</StyledTableCell>
                         <StyledTableCell>Respondent Name</StyledTableCell>
-                        <StyledTableCell align="right">Mobile No</StyledTableCell>                        
+                        <StyledTableCell align="right">Mobile No</StyledTableCell>
                         <StyledTableCell align="right">Pincode</StyledTableCell>
                         <StyledTableCell align="right">Marital Status</StyledTableCell>
-                        <StyledTableCell align="right">Created By</StyledTableCell>
+                        {(userDetail.userRole != '3' && userDetail.userRole != '2' ) && <StyledTableCell align="right">Created By</StyledTableCell>}
                         <StyledTableCell align="right">Created Date</StyledTableCell>
                         <StyledTableCell align="right"></StyledTableCell>
                     </TableRow>
@@ -152,38 +175,41 @@ export default function DataGridTable() {
                     {(rowsPerPage > 0
                         ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         : rows.data
-                    ).map((row) => (
+                    ).map((row, i) => (
                         <TableRow key={row._id}>
+                            <TableCell component="th" scope="row">
+                                {parseInt(i) + 1}
+                            </TableCell>
                             <TableCell component="th" scope="row">
                                 {row.respondentName}
                             </TableCell>
                             <TableCell style={{ width: 160 }} align="right">
                                 {row.mobileNo}
-                            </TableCell>                          
+                            </TableCell>
                             <TableCell style={{ width: 160 }} align="right">
                                 {row.pincode}
                             </TableCell>
                             <TableCell style={{ width: 160 }} align="right">
                                 {row.maritalStatus === 1 ? "Single" : "Married"}
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="right">
-                               Bunty
-                            </TableCell>
-                            <TableCell  align="right">
-                              28-Aug-2023 15:00:00
+                            {(userDetail.userRole != '3' && userDetail.userRole != '2' ) && <TableCell style={{ width: 160 }} align="right">
+                                {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
+                            </TableCell>}
+                            <TableCell align="right">
+                                {formatDate(row.date)}
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ))} 
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 53 * emptyRows }}>
                             <TableCell colSpan={6} />
                         </TableRow>
                     )}
                 </TableBody>
-                <TableFooter>
+                {(rows.status && rows.data.length>10) && <TableFooter>
                     <TableRow>
                         <TablePagination
-                            rowsPerPageOptions={[10, 20,50, { label: 'All', value: -1 }]}
+                            rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
                             colSpan={3}
                             count={rows.data.length}
                             rowsPerPage={rowsPerPage}
@@ -199,7 +225,7 @@ export default function DataGridTable() {
                             ActionsComponent={TablePaginationActions}
                         />
                     </TableRow>
-                </TableFooter>
+                </TableFooter>}
             </Table>}
         </TableContainer>
     );
