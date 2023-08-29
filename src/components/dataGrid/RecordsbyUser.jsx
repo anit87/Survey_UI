@@ -14,7 +14,8 @@ const apiUrl = import.meta.env.VITE_API_URL + '/users/records'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#1565c0",
+    // backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -32,14 +33,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const rows = [{
-  name: "aa",
-  fat: "aa"
-},
-{
-  name: "bb",
-  fat: "bb"
-}];
 
 export default function RecordsbyUser() {
   let { id } = useParams();
@@ -91,3 +84,4 @@ export default function RecordsbyUser() {
     </TableContainer>
   );
 }
+

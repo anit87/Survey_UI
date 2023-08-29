@@ -3,6 +3,7 @@
 .image-container {
     position: relative;
     display: inline-block;
+    width: 100% !important;
   }
   
   .img {
@@ -19,6 +20,14 @@
     padding: 10px;
     font-size: 18px;
     display: flex;
+    display: -webkit-box;
     justify-content: center;
   }
-  
+  h6.surveyheaing {
+    display: inline-flex;
+    display: end;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    margin-left: 18rem;
+}

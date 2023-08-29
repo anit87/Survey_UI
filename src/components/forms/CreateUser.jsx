@@ -72,14 +72,15 @@ const CreateUser = () => {
             >
                 <Box
                     sx={{
-                        my: 8,
-                        mx: 8,
+                        my: 1,
+                        mx: 1,
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
+                        alignItems: 'left',
                     }}
                 >
-                    <Typography variant="h5">Create User</Typography>
+                    <h6  style={{fontSize:"20px", fontWeight:"bold"}} >Users</h6>
+                   
                     <Box sx={{ mt: 1 }} >
                         <Form>
                             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -88,7 +89,7 @@ const CreateUser = () => {
                                         label="Name"
                                         name="displayName"
                                         type="text"
-                                        placeholder="Please Enter Your Name"
+                                        placeholder="Enter Your Name"
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -97,7 +98,7 @@ const CreateUser = () => {
                                         label="Email"
                                         name="email"
                                         type="email"
-                                        placeholder="Please Enter Your Email"
+                                        placeholder="Enter Your Email"
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -117,6 +118,14 @@ const CreateUser = () => {
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
+                                    <TextInput
+                                        label="Phone Number"
+                                        name="phoneNumber"
+                                        type="text"
+                                        placeholder="Enter Phone Number"
+                                    />
+                                </Grid>
+                                <Grid item md={6} xs={12}>
                                     <SelectInput
                                         label="Choose Role"
                                         title="Choose Role for the new user"
@@ -129,7 +138,8 @@ const CreateUser = () => {
                                     />
                                 </Grid>
                             </Grid>
-                            <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2 }} >Create</Button>
+                            <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2,mr:2 }} >Create</Button>
+                            <Button variant='contained' type='button' sx={{ mt: 3, mb: 2 }} >Cancel</Button>
                         </Form>
                     </Box>
                 </Box>

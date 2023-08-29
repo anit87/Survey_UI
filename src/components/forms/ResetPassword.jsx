@@ -67,7 +67,7 @@ const ResetPassword = () => {
                                     label="Email"
                                     name="email"
                                     type="email"
-                                    placeholder="test@email.com"
+                                    placeholder="Please Enter Your Email"
                                 />
                                 : <TextInput
                                     label="6 Digit Code"

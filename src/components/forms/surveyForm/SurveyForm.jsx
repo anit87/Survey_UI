@@ -10,6 +10,7 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
+import { ageOptions, incomeOptions } from '../../../utils/constants'; 
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
 // const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
@@ -79,28 +80,7 @@ const educationalOptions = [
         value: 7
     }
 ]
-const ageOptions = [
-    {
-        label: "18 years or below",
-        value: 1
-    },
-    {
-        label: "19 - 24",
-        value: 2
-    },
-    {
-        label: "25 - 35",
-        value: 3
-    },
-    {
-        label: "35 - 45",
-        value: 4
-    },
-    {
-        label: "Above 45 years",
-        value: 5
-    }
-]
+
 
 const initialValues = {
     respondentName: '',
@@ -277,13 +257,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             title="What is the Monthly Household Income (MHI)."
                                             id="monthlyHouseholdIncome"
                                             name="monthlyHouseholdIncome"
-                                            options={[
-                                                { label: "Below Rs. 20,000.", value: "1" },
-                                                { label: "Rs. 20,000 to Rs. 50,000.", value: "2" },
-                                                { label: "Rs. 50,000 to Rs. 1,00,000.", value: "3" },
-                                                { label: "Rs. 1,00,000 to Rs. 3,00,000.", value: "4" },
-                                                { label: "Above Rs. 3,00,000.", value: "5" },
-                                            ]}
+                                            options={incomeOptions}
                                         // editable={Boolean(formsDetail)}
                                         // textValue={
                                         //     formsDetail.monthlyHouseholdIncome==1?"Below Rs. 20,000.":

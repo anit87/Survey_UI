@@ -41,10 +41,12 @@ const SurveyMultiSteps = () => {
   };
   console.log("id is ", id, "*");
   return (
+    
     <div>
+     
       <ImageWithText image={isSmallScreen ? india1 : india} />
       <Toolbar />
-
+      <h6  style={{fontSize:"20px", fontWeight:"bold"}} >Survey Form</h6>
       <br />
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
@@ -68,9 +70,12 @@ const SurveyMultiSteps = () => {
                 Back
               </Button>}
             {activeStep !== steps.length - 1 &&
-              <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" onClick={handleNext}>
+              <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" sx={{ mr: '1rem' }} onClick={handleNext}>
                 Next
               </Button>}
+            <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" onClick={()=>navigate("/surveys")}>
+              Cancel
+            </Button>
           </div>
         </div>
       </div>

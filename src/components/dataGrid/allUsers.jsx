@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -21,8 +22,19 @@ const subText = grey[600];
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users'
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    // backgroundColor: theme.palette.common.black,"#1565c0"
+    backgroundColor: "#1565c0",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
 function Row(props) {
-  const { row } = props;
+  const { row, index } = props;
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate()
 
@@ -38,11 +50,12 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell scope="row">{row.displayName}</TableCell>
+        <TableCell >{parseInt(index) + 1}</TableCell>
+        <TableCell >{row.displayName}</TableCell>
         <TableCell >{row.email}</TableCell>
-        <TableCell>{row.userRole==='user'?'Admin':row.userRole}</TableCell>
-        <TableCell>
-          <Button color="primary" onClick={() =>navigate(`/allRecords/${row._id}`)} >View</Button >
+        <TableCell>{row.userRole === 'user' ? 'Admin' : row.userRole}</TableCell>
+        <TableCell  >
+          <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
         </TableCell>
       </TableRow>
       {row.userRole !== "fielduser" &&
@@ -57,23 +70,25 @@ function Row(props) {
                 </Typography>
                 {row.fieldUsers.length > 0 && <Table size="small" aria-label="purchases">
                   <TableBody>
-                    {row.fieldUsers.map((historyRow) => (
+                    {row.fieldUsers.map((historyRow, i) => (
                       <TableRow key={historyRow._id} sx={{ '& > *': { borderBottom: 'unset' } }}>
-                        <TableCell style={{visibility:'hidden'}} >
+                        <TableCell style={{ visibility: 'hidden' }} >
                           <IconButton
                             aria-label="expand row"
                             size="small"
                           >
-                            <KeyboardArrowUpIcon />
                           </IconButton>
                         </TableCell>
-                        <TableCell sx={{ color: subText }}  scope="row">
+                        <TableCell sx={{ color: subText }} align='left'>
+                          {parseInt(i) + 1}
+                        </TableCell>
+                        <TableCell sx={{ color: subText }} align='center' >
                           {historyRow.displayName}
                         </TableCell>
-                        <TableCell sx={{ color: subText }}>{historyRow.email}</TableCell>
-                        <TableCell sx={{ color: subText }}>{historyRow.userRole}</TableCell>
-                        <TableCell sx={{ color: subText }}>
-                          <Button color="primary" onClick={() =>navigate(`/allRecords/${historyRow._id}`)} >View</Button >
+                        <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
+                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole}</TableCell>
+                        <TableCell sx={{ color: subText }} align='center'>
+                          <Button color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
                         </TableCell>
                       </TableRow>
                     ))}
@@ -135,15 +150,31 @@ export default function CollapsibleTable() {
   console.log("userDetail ", userDetail);
   return (
     <>
-      <div className='d-flex flex-row-reverse bd-highlight mb-2'>
-        <Button variant="contained" color="primary" onClick={() => navigate('/createuser')} > Create User </Button >
-      </div >
+      <div className='d-flex justify-content-between m-3'>
+        <div className='col-10 pull-left'>
+          <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Users</h6>
+        </div>
+        <div>
+          <Button variant="contained" color="primary" onClick={() => navigate('/createuser')} > Create User </Button >
+        </div >
+      </div>
+
 
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell></StyledTableCell>
+              <StyledTableCell>S.No</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Email</StyledTableCell>
+              <StyledTableCell>Role</StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
-            {users.status && users.result.map((row) => (
-              <Row key={row._id} row={row} />
+            {users.status && users.result.map((row, index) => (
+              <Row key={row._id} row={row} index={index} />
             ))}
           </TableBody>
         </Table>

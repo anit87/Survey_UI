@@ -33,7 +33,7 @@ const SignIn = () => {
       const resp = verifyUser()
       if (resp) {
         console.log(resp);
-        navigate("/createuser")
+        navigate("/surveys")
       }
     }
   }, [token])
@@ -61,7 +61,7 @@ const SignIn = () => {
             .unwrap()
             .then((originalPromiseResult) => {
               if (originalPromiseResult.status) {
-                navigate("/createuser")
+                navigate("/surveys")
               }
             })
           alertfn()
@@ -85,14 +85,14 @@ const SignIn = () => {
                 title="Enter your email"
                 name="email"
                 type="email"
-                placeholder="test@email.com"
+                placeholder="Please Enter Your Email"
               />
 
               <TextInput
                 label="Password"
                 title="11"
                 name="password"
-                type="text"
+                type="password"
                 placeholder="*******"
               />
               <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2 }} fullWidth >SignIn</Button>
@@ -101,11 +101,6 @@ const SignIn = () => {
               <Grid item xs>
                 <Link className='textDecoration' to="/reset" variant="body2">
                   Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link className='textDecoration' to="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
