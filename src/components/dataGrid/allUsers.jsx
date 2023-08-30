@@ -57,9 +57,9 @@ function Row(props) {
         </TableCell>
         <TableCell >{parseInt(index) + 1}</TableCell>
         <TableCell >{row.displayName}</TableCell>
-        {/* <TableCell >{row.phoneNumber||"- - -"}</TableCell> */}
+        <TableCell >{row.phoneNumber||"- - -"}</TableCell>
         <TableCell >{row.email}</TableCell>
-        <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell>
+        {/* <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell> */}
         <TableCell  >
           <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
         </TableCell>
@@ -91,9 +91,9 @@ function Row(props) {
                         <TableCell sx={{ color: subText }} align='center' >
                           {historyRow.displayName}
                         </TableCell>
-                        {/* <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber||"- - -"}</TableCell> */}
+                        <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber||"- - -"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
-                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell>
+                        {/* <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell> */}
                         <TableCell sx={{ color: subText }} align='center'>
                           <Button color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
                         </TableCell>
@@ -176,7 +176,7 @@ export default function CollapsibleTable() {
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Phone</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
-              <StyledTableCell>Role</StyledTableCell>
+              {/* <StyledTableCell>Role</StyledTableCell> */}
               <StyledTableCell align="right"></StyledTableCell>
             </TableRow>
           </TableHead>

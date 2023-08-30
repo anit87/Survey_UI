@@ -40,13 +40,12 @@ const SurveyMultiSteps = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
   console.log("id is ", id, "*");
+
   return (
-    
     <div>
-     
       <ImageWithText image={isSmallScreen ? india1 : india} />
       <Toolbar />
-      <h6  style={{fontSize:"20px", fontWeight:"bold"}} >Survey Form</h6>
+      <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Survey Form</h6>
       <br />
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
@@ -62,9 +61,9 @@ const SurveyMultiSteps = () => {
             <SurveyFormNoneEdit
               activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)}
               formsDetail={formsDetail}
-            />}
-
-          <div style={{ margin: activeStep !== steps.length - 1 ? "1.5rem" : "0px" }}  >
+            />
+          }
+          <div style={{ margin: activeStep !== steps.length - 1 ? "1.5rem" : "1rem" }}>
             {activeStep !== 0 &&
               <Button disabled={activeStep === 0} onClick={handleBack} variant="contained" color="primary" sx={{ mr: '1rem' }} >
                 Back
@@ -73,7 +72,7 @@ const SurveyMultiSteps = () => {
               <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" sx={{ mr: '1rem' }} onClick={handleNext}>
                 Next
               </Button>}
-            <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" onClick={()=>navigate("/surveys")}>
+            <Button variant="contained" color="primary" onClick={() => navigate("/surveys")}>
               Cancel
             </Button>
           </div>
