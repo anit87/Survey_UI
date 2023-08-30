@@ -9,6 +9,7 @@ import india from "../../assets/india1440.png"
 import india1 from "../../assets/india420.png"
 import { useNavigate, Link } from 'react-router-dom';
 import ImageWithText from '../imageWithText/ImageWithText';
+import Navbar from '../Navbar';
 
 
 export default function ClippedDrawer({ children }) {
@@ -16,9 +17,10 @@ export default function ClippedDrawer({ children }) {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     return (
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <ImageWithText image={isSmallScreen ? india1 : india} />
-            <Toolbar />
+        <Box component="main" sx={{ flexGrow: 1, p: 0 }}>
+            {/* <ImageWithText image={isSmallScreen ? india1 : india} /> */}
+            <Navbar />
+            
             {children}
         </Box>
     );

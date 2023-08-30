@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Box, Grid, Typography } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Formik, Form } from "formik"
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -11,6 +11,7 @@ import SelectInput from '../inputs/SelectInput'
 import Alert from '../Alert'
 import { verifyUser } from '../../utils/functions/verifyUser'
 import axios from 'axios'
+
 
 const apiUrl = `/auth/signup`
 const urlForAgentList = import.meta.env.VITE_API_URL + '/users/agentslist'
@@ -28,20 +29,14 @@ const roles = [
 const userRoleOp = [{ label: "User", value: "user" }]
 const fieldRoleOp = [{ label: "Field User", value: "fielduser" }]
 
-const initialValues = {
-    displayName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phoneNumber: "",
-    userRole: "2",
-    reportingAgent:""
-    
-}
+
 
 const CreateUser = () => {
     const dispatch = useDispatch()
-    const [userRole, setUserRole] = useState(" ")
+    const navigate = useNavigate()
+    const { data, error, loading, msg, token } = useSelector(state => state.auth)
+
+    const [userRole, setUserRole] = useState("")
     const [agentsList, setAgentsList] = useState([])
     const [alert, setAlert] = useState(false);
 
@@ -49,16 +44,16 @@ const CreateUser = () => {
         setTimeout(() => setAlert(true), 1000);
     }
     useEffect(() => {
-        const { userRole } = verifyUser()
+        const { userRole } = verifyUser(token)
         setUserRole(userRole)
     }, [userRole])
 
     useEffect(() => {
         allAgents()
     }, [])
-    console.log(userRole);
+    console.log("create user , UserRole", userRole);
 
-    const { data, error, loading, msg } = useSelector(state => state.auth)
+
 
     const allAgents = async () => {
         const resp = await axios.get(urlForAgentList)
@@ -69,6 +64,16 @@ const CreateUser = () => {
         setAgentsList(newArr)
     }
 
+    const initialValues = {
+        displayName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phoneNumber: "",
+        userRole: "2",
+        reportingAgent: ""
+    }
+
     return (
         <>
             <Alert open={alert} type={error ? "error" : "info"} msg={msg} onClose={() => setAlert(false)} />
@@ -77,7 +82,11 @@ const CreateUser = () => {
                 initialValues={initialValues}
                 validationSchema={signUpSchema}
                 onSubmit={(values, { setSubmitting }) => {
+                    if (userRole!=='admin') {
+                        values.userRole='3'
+                    } 
                     console.log(values);
+
                     dispatch(fetchAuthData(
                         {
                             apiUrl: import.meta.env.VITE_API_URL + apiUrl,
@@ -89,7 +98,7 @@ const CreateUser = () => {
                     setSubmitting(false);
                 }}
             >
-                {({ values, errors }) => (
+                {(formik) => (
                     <Box
                         sx={{
                             my: 1,
@@ -100,6 +109,7 @@ const CreateUser = () => {
                         }}
                     >
                         <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Users</h6>
+                        {console.log("formik ", formik)}
 
                         <Box sx={{ mt: 1 }} >
                             <Form>
@@ -146,19 +156,27 @@ const CreateUser = () => {
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label="Choose Role"
-                                            title="Choose Role for the new user"
-                                            name="userRole"
-                                            id="userRole"
-                                            options={roles}
-                                        // disabled={userRole !== 'admin'}
-                                        // disabled={true}
-                                        // value={userRole === 'admin'? 'user': 'fielduser'}
-                                        />
+                                        {userRole === 'admin' ?
+                                            <SelectInput
+                                                label="Choose Role"
+                                                title="Choose Role for the new user"
+                                                name="userRole"
+                                                id="userRole"
+                                                options={roles}
+                                            /> :
+                                            <SelectInput
+                                                label="Choose Role"
+                                                title="Choose Role for the new user"
+                                                name="userRole"
+                                                id="userRole"
+                                                options={roles}
+                                                value='3'
+                                                disabled={true}
+                                            />
+                                        }
                                     </Grid>
 
-                                    {values.userRole === '3' && <Grid item md={6} xs={12}>
+                                    {userRole === 'admin' && formik.values.userRole === '3' && <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Choose Agent"
                                             name="reportingAgent"
@@ -168,7 +186,7 @@ const CreateUser = () => {
                                     </Grid>}
                                 </Grid>
                                 <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2, mr: 2 }} >Create</Button>
-                                <Button variant='contained' type='button' sx={{ mt: 3, mb: 2 }} >Cancel</Button>
+                                <Button variant='contained' type='button' onClick={() => navigate("/allusers")} sx={{ mt: 3, mb: 2 }} >Cancel</Button>
                             </Form>
                         </Box>
                     </Box>

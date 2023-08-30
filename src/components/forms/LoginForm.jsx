@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Stack, Button, Box, Typography, Grid } from "@mui/material"
+import { Stack, Button, Box, Typography, Grid, Container } from "@mui/material"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import { Formik, Form } from "formik"
@@ -68,42 +68,48 @@ const SignIn = () => {
           setSubmitting(false);
         }}
       >
-        <Box
-          sx={{
-            my: 8,
-            mx: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h5">Sign In</Typography>
-          <Box sx={{ mt: 1 }} >
-            <Form>
-              <TextInput
-                label="Email"
-                name="email"
-                type="email"
-                placeholder="Please Enter Your Email"
-              />
+        <Container component="main" maxWidth="sm">
+          <Box
+            sx={{
+              boxShadow: 3,
+              borderRadius: 2,
+              px: 4,
+              py: 6,
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h5">Log In</Typography>
+            <Box sx={{ mt: 1 }} >
+              <Form>
+                <TextInput
+                  label="Email"
+                  name="email"
+                  type="email"
+                  placeholder="Please Enter Your Email"
+                />
+                {/* <Toolbar variant='string' sx={{mt:2}} /> */}
 
-              <TextInput
-                label="Password"
-                name="password"
-                type="password"
-                placeholder="*******"
-              />
-              <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2 }} fullWidth >SignIn</Button>
-            </Form>
-            <Grid container>
-              <Grid item xs>
-                <Link className='textDecoration' to="/reset" variant="body2">
-                  Forgot password?
-                </Link>
+                <TextInput
+                  label="Password"
+                  name="password"
+                  type="password"
+                  placeholder="*******"
+                />
+                <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2 }} fullWidth >LogIn</Button>
+              </Form>
+              <Grid container>
+                <Grid item xs>
+                  <Link className='textDecoration' to="/reset" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
+        </Container>
       </Formik>
     </>
   )

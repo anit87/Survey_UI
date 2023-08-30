@@ -6,6 +6,7 @@ import SurveyFormNoneEdit from "./SurveyFormNoneEdit"
 import india from "../../../assets/india1440.png"
 import india1 from "../../../assets/india420.png"
 import ImageWithText from '../../imageWithText/ImageWithText';
+import Navbar from '../../Navbar';
 import axios from "axios"
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
@@ -43,7 +44,8 @@ const SurveyMultiSteps = () => {
 
   return (
     <div>
-      <ImageWithText image={isSmallScreen ? india1 : india} />
+      {/* <ImageWithText image={isSmallScreen ? india1 : india} /> */}
+      <Navbar/>
       <Toolbar />
       <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Survey Form</h6>
       <br />

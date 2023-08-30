@@ -18,7 +18,7 @@ import axios from 'axios';
 import { verifyUser } from '../../utils/functions/verifyUser';
 import { grey } from '@mui/material/colors'
 import { useNavigate } from "react-router-dom"
-import TreeTable from './TreeTable';
+import Loader from '../loader';
 
 const subText = grey[600];
 
@@ -57,7 +57,7 @@ function Row(props) {
         </TableCell>
         <TableCell >{parseInt(index) + 1}</TableCell>
         <TableCell >{row.displayName}</TableCell>
-        <TableCell >{row.phoneNumber||"- - -"}</TableCell>
+        <TableCell >{row.phoneNumber || "- - -"}</TableCell>
         <TableCell >{row.email}</TableCell>
         {/* <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell> */}
         <TableCell  >
@@ -91,7 +91,7 @@ function Row(props) {
                         <TableCell sx={{ color: subText }} align='center' >
                           {historyRow.displayName}
                         </TableCell>
-                        <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber||"- - -"}</TableCell>
+                        <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber || "- - -"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
                         {/* <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell> */}
                         <TableCell sx={{ color: subText }} align='center'>
@@ -135,6 +135,7 @@ export default function CollapsibleTable() {
     totalResults: 0
   })
   const [userDetail, setUserDetail] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     getUsers()
@@ -150,9 +151,10 @@ export default function CollapsibleTable() {
     'Authorization': localStorage.getItem("surveyApp"),
   };
   const getUsers = async () => {
+    setIsLoading(true)
     const response = await axios.get(apiUrl, { headers })
-    console.log(response.data);
     setUsers(response.data)
+    setIsLoading(false)
   }
   console.log("userDetail ", userDetail);
   return (
@@ -167,26 +169,28 @@ export default function CollapsibleTable() {
       </div>
 
 
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell>S.No</StyledTableCell>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Phone</StyledTableCell>
-              <StyledTableCell>Email</StyledTableCell>
-              {/* <StyledTableCell>Role</StyledTableCell> */}
-              <StyledTableCell align="right"></StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.status && users.result.map((row, index) => (
-              <Row key={row._id} row={row} index={index} userDetail={userDetail} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {isLoading ? <Loader /> :
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell>S.No</StyledTableCell>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Phone</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
+                {/* <StyledTableCell>Role</StyledTableCell> */}
+                <StyledTableCell align="right"></StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.status && users.result.map((row, index) => (
+                <Row key={row._id} row={row} index={index} userDetail={userDetail} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      }
       <br />
 
       {/* {users.status && <TreeTable data={users.result} />} */}

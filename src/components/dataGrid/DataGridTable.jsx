@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
-import { Box, Button } from '@mui/material';
+import { Box, Button, TextField, MenuItem, Stack, FormControl, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -24,7 +24,7 @@ import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyU
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import Loader from '../loader';
-
+import { ageOptions, incomeOptions } from "../../utils/constants"
 const apiUrl = import.meta.env.VITE_API_URL + '/users/allrecords'
 
 
@@ -118,7 +118,15 @@ export default function SurveyForms() {
     })
     const [isLoading, setisLoading] = useState(false)
 
-    const { filterData } = useDrawerData();
+    // const { filterData } = useDrawerData();
+    const [filterData, setFilterData] = useState({
+        birthdayDate: '',
+        maritalStatus: '',
+        monthlyHouseholdIncome: '',
+        startDate: "",
+        endDate: ""
+    });
+    // console.log("filters ", filterData);
 
     const [userDetail, setUserDetail] = useState({})
     const token = useSelector(state => state.auth.token)
@@ -126,7 +134,7 @@ export default function SurveyForms() {
         const user = verifyUser(token)
         setUserDetail(user)
     }, [])
-    console.log("userDetail dash ", userDetail);
+    // console.log("userDetail dash ", userDetail);
 
     useEffect(() => {
         getData()
@@ -139,14 +147,14 @@ export default function SurveyForms() {
         };
         setisLoading(true)
         const url = `${apiUrl}?birthdayDate=${filterData.birthdayDate || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}`
-        // const response = await axios.get(`${apiUrl}?birthdayDate=${filterData.birthdayDate}&maritalStatus=${filterData.maritalStatus}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`)
+
         const response = await axios.get(url, { headers })
         setRows(response.data)
 
         setisLoading(false)
     }
 
-    console.log("filters ", rows);
+
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -161,12 +169,103 @@ export default function SurveyForms() {
         setPage(0);
     };
 
+    const changeHandler = (e) => {
+        setFilterData({
+            ...filterData,
+            [e.target.name]: e.target.value
+        })
+    }
+
     return (
 
         <TableContainer component={Paper}>
-            <h6 className='' style={{ fontSize: "20px", fontWeight: "bold" }} >All Survey's</h6>
-          
-            { isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+            <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >All Survey's</h6>
+            {/* <div className='"d-flex justify-content-evenly"'> */}
+
+            <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={{ xs: 1, sm: 2, md: 4 }}
+                sx={{ mt: 1, mb: 1 }}
+            >
+                <FormControl fullWidth >
+                    <Stack direction="row">
+                        <Typography variant="h6"
+                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Age</Typography>
+                    </Stack>
+                    <TextField id="select"
+                        margin="none"
+                        size="small"
+                        fullWidth
+                        name="birthdayDate"
+                        label={""}
+                        value=''
+                        onChange={(e) => changeHandler(e)}
+                        select
+                    >
+                        {
+                            ageOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </FormControl>
+                <FormControl fullWidth >
+                    <Stack direction="row">
+                        <Typography variant="h6"
+                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Income</Typography>
+                    </Stack>
+
+                    <TextField id="select"
+                        margin="none"
+                        size="small"
+                        fullWidth
+                        name="birthdayDate"
+                        label={""}
+                        value=''
+                        onChange={(e) => changeHandler(e)}
+                        select
+                    >
+                        {
+                            incomeOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </FormControl>
+                <FormControl fullWidth >
+                    <Stack direction="row">
+                        <Typography variant="h6"
+                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Marital Status</Typography>
+                    </Stack>
+
+                    <TextField id="select"
+                        margin="none"
+                        size="small"
+                        fullWidth
+                        name="maritalStatus"
+                        label={""}
+                        value=''
+                        onChange={(e) => changeHandler(e)}
+                        select
+                    >
+                        {
+                            [{ label: "Single", value: "1" }, { label: "Married", value: "2" }].map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </FormControl>
+            </Stack>
+            {/* </div> */}
+            
+
+            {isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                 <TableHead>
                     <TableRow>
                         <StyledTableCell>S.No</StyledTableCell>
@@ -175,7 +274,7 @@ export default function SurveyForms() {
                         <StyledTableCell align="center">Pincode</StyledTableCell>
                         <StyledTableCell align="center">Marital Status</StyledTableCell>
                         {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                            <StyledTableCell align="center">Created By</StyledTableCell>}
+                            <StyledTableCell align="center">Field Agent</StyledTableCell>}
                         <StyledTableCell align="center">Created Date</StyledTableCell>
                         <StyledTableCell align="right"></StyledTableCell>
                     </TableRow>
@@ -245,3 +344,7 @@ export default function SurveyForms() {
         </TableContainer>
     );
 }
+
+
+
+        // axios.get(`${apiUrl}?birthdayDate=${filterData.birthdayDate}&maritalStatus=${filterData.maritalStatus}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`)

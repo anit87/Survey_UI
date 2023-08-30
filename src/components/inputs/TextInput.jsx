@@ -24,7 +24,7 @@ const TextInput = ({ label, title, editable,textValue, ...props }) => {
 
     return (
         <>
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{mt:1}} >
                 <Stack direction="row">
                     <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>{label}</Typography>
                 </Stack>
