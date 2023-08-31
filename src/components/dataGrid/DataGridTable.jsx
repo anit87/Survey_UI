@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import Loader from '../loader';
 import { ageOptions, incomeOptions, maritalOptions } from "../../utils/constants"
+import NoData from '../NoData';
 const apiUrl = import.meta.env.VITE_API_URL + '/users/allrecords'
 
 
@@ -331,83 +332,86 @@ export default function SurveyForms() {
                     </FormControl>
                 </Stack>
 
-
-                {isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell>S.No</StyledTableCell>
-                            <StyledTableCell>Respondent Name</StyledTableCell>
-                            <StyledTableCell align="center">Mobile No</StyledTableCell>
-                            <StyledTableCell align="center">Pincode</StyledTableCell>
-                            <StyledTableCell align="center">Marital Status</StyledTableCell>
-                            {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                                <StyledTableCell align="center">Field Agent</StyledTableCell>}
-                            <StyledTableCell align="center">Created Date</StyledTableCell>
-                            <StyledTableCell align="right"></StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-
-
-                    <TableBody>
-                        {(rowsPerPage > 0
-                            ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : rows.data
-                        ).map((row, i) => (
-                            <TableRow key={row._id}>
-                                <TableCell component="th" scope="row">
-                                    {parseInt(i) + 1}
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    {row.respondentName}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="center">
-                                    {row.mobileNo}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="center">
-                                    {row.pincode}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="center">
-                                    {row.maritalStatus === 1 ? "Single" : "Married"}
-                                </TableCell>
+                {
+                    rows.data.length < 1 ?
+                    <NoData msg="No Surveys Found" /> :<>
+                
+                    {isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell>S.No</StyledTableCell>
+                                <StyledTableCell>Respondent Name</StyledTableCell>
+                                <StyledTableCell align="center">Mobile No</StyledTableCell>
+                                <StyledTableCell align="center">Pincode</StyledTableCell>
+                                <StyledTableCell align="center">Marital Status</StyledTableCell>
                                 {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
+                                    <StyledTableCell align="center">Field Agent</StyledTableCell>}
+                                <StyledTableCell align="center">Created Date</StyledTableCell>
+                                <StyledTableCell align="right"></StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>
+                            {(rowsPerPage > 0
+                                ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : rows.data
+                            ).map((row, i) => (
+                                <TableRow key={row._id}>
+                                    <TableCell component="th" scope="row">
+                                        {parseInt(i) + 1}
+                                    </TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {row.respondentName}
+                                    </TableCell>
                                     <TableCell style={{ width: 160 }} align="center">
-                                        {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
-                                    </TableCell>}
-                                <TableCell align="center">
-                                    {formatDate(row.date)}
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
-                                </TableCell>
+                                        {row.mobileNo}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="center">
+                                        {row.pincode}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="center">
+                                        {row.maritalStatus === 1 ? "Single" : "Married"}
+                                    </TableCell>
+                                    {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
+                                        <TableCell style={{ width: 160 }} align="center">
+                                            {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
+                                        </TableCell>}
+                                    <TableCell align="center">
+                                        {formatDate(row.date)}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: 53 * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                        {(rows.status && rows.data.length > 10) && <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+                                    colSpan={3}
+                                    count={rows.data.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: {
+                                            'aria-label': 'rows per page',
+                                        },
+                                        native: true,
+                                    }}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    ActionsComponent={TablePaginationActions}
+                                />
                             </TableRow>
-                        ))}
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
-                    </TableBody>
-                    {(rows.status && rows.data.length > 10) && <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                                colSpan={3}
-                                count={rows.data.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                SelectProps={{
-                                    inputProps: {
-                                        'aria-label': 'rows per page',
-                                    },
-                                    native: true,
-                                }}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                            />
-                        </TableRow>
-                    </TableFooter>}
-                </Table>}
+                        </TableFooter>}
+                    </Table>}
+                </>}
             </TableContainer>
         </LocalizationProvider>
     );

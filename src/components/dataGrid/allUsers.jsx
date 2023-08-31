@@ -15,11 +15,12 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import axios from 'axios';
-import { verifyUser } from '../../utils/functions/verifyUser';
+import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
 import { grey } from '@mui/material/colors'
 import { useNavigate } from "react-router-dom"
 import { useSelector } from 'react-redux';
 import Loader from '../loader';
+import NoData from '../NoData';
 
 const subText = grey[600];
 
@@ -56,10 +57,10 @@ function Row(props) {
           }
         </TableCell>
         <TableCell >{parseInt(index) + 1}</TableCell>
-        <TableCell >{row.displayName}</TableCell>
+        <TableCell >{capitalizeFirstLetter(row.displayName)}</TableCell>
         <TableCell >{row.phoneNumber || "- - -"}</TableCell>
         <TableCell >{row.email}</TableCell>
-        {/* <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell> */}
+        <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell>
         <TableCell  >
           <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
           <Button color="primary" onClick={() => navigate(`/createuser/${row._id}`)} >Edit</Button >
@@ -67,19 +68,19 @@ function Row(props) {
       </TableRow>
       {row.userRole !== "fielduser" &&
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
                 <Typography variant="h6" gutterBottom component="div">
                   {row.fieldUsers.length < 1
-                    ? "No user"
+                    ? "No Field Agent"
                     : ""}
                 </Typography>
                 {row.fieldUsers.length > 0 && <Table size="small" aria-label="purchases">
                   <TableBody>
                     {row.fieldUsers.map((historyRow, i) => (
                       <TableRow key={historyRow._id} sx={{ '& > *': { borderBottom: 'unset' } }}>
-                      {/* <TableRow key={historyRow._id} > */}
+                        {/* <TableRow key={historyRow._id} > */}
                         <TableCell style={{ visibility: 'hidden' }} >
                           <IconButton
                             aria-label="expand row"
@@ -91,11 +92,11 @@ function Row(props) {
                           {parseInt(i) + 1}
                         </TableCell>
                         <TableCell sx={{ color: subText }} align='center' >
-                          {historyRow.displayName}
+                          {capitalizeFirstLetter(historyRow.displayName)}
                         </TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber || "- - -"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
-                        {/* <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell> */}
+                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center'>
                           <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
                           <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/createuser/${historyRow._id}`)} >Edit</Button >
@@ -159,29 +160,34 @@ export default function CollapsibleTable() {
 
       {isLoading ? <Loader /> :
         <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell>S.No</StyledTableCell>
-                <StyledTableCell>Name</StyledTableCell>
-                <StyledTableCell>Phone</StyledTableCell>
-                <StyledTableCell>Email</StyledTableCell>
-                {/* <StyledTableCell>Role</StyledTableCell> */}
-                <StyledTableCell align="right"></StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {users.status && users.result.map((row, index) => (
-                <Row key={row._id} row={row} index={index} userDetail={userDetail} />
-              ))}
-            </TableBody>
-          </Table>
+
+          {
+            users.result.length < 1 ?
+              <NoData msg="No User Found" /> :
+              <Table aria-label="collapsible table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell>S.No</StyledTableCell>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Phone</StyledTableCell>
+                    <StyledTableCell>Email</StyledTableCell>
+                    <StyledTableCell>Role</StyledTableCell>
+                    <StyledTableCell align="right"></StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {users.status && users.result.map((row, index) => (
+                    <Row key={row._id} row={row} index={index} userDetail={userDetail} />
+                  ))}
+                </TableBody>
+              </Table>
+          }
         </TableContainer>
       }
       <br />
 
-      {/* {users.status && <TreeTable data={users.result} />} */}
+
     </>
   );
 }
