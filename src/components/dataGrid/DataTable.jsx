@@ -47,7 +47,7 @@ export default function DataTable({ formsDetail }) {
                         <StyledTableCell>Name</StyledTableCell>
                         <StyledTableCell align="right">Age</StyledTableCell>
                         <StyledTableCell align="right">Gender</StyledTableCell>
-                        <StyledTableCell align="right">Assembly(g)</StyledTableCell>
+                        <StyledTableCell align="right">Assembly</StyledTableCell>
                         <StyledTableCell align="right">Voter Id</StyledTableCell>
                     </TableRow>
                 </TableHead>

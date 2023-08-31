@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Box, Grid, Typography } from "@mui/material"
-import { Link, useNavigate } from "react-router-dom"
-import { Formik, Form } from "formik"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { Formik, Form, useFormikContext } from "formik"
 import { useDispatch, useSelector } from 'react-redux'
 
 import { signUpSchema } from "../../utils/schemas/auth"
@@ -10,11 +10,11 @@ import TextInput from '../inputs/TextInput'
 import SelectInput from '../inputs/SelectInput'
 import Alert from '../Alert'
 import { verifyUser } from '../../utils/functions/verifyUser'
-import axios from 'axios'
+import axios from 'axios' 
 
 
 const apiUrl = `/auth/signup`
-const urlForAgentList = import.meta.env.VITE_API_URL + '/users/agentslist'
+const serverURL = import.meta.env.VITE_API_URL + '/users'
 
 const roles = [
     {
@@ -34,12 +34,16 @@ const fieldRoleOp = [{ label: "Field User", value: "fielduser" }]
 const CreateUser = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    let { id } = useParams();
+    // const { values, submitForm } = useFormikContext();
     const { data, error, loading, msg, token } = useSelector(state => state.auth)
-
     const [userRole, setUserRole] = useState("")
     const [agentsList, setAgentsList] = useState([])
+    const [userToUpdate, setUserToUpdate] = useState({
+        status: false, data: {}
+    })
     const [alert, setAlert] = useState(false);
-
+    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ", values, submitForm);
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
@@ -49,6 +53,9 @@ const CreateUser = () => {
     }, [userRole])
 
     useEffect(() => {
+        if (id) {
+            userToUpdateFn()
+        }
         allAgents()
     }, [])
     console.log("create user , UserRole", userRole);
@@ -56,12 +63,16 @@ const CreateUser = () => {
 
 
     const allAgents = async () => {
-        const resp = await axios.get(urlForAgentList)
+        const resp = await axios.get(serverURL + '/agentslist')
         const data = resp.data.data
         const newArr = data.map(obj => {
             return { label: obj.displayName, value: obj._id }
         })
         setAgentsList(newArr)
+    }
+    const userToUpdateFn = async () => {
+        const resp = await axios.get(serverURL + `/getuser/${id}`)
+        setUserToUpdate(resp.data)
     }
 
     const initialValues = {
@@ -82,10 +93,9 @@ const CreateUser = () => {
                 initialValues={initialValues}
                 validationSchema={signUpSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    if (userRole!=='admin') {
-                        values.userRole='3'
-                    } 
-                    console.log(values);
+                    if (userRole !== 'admin') {
+                        values.userRole = '3'
+                    }
 
                     dispatch(fetchAuthData(
                         {

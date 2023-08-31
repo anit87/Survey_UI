@@ -36,6 +36,7 @@ function App() {
             <Route path='/allusers' element={<ProtectedRoute><Layout><CollapsibleTable /></Layout></ProtectedRoute>} />
             <Route path='/allRecords/:id' element={<ProtectedRoute><Layout><RecordsbyUser /></Layout></ProtectedRoute>} />
             <Route path='/createuser' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />
+            <Route path='/createuser/:id' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />
             <Route path='/surveys' element={<ProtectedRoute><Layout><DataGridTable /></Layout></ProtectedRoute>} />
           </Routes>
         </DrawerDataProvider>

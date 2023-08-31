@@ -74,7 +74,7 @@ const SurveyMultiSteps = () => {
               <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" sx={{ mr: '1rem' }} onClick={handleNext}>
                 Next
               </Button>}
-            <Button variant="contained" color="primary" onClick={() => navigate("/surveys")}>
+            <Button variant="contained" color="primary" onClick={() =>navigate(-1)}>
               Cancel
             </Button>
           </div>

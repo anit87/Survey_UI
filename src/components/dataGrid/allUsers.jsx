@@ -18,6 +18,7 @@ import axios from 'axios';
 import { verifyUser } from '../../utils/functions/verifyUser';
 import { grey } from '@mui/material/colors'
 import { useNavigate } from "react-router-dom"
+import { useSelector } from 'react-redux';
 import Loader from '../loader';
 
 const subText = grey[600];
@@ -26,7 +27,6 @@ const apiUrl = import.meta.env.VITE_API_URL + '/users'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    // backgroundColor: theme.palette.common.black,"#1565c0"
     backgroundColor: "#1565c0",
     color: theme.palette.common.white,
   },
@@ -62,6 +62,7 @@ function Row(props) {
         {/* <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell> */}
         <TableCell  >
           <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
+          <Button color="primary" onClick={() => navigate(`/createuser/${row._id}`)} >Edit</Button >
         </TableCell>
       </TableRow>
       {row.userRole !== "fielduser" &&
@@ -78,6 +79,7 @@ function Row(props) {
                   <TableBody>
                     {row.fieldUsers.map((historyRow, i) => (
                       <TableRow key={historyRow._id} sx={{ '& > *': { borderBottom: 'unset' } }}>
+                      {/* <TableRow key={historyRow._id} > */}
                         <TableCell style={{ visibility: 'hidden' }} >
                           <IconButton
                             aria-label="expand row"
@@ -95,7 +97,8 @@ function Row(props) {
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
                         {/* <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell> */}
                         <TableCell sx={{ color: subText }} align='center'>
-                          <Button color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
+                          <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
+                          <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/createuser/${historyRow._id}`)} >Edit</Button >
                         </TableCell>
                       </TableRow>
                     ))}
@@ -104,31 +107,16 @@ function Row(props) {
               </Box>
             </Collapse>
           </TableCell>
-        </TableRow>}
+        </TableRow>
+      }
     </React.Fragment>
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        displayName: PropTypes.string.isRequired,
-        email: PropTypes.string.isRequired,
-        userRole: PropTypes.string.isRequired,
-      }),
-    ),
-    displayName: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    userRole: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-// const rows = [];
-
 
 export default function CollapsibleTable() {
   const navigate = useNavigate()
+  const { token } = useSelector(state => state.auth)
   const [users, setUsers] = useState({
     status: false,
     result: [],
@@ -142,7 +130,7 @@ export default function CollapsibleTable() {
   }, [])
 
   useEffect(() => {
-    const user = verifyUser()
+    const user = verifyUser(token)
     setUserDetail(user)
   }, [])
 
@@ -198,5 +186,17 @@ export default function CollapsibleTable() {
   );
 }
 
-
-
+Row.propTypes = {
+  row: PropTypes.shape({
+    history: PropTypes.arrayOf(
+      PropTypes.shape({
+        displayName: PropTypes.string.isRequired,
+        email: PropTypes.string.isRequired,
+        userRole: PropTypes.string.isRequired,
+      }),
+    ),
+    displayName: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    userRole: PropTypes.string.isRequired,
+  }).isRequired,
+};

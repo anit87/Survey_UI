@@ -56,18 +56,22 @@ export default function RecordsbyUser() {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
+            <StyledTableCell>S.No</StyledTableCell>
             <StyledTableCell>Respondent Name</StyledTableCell>
             <StyledTableCell align="right">Mobile No</StyledTableCell>
             <StyledTableCell align="right">Address</StyledTableCell>
-            <StyledTableCell align="right">Pincode(g)</StyledTableCell>
+            <StyledTableCell align="right">Pincode</StyledTableCell>
             <StyledTableCell align="right">Marital Status</StyledTableCell>
             <StyledTableCell align="right"></StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {formsDetail.map((row) => (
+          {formsDetail.map((row, i) => (
             <StyledTableRow key={row._id}>
               <StyledTableCell component="th" scope="row">
+                {parseInt(i)+1}
+              </StyledTableCell>
+              <StyledTableCell scope="row">
                 {row.respondentName}
               </StyledTableCell>
               <StyledTableCell align="right">{row.mobileNo}</StyledTableCell>
