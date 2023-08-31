@@ -151,7 +151,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
                         initialValues={formsDetail ? formsDetail : initialValues}
-                        // validationSchema={surveyFormSchema}
+                        validationSchema={surveyFormSchema}
                         onSubmit={async (values, { setSubmitting }) => {
                             // console.log("user id ", userId);
                             const resp = await axios.post(apiUrl, { ...values, filledBy: userId })

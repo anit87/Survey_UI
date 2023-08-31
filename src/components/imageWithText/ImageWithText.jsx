@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material'
+import { Button } from '@mui/material'
 import './ImageWithText.css'; // Import your CSS file
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { reset } from '../../features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyUser } from '../../utils/functions/verifyUser';
 
 const ImageWithText = ({ image }) => {
-    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [userDetail, setUserDetail] = useState({})
     const token = useSelector(state => state.auth.token)
@@ -15,7 +14,6 @@ const ImageWithText = ({ image }) => {
         const user = verifyUser(token)
         setUserDetail(user)
     }, [])
-    console.log("userDetail na ", userDetail);
 
     return (
         <div className="image-container ">

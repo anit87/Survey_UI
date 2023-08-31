@@ -1,7 +1,7 @@
 export const ageOptions = [
     {
         label: "Please Select",
-        value: 0
+        value: ""
     },
     {
         label: "18 years or below",
@@ -26,9 +26,17 @@ export const ageOptions = [
 ]
 
 export const incomeOptions = [
+    { label: "Please Select", value: "" },
     { label: "Below Rs. 20,000.", value: "1" },
     { label: "Rs. 20,000 to Rs. 50,000.", value: "2" },
     { label: "Rs. 50,000 to Rs. 1,00,000.", value: "3" },
     { label: "Rs. 1,00,000 to Rs. 3,00,000.", value: "4" },
     { label: "Above Rs. 3,00,000.", value: "5" },
 ]
+
+export const maritalOptions = [
+    { label: "Please Select", value: "" },
+    { label: "Single", value: "1" },
+    { label: "Married", value: "2" }
+]
+

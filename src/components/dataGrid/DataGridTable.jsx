@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
-import { Box, Button, TextField, MenuItem, Stack, FormControl, Typography } from '@mui/material';
+import { Box, Button, TextField, MenuItem, Stack, FormControl, Typography, ListItem } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -18,13 +18,19 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
+
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { useDrawerData } from '../../utils/DrawerDataContext';
 import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import Loader from '../loader';
-import { ageOptions, incomeOptions } from "../../utils/constants"
+import { ageOptions, incomeOptions, maritalOptions } from "../../utils/constants"
 const apiUrl = import.meta.env.VITE_API_URL + '/users/allrecords'
 
 
@@ -33,7 +39,6 @@ const formatDate = (dateString) => {
     const formattedDate = parsedDate.format("DD-MM-YYYY HH:mm");
     return formattedDate
 }
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -117,41 +122,64 @@ export default function SurveyForms() {
         data: []
     })
     const [isLoading, setisLoading] = useState(false)
+    const [error, setError] = React.useState(null);
 
     // const { filterData } = useDrawerData();
     const [filterData, setFilterData] = useState({
         birthdayDate: '',
         maritalStatus: '',
         monthlyHouseholdIncome: '',
-        startDate: "",
-        endDate: ""
+        startDate: '2023-08-01',
+        endDate: new Date().toISOString().slice(0, 10)
     });
-    // console.log("filters ", filterData);
+    console.log("filters ", filterData);
 
     const [userDetail, setUserDetail] = useState({})
     const token = useSelector(state => state.auth.token)
+
+    const errorMessage = React.useMemo(() => {
+        switch (error) {
+            case 'maxDate':
+            case 'minDate': {
+                return 'Please select a date in the first quarter of 2022';
+            }
+
+            case 'invalidDate': {
+                return 'Your date is not valid';
+            }
+
+            default: {
+                return '';
+            }
+        }
+    }, [error]);
     useEffect(() => {
         const user = verifyUser(token)
         setUserDetail(user)
     }, [])
-    // console.log("userDetail dash ", userDetail);
+
+    // console.log("userDetail dash ", rows);
 
     useEffect(() => {
         getData()
     }, [filterData])
 
     const getData = async () => {
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem("surveyApp"),
-        };
-        setisLoading(true)
-        const url = `${apiUrl}?birthdayDate=${filterData.birthdayDate || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}`
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("surveyApp"),
+            };
+            setisLoading(true)
+            const url = `${apiUrl}?birthdayDate=${filterData.birthdayDate || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`
 
-        const response = await axios.get(url, { headers })
-        setRows(response.data)
+            const response = await axios.get(url, { headers })
+            setRows(response.data)
 
-        setisLoading(false)
+            setisLoading(false)
+        } catch (error) {
+            console.log("Error in Dashboard ", error);
+        }
     }
 
 
@@ -175,173 +203,213 @@ export default function SurveyForms() {
             [e.target.name]: e.target.value
         })
     }
-
+    // console.log("dat ", dayjs('2023-08-10'));
     return (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TableContainer component={Paper}>
+                <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >All Survey's</h6>
 
-        <TableContainer component={Paper}>
-            <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >All Survey's</h6>
-            {/* <div className='"d-flex justify-content-evenly"'> */}
+                <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={{ xs: 1, sm: 2, md: 4 }}
+                    sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
+                >
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Age</Typography>
+                        </Stack>
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="birthdayDate"
+                            label={""}
+                            value={filterData.birthdayDate}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                ageOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Income</Typography>
+                        </Stack>
 
-            <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={{ xs: 1, sm: 2, md: 4 }}
-                sx={{ mt: 1, mb: 1 }}
-            >
-                <FormControl fullWidth >
-                    <Stack direction="row">
-                        <Typography variant="h6"
-                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Age</Typography>
-                    </Stack>
-                    <TextField id="select"
-                        margin="none"
-                        size="small"
-                        fullWidth
-                        name="birthdayDate"
-                        label={""}
-                        value=''
-                        onChange={(e) => changeHandler(e)}
-                        select
-                    >
-                        {
-                            ageOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))
-                        }
-                    </TextField>
-                </FormControl>
-                <FormControl fullWidth >
-                    <Stack direction="row">
-                        <Typography variant="h6"
-                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Income</Typography>
-                    </Stack>
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="monthlyHouseholdIncome"
+                            label={""}
+                            value={filterData.monthlyHouseholdIncome}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                incomeOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Marital Status</Typography>
+                        </Stack>
 
-                    <TextField id="select"
-                        margin="none"
-                        size="small"
-                        fullWidth
-                        name="birthdayDate"
-                        label={""}
-                        value=''
-                        onChange={(e) => changeHandler(e)}
-                        select
-                    >
-                        {
-                            incomeOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))
-                        }
-                    </TextField>
-                </FormControl>
-                <FormControl fullWidth >
-                    <Stack direction="row">
-                        <Typography variant="h6"
-                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Marital Status</Typography>
-                    </Stack>
-
-                    <TextField id="select"
-                        margin="none"
-                        size="small"
-                        fullWidth
-                        name="maritalStatus"
-                        label={""}
-                        value=''
-                        onChange={(e) => changeHandler(e)}
-                        select
-                    >
-                        {
-                            [{ label: "Single", value: "1" }, { label: "Married", value: "2" }].map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))
-                        }
-                    </TextField>
-                </FormControl>
-            </Stack>
-            {/* </div> */}
-            
-
-            {isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>S.No</StyledTableCell>
-                        <StyledTableCell>Respondent Name</StyledTableCell>
-                        <StyledTableCell align="center">Mobile No</StyledTableCell>
-                        <StyledTableCell align="center">Pincode</StyledTableCell>
-                        <StyledTableCell align="center">Marital Status</StyledTableCell>
-                        {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                            <StyledTableCell align="center">Field Agent</StyledTableCell>}
-                        <StyledTableCell align="center">Created Date</StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                    </TableRow>
-                </TableHead>
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="maritalStatus"
+                            label={""}
+                            value={filterData.maritalStatus}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                maritalOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
 
 
-                <TableBody>
-                    {(rowsPerPage > 0
-                        ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : rows.data
-                    ).map((row, i) => (
-                        <TableRow key={row._id}>
-                            <TableCell component="th" scope="row">
-                                {parseInt(i) + 1}
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                                {row.respondentName}
-                            </TableCell>
-                            <TableCell style={{ width: 160 }} align="center">
-                                {row.mobileNo}
-                            </TableCell>
-                            <TableCell style={{ width: 160 }} align="center">
-                                {row.pincode}
-                            </TableCell>
-                            <TableCell style={{ width: 160 }} align="center">
-                                {row.maritalStatus === 1 ? "Single" : "Married"}
-                            </TableCell>
-                            {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                                <TableCell style={{ width: 160 }} align="center">
-                                    {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
-                                </TableCell>}
-                            <TableCell align="center">
-                                {formatDate(row.date)}
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                    {emptyRows > 0 && (
-                        <TableRow style={{ height: 53 * emptyRows }}>
-                            <TableCell colSpan={6} />
-                        </TableRow>
-                    )}
-                </TableBody>
-                {(rows.status && rows.data.length > 10) && <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                            colSpan={3}
-                            count={rows.data.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                                inputProps: {
-                                    'aria-label': 'rows per page',
-                                },
-                                native: true,
+                    <FormControl fullWidth>
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filled From</Typography>
+                        </Stack>
+
+                        <TextField
+                            margin="none"
+                            size="small"
+                            id="startDate"
+                            name="startDate"
+                            label={""}
+                            type="date"
+                            value={filterData.startDate}
+                            onChange={(e) => changeHandler(e)}
+                            InputLabelProps={{
+                                shrink: true,
                             }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
                         />
-                    </TableRow>
-                </TableFooter>}
-            </Table>}
-        </TableContainer>
+                    </FormControl>
+                    <FormControl fullWidth>
+                        <Typography variant="h6"
+                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom
+                        >Upto</Typography>
+                        <DatePicker
+                            defaultValue={dayjs()}
+                            name="endDate"
+                            // onError={(newError) => setError(newError)}
+                            onChange={(value) => setFilterData({ ...filterData, endDate: value.format('YYYY-MM-DD') })}
+                            slotProps={{
+                                textField: {
+                                    helperText: errorMessage,
+                                    size: "small"
+                                },
+                            }}
+                            minDate={dayjs(filterData.startDate)}
+                            maxDate={dayjs()}
+                        />
+                    </FormControl>
+                </Stack>
+
+
+                {isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>S.No</StyledTableCell>
+                            <StyledTableCell>Respondent Name</StyledTableCell>
+                            <StyledTableCell align="center">Mobile No</StyledTableCell>
+                            <StyledTableCell align="center">Pincode</StyledTableCell>
+                            <StyledTableCell align="center">Marital Status</StyledTableCell>
+                            {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
+                                <StyledTableCell align="center">Field Agent</StyledTableCell>}
+                            <StyledTableCell align="center">Created Date</StyledTableCell>
+                            <StyledTableCell align="right"></StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+
+
+                    <TableBody>
+                        {(rowsPerPage > 0
+                            ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : rows.data
+                        ).map((row, i) => (
+                            <TableRow key={row._id}>
+                                <TableCell component="th" scope="row">
+                                    {parseInt(i) + 1}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    {row.respondentName}
+                                </TableCell>
+                                <TableCell style={{ width: 160 }} align="center">
+                                    {row.mobileNo}
+                                </TableCell>
+                                <TableCell style={{ width: 160 }} align="center">
+                                    {row.pincode}
+                                </TableCell>
+                                <TableCell style={{ width: 160 }} align="center">
+                                    {row.maritalStatus === 1 ? "Single" : "Married"}
+                                </TableCell>
+                                {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
+                                    <TableCell style={{ width: 160 }} align="center">
+                                        {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
+                                    </TableCell>}
+                                <TableCell align="center">
+                                    {formatDate(row.date)}
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                    {(rows.status && rows.data.length > 10) && <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+                                colSpan={3}
+                                count={rows.data.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                SelectProps={{
+                                    inputProps: {
+                                        'aria-label': 'rows per page',
+                                    },
+                                    native: true,
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>}
+                </Table>}
+            </TableContainer>
+        </LocalizationProvider>
     );
 }
 
