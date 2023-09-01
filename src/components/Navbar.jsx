@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux';
 import { reset } from "../features/auth/authSlice"
 import flag from "../assets/flag.png"
 import "./Navbar.css"
 import { verifyUser } from '../utils/functions/verifyUser';
+import { fetchUsersData } from '../features/auth/usersSlice';
 
 const Navbar = () => {
     const dispatch = useDispatch()

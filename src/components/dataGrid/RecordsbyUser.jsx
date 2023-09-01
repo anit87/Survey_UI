@@ -11,12 +11,13 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import NoData from "../NoData"
+import Loader from '../loader';
+
 const apiUrl = import.meta.env.VITE_API_URL + '/users/records'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#1565c0",
-    // backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -39,7 +40,7 @@ export default function RecordsbyUser() {
   let { id } = useParams();
   const navigate = useNavigate()
   const [formsDetail, setFormsDetail] = useState({ data: [], user: { displayName: "" } })
-  // console.log(formsDetail);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     getUsers()
@@ -49,49 +50,52 @@ export default function RecordsbyUser() {
     'Authorization': localStorage.getItem("surveyApp"),
   };
   const getUsers = async () => {
+    setIsLoading(true)
     const response = await axios.post(apiUrl, { id }, { headers })
     console.log(response.data);
     setFormsDetail(response.data)
+    setIsLoading(false)
   }
   return (
     <>
       <h6 style={{ fontSize: "20px", fontWeight: "600" }} >{`Surveys By ${formsDetail.user.displayName}`}</h6>
       <TableContainer component={Paper}>
         {
-          formsDetail.data.length < 1 ?
-            <NoData msg="No Surveys Found"/> :
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>S.No</StyledTableCell>
-                  <StyledTableCell>Respondent Name</StyledTableCell>
-                  <StyledTableCell align="right">Mobile No</StyledTableCell>
-                  <StyledTableCell align="right">Address</StyledTableCell>
-                  <StyledTableCell align="right">Pincode</StyledTableCell>
-                  <StyledTableCell align="right">Marital Status</StyledTableCell>
-                  <StyledTableCell align="right"></StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {formsDetail.data.map((row, i) => (
-                  <StyledTableRow key={row._id}>
-                    <StyledTableCell component="th" scope="row">
-                      {parseInt(i) + 1}
-                    </StyledTableCell>
-                    <StyledTableCell scope="row">
-                      {row.respondentName}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{row.mobileNo}</StyledTableCell>
-                    <StyledTableCell align="right">{row.address.slice(0, 7) + '...'}</StyledTableCell>
-                    <StyledTableCell align="right">{row.pincode}</StyledTableCell>
-                    <StyledTableCell align="right">{row.maritalStatus === 1 ? "Single" : "Married"}</StyledTableCell>
-                    <StyledTableCell align="right">
-                      <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
+          isLoading ? <Loader />
+            : formsDetail.data.length < 1 ?
+              <NoData msg="No Surveys Found" /> :
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>S.No</StyledTableCell>
+                    <StyledTableCell>Respondent Name</StyledTableCell>
+                    <StyledTableCell align="right">Mobile No</StyledTableCell>
+                    <StyledTableCell align="right">Address</StyledTableCell>
+                    <StyledTableCell align="right">Pincode</StyledTableCell>
+                    <StyledTableCell align="right">Marital Status</StyledTableCell>
+                    <StyledTableCell align="right"></StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {formsDetail.data.map((row, i) => (
+                    <StyledTableRow key={row._id}>
+                      <StyledTableCell component="th" scope="row">
+                        {parseInt(i) + 1}
+                      </StyledTableCell>
+                      <StyledTableCell scope="row">
+                        {row.respondentName}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">{row.mobileNo}</StyledTableCell>
+                      <StyledTableCell align="right">{row.address.slice(0, 7) + '...'}</StyledTableCell>
+                      <StyledTableCell align="right">{row.pincode}</StyledTableCell>
+                      <StyledTableCell align="right">{row.maritalStatus === 1 ? "Single" : "Married"}</StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
         }
         <Button sx={{ m: 4 }} variant='contained' onClick={() => navigate(-1)}>Back</Button>
       </TableContainer>
