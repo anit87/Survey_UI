@@ -22,7 +22,7 @@ import {useDispatch ,useSelector } from 'react-redux';
 import Loader from '../loader';
 import NoData from '../NoData';
 import { userToUpdate } from '../../features/auth/authSlice';
-
+import { fetchUsersData } from '../../features/auth/usersSlice';
 
 const subText = grey[600];
 

@@ -30,7 +30,7 @@ import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyU
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import Loader from '../loader';
-import { ageOptions, incomeOptions, maritalOptions } from "../../utils/constants"
+import { incomeOptions, maritalOptions, trueFalseOptions, educationalOptions, religionOptions, occupationOptios } from "../../utils/constants"
 import NoData from '../NoData';
 const apiUrl = import.meta.env.VITE_API_URL + '/users/allrecords'
 
@@ -130,6 +130,10 @@ export default function SurveyForms() {
         birthdayDate: '',
         maritalStatus: '',
         monthlyHouseholdIncome: '',
+        isOwnProperty: '',
+        occupationStatus: '',
+        religion: '',
+        cweEducation: '',
         startDate: '2023-08-01',
         endDate: new Date().toISOString().slice(0, 10)
     });
@@ -172,7 +176,7 @@ export default function SurveyForms() {
                 'Authorization': localStorage.getItem("surveyApp"),
             };
             setisLoading(true)
-            const url = `${apiUrl}?birthdayDate=${filterData.birthdayDate || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`
+            const url = `${apiUrl}?isOwnProperty=${filterData.isOwnProperty || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}&occupationStatus=${filterData.occupationStatus}&religion=${filterData.religion}&cweEducation=${filterData.cweEducation}`
 
             const response = await axios.get(url, { headers })
             setRows(response.data)
@@ -215,7 +219,7 @@ export default function SurveyForms() {
                     spacing={{ xs: 1, sm: 2, md: 4 }}
                     sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
                 >
-                    <FormControl fullWidth >
+                    {/* <FormControl fullWidth >
                         <Stack direction="row">
                             <Typography variant="h6"
                                 style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Age</Typography>
@@ -238,32 +242,7 @@ export default function SurveyForms() {
                                 ))
                             }
                         </TextField>
-                    </FormControl>
-                    <FormControl fullWidth >
-                        <Stack direction="row">
-                            <Typography variant="h6"
-                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Income</Typography>
-                        </Stack>
-
-                        <TextField id="select"
-                            margin="none"
-                            size="small"
-                            fullWidth
-                            name="monthlyHouseholdIncome"
-                            label={""}
-                            value={filterData.monthlyHouseholdIncome}
-                            onChange={(e) => changeHandler(e)}
-                            select
-                        >
-                            {
-                                incomeOptions.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))
-                            }
-                        </TextField>
-                    </FormControl>
+                    </FormControl> */}
                     <FormControl fullWidth >
                         <Stack direction="row">
                             <Typography variant="h6"
@@ -290,8 +269,60 @@ export default function SurveyForms() {
                         </TextField>
                     </FormControl>
 
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Income</Typography>
+                        </Stack>
 
-                    <FormControl fullWidth>
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="monthlyHouseholdIncome"
+                            label={""}
+                            value={filterData.monthlyHouseholdIncome}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                incomeOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
+
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Own Property</Typography>
+                        </Stack>
+
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="isOwnProperty"
+                            label={""}
+                            value={filterData.isOwnProperty}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                trueFalseOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
+
+
+                    {/* <FormControl fullWidth>
                         <Stack direction="row">
                             <Typography variant="h6"
                                 style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filled From</Typography>
@@ -329,89 +360,174 @@ export default function SurveyForms() {
                             minDate={dayjs(filterData.startDate)}
                             maxDate={dayjs()}
                         />
+                    </FormControl> */}
+                </Stack>
+
+                <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={{ xs: 1, sm: 2, md: 4 }}
+                    sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
+                >
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Occupation Status</Typography>
+                        </Stack>
+
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="occupationStatus"
+                            label={""}
+                            value={filterData.occupationStatus}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                occupationOptios.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
+
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Religion</Typography>
+                        </Stack>
+
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="religion"
+                            label={""}
+                            value={filterData.religion}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                religionOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
+
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Education Of Chief Wage Earner</Typography>
+                        </Stack>
+
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="cweEducation"
+                            label={""}
+                            value={filterData.cweEducation}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                educationalOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
                     </FormControl>
                 </Stack>
 
+
                 {
                     rows.data.length < 1 ?
-                    <NoData msg="No Surveys Found" /> :<>
-                
-                    {isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell>S.No</StyledTableCell>
-                                <StyledTableCell>Respondent Name</StyledTableCell>
-                                <StyledTableCell align="center">Mobile No</StyledTableCell>
-                                <StyledTableCell align="center">Pincode</StyledTableCell>
-                                <StyledTableCell align="center">Marital Status</StyledTableCell>
-                                {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                                    <StyledTableCell align="center">Field Agent</StyledTableCell>}
-                                <StyledTableCell align="center">Created Date</StyledTableCell>
-                                <StyledTableCell align="right"></StyledTableCell>
-                            </TableRow>
-                        </TableHead>
+                        <NoData msg="No Surveys Found" /> : <>
 
-                        <TableBody>
-                            {(rowsPerPage > 0
-                                ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                : rows.data
-                            ).map((row, i) => (
-                                <TableRow key={row._id}>
-                                    <TableCell component="th" scope="row">
-                                        {parseInt(i) + 1}
-                                    </TableCell>
-                                    <TableCell component="th" scope="row">
-                                        {row.respondentName}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        {row.mobileNo}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        {row.pincode}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        {row.maritalStatus === 1 ? "Single" : "Married"}
-                                    </TableCell>
-                                    {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                                        <TableCell style={{ width: 160 }} align="center">
-                                            {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
-                                        </TableCell>}
-                                    <TableCell align="center">
-                                        {formatDate(row.date)}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 53 * emptyRows }}>
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                        {(rows.status && rows.data.length > 10) && <TableFooter>
-                            <TableRow>
-                                <TablePagination
-                                    rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                                    colSpan={3}
-                                    count={rows.data.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    SelectProps={{
-                                        inputProps: {
-                                            'aria-label': 'rows per page',
-                                        },
-                                        native: true,
-                                    }}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions}
-                                />
-                            </TableRow>
-                        </TableFooter>}
-                    </Table>}
-                </>}
+                            {isLoading ? <Loader /> : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell>S.No</StyledTableCell>
+                                        <StyledTableCell>Respondent Name</StyledTableCell>
+                                        <StyledTableCell align="center">Mobile No</StyledTableCell>
+                                        <StyledTableCell align="center">Pincode</StyledTableCell>
+                                        <StyledTableCell align="center">Marital Status</StyledTableCell>
+                                        {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
+                                            <StyledTableCell align="center">Field Agent</StyledTableCell>}
+                                        <StyledTableCell align="center">Created Date</StyledTableCell>
+                                        <StyledTableCell align="right"></StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+
+                                <TableBody>
+                                    {(rowsPerPage > 0
+                                        ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : rows.data
+                                    ).map((row, i) => (
+                                        <TableRow key={row._id}>
+                                            <TableCell component="th" scope="row">
+                                                {parseInt(i) + 1}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {row.respondentName}
+                                            </TableCell>
+                                            <TableCell style={{ width: 160 }} align="center">
+                                                {row.mobileNo}
+                                            </TableCell>
+                                            <TableCell style={{ width: 160 }} align="center">
+                                                {row.pincode}
+                                            </TableCell>
+                                            <TableCell style={{ width: 160 }} align="center">
+                                                {row.maritalStatus === 1 ? "Single" : "Married"}
+                                            </TableCell>
+                                            {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
+                                                <TableCell style={{ width: 160 }} align="center">
+                                                    {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
+                                                </TableCell>}
+                                            <TableCell align="center">
+                                                {formatDate(row.date)}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {emptyRows > 0 && (
+                                        <TableRow style={{ height: 53 * emptyRows }}>
+                                            <TableCell colSpan={6} />
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                                {(rows.status && rows.data.length > 10) && <TableFooter>
+                                    <TableRow>
+                                        <TablePagination
+                                            rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+                                            colSpan={3}
+                                            count={rows.data.length}
+                                            rowsPerPage={rowsPerPage}
+                                            page={page}
+                                            SelectProps={{
+                                                inputProps: {
+                                                    'aria-label': 'rows per page',
+                                                },
+                                                native: true,
+                                            }}
+                                            onPageChange={handleChangePage}
+                                            onRowsPerPageChange={handleChangeRowsPerPage}
+                                            ActionsComponent={TablePaginationActions}
+                                        />
+                                    </TableRow>
+                                </TableFooter>}
+                            </Table>}
+                        </>}
             </TableContainer>
         </LocalizationProvider>
     );
@@ -419,4 +535,4 @@ export default function SurveyForms() {
 
 
 
-        // axios.get(`${apiUrl}?birthdayDate=${filterData.birthdayDate}&maritalStatus=${filterData.maritalStatus}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`)
+// const url = `${apiUrl}?birthdayDate=${filterData.birthdayDate || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`

@@ -1,3 +1,31 @@
+export const trueFalseOptions = [
+    { label: "Please Select", value: "" },
+    {
+        label: "Yes",
+        value: true
+    },
+    {
+        label: "No",
+        value: false
+    }
+]
+
+export const occupationOptios = [
+    { label: "Please Select", value: "" },
+    { label: "Self-employed", value: "1" },
+    { label: "Full-time", value: "2" },
+    { label: "Part-time/freelancer", value: "3" },
+    { label: "Home maker", value: "4" }
+]
+export const religionOptions = [
+    { label: "Please Select", value: "" },
+    { label: "Hindu", value: "1" },
+    { label: "Muslim", value: "2" },
+    { label: "Christianity", value: "3" },
+    { label: "Sikh", value: "4" },
+    { label: "Other", value: "5" }
+]
+
 export const ageOptions = [
     {
         label: "Please Select",
@@ -40,3 +68,35 @@ export const maritalOptions = [
     { label: "Married", value: "2" }
 ]
 
+
+export const educationalOptions = [
+    { label: "Please Select", value: "" },
+    {
+        label: "Illiterate",
+        value: 1
+    },
+    {
+        label: "Literate but no formal education (0-4 years)",
+        value: 2
+    },
+    {
+        label: "School 5-9 years",
+        value: 3
+    },
+    {
+        label: "SSC/HSC",
+        value: 4
+    },
+    {
+        label: "Undergraduate",
+        value: 5
+    },
+    {
+        label: "Postgraduate",
+        value: 6
+    },
+    {
+        label: "Professional (Lawyer, Doctor, CA)",
+        value: 7
+    }
+]

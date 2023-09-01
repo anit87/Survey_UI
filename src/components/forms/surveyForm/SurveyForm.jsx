@@ -10,7 +10,7 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { ageOptions, incomeOptions } from '../../../utils/constants'; 
+import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions } from '../../../utils/constants';
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
 // const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
@@ -38,48 +38,6 @@ const FieldArrayRemoveIcon = ({ index, arrayHelpers, array }) => {
         </Box>
     )
 }
-
-
-const trueFalseOptions = [
-    {
-        label: "Yes",
-        value: true
-    },
-    {
-        label: "No",
-        value: false
-    }
-]
-const educationalOptions = [
-    {
-        label: "Illiterate",
-        value: 1
-    },
-    {
-        label: "Literate but no formal education (0-4 years)",
-        value: 2
-    },
-    {
-        label: "School 5-9 years",
-        value: 3
-    },
-    {
-        label: "SSC/HSC",
-        value: 4
-    },
-    {
-        label: "Undergraduate",
-        value: 5
-    },
-    {
-        label: "Postgraduate",
-        value: 6
-    },
-    {
-        label: "Professional (Lawyer, Doctor, CA)",
-        value: 7
-    }
-]
 
 
 const initialValues = {
@@ -119,7 +77,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
     const mydata = useSelector(state => state.auth)
     // console.log("token ", mydata.token);
     useEffect(() => {
-        const data = mydata.token||token
+        const data = mydata.token || token
         const { id } = verifyUser(data)
         setUserId(id)
     }, [userId, token])
@@ -158,7 +116,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                             setSavedResp(resp.data)
                             // console.log("formik ", resp);
                             alertfn()
-                            setSubmitting(false); 
+                            setSubmitting(false);
                         }}
                     >
                         {({ values, errors }) => (

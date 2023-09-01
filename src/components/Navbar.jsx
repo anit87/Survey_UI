@@ -43,6 +43,10 @@ const Navbar = () => {
                                 </Link>
                             </li>
                         }
+                        {/* onClick={() => dispatch(fetchUsersData({
+                            apiUrl: '/users',
+                            method: "GET"
+                        }))} */}
                         {
                             userDetail.userRole !== 'admin' &&
                             <li className="nav-item">
