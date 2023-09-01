@@ -14,6 +14,13 @@ export const signUpSchema = Yup.object().shape({
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
         .required('Confirm Password is required'),
 });
+export const updateUserSchema = Yup.object().shape({
+    displayName: Yup.string()
+        .required('Name is required'),
+    email: Yup.string()
+        .email('Invalid email')
+        .required('Email is required'),
+});
 
 export const signInSchema = Yup.object().shape({
     email: Yup.string()
@@ -30,8 +37,8 @@ export const resetPasswordSchema = Yup.object().shape({
         .required('Email is required')
 });
 export const resetPasswordCode = Yup.object().shape({
-    email: 
+    email:
         Yup.string()
-        .length(6, 'Code must be 6 characters')
-        .required('Required')
+            .length(6, 'Code must be 6 characters')
+            .required('Required')
 });

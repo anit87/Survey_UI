@@ -6,14 +6,12 @@ const initialState = {
     loading: false,
     error: null,
     msg: null,
-    token: null,
-    isVerified: false,
     data: null,
     singleUser: {}
 }
-
-const authSlice = createSlice({
-    name: 'auth',
+ 
+const usersSlice = createSlice({
+    name: 'users',
     initialState: initialState,
     reducers: {
         reset: (state, action) => {
@@ -21,47 +19,40 @@ const authSlice = createSlice({
             state.loading = false;
             state.error = null;
             state.msg = null;
-            state.token = null;
-            state.isVerified = false;
             state.data = null;
+            state.singleUser = {};
         },
         userToUpdate: (state, action) => {
-
             const data = {
                 _id: action.payload._id || "",
                 displayName: action.payload.displayName || "",
                 email: action.payload.email || "",
                 userRole: action.payload.userRole || "",
-                phoneNumber: action.payload.phoneNumber ||"",
-                reportingAgent: action.payload.reportingAgent ||"",
+                phoneNumber: action.payload.phoneNumber || "",
+                reportingAgent: action.payload.reportingAgent || "",
             }
             state.singleUser = data
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAuthData.pending, (state, action) => {
+            .addCase(fetchUsersData.pending, (state, action) => {
                 state.loading = true;
             })
-            .addCase(fetchAuthData.fulfilled, (state, action) => {
+            .addCase(fetchUsersData.fulfilled, (state, action) => {
                 if (action.payload.status) {
                     state.status = action.payload.status;
                     state.loading = false;
-                    state.data = action.payload;
                     state.error = !action.payload.status;
                     state.msg = action.payload.msg;
-                    state.token = action.payload.token || null;
-                    // state.isVerified = action.payload.isVerified;
-                    if (action.payload.token) {
-                        localStorage.setItem("surveyApp", action.payload.token);
-                    }
+                    state.data = action.payload;
                 } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = action.payload.msg;
                 }
             })
-            .addCase(fetchAuthData.rejected, (state, action) => {
+            .addCase(fetchUsersData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = action.error.message;
@@ -69,18 +60,19 @@ const authSlice = createSlice({
     },
 });
 
-export const fetchAuthData = createAsyncThunk('auth/fetchData', async (apiData) => {
+export const fetchUsersData = createAsyncThunk('users/fetchData', async (apiData) => {
     try {
+        const { apiUrl, bodyOfRequest, method } = apiData
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': localStorage.getItem("surveyApp"),
         };
-        const { apiUrl, bodyOfRequest, method } = apiData
         let response
+        const api = `${import.meta.env.VITE_API_URL}${apiUrl}`
         if (method === 'GET') {
-            response = await axios.get(apiUrl, { headers });
+            response = await axios.get(api, { headers });
         } else if (method === 'POST') {
-            response = await axios.post(apiUrl, bodyOfRequest, { headers });
+            response = await axios.post(api, bodyOfRequest, { headers });
         }
         return response.data;
     } catch (error) {
@@ -89,5 +81,5 @@ export const fetchAuthData = createAsyncThunk('auth/fetchData', async (apiData) 
     }
 });
 
-export const { reset, userToUpdate } = authSlice.actions
-export default authSlice.reducer; 
+export const { reset, userToUpdate } = usersSlice.actions
+export default usersSlice.reducer; 

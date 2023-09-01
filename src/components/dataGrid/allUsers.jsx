@@ -18,9 +18,11 @@ import axios from 'axios';
 import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
 import { grey } from '@mui/material/colors'
 import { useNavigate } from "react-router-dom"
-import { useSelector } from 'react-redux';
+import {useDispatch ,useSelector } from 'react-redux';
 import Loader from '../loader';
 import NoData from '../NoData';
+import { userToUpdate } from '../../features/auth/authSlice';
+
 
 const subText = grey[600];
 
@@ -40,6 +42,7 @@ function Row(props) {
   const { row, index, userDetail } = props;
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   return (
     <React.Fragment>
@@ -63,7 +66,7 @@ function Row(props) {
         <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell>
         <TableCell  >
           <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
-          <Button color="primary" onClick={() => navigate(`/createuser/${row._id}`)} >Edit</Button >
+          <Button color="primary" onClick={() => (dispatch(userToUpdate(row)),navigate(`/createuser/${row._id}`))} >Edit</Button >
         </TableCell>
       </TableRow>
       {row.userRole !== "fielduser" &&
@@ -99,7 +102,7 @@ function Row(props) {
                         <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center'>
                           <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
-                          <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/createuser/${historyRow._id}`)} >Edit</Button >
+                          <Button sx={{ pr: 3 }} color="primary" onClick={() =>(dispatch(userToUpdate(historyRow)), navigate(`/createuser/${historyRow._id}`))} >Edit</Button >
                         </TableCell>
                       </TableRow>
                     ))}
@@ -145,7 +148,7 @@ export default function CollapsibleTable() {
     setUsers(response.data)
     setIsLoading(false)
   }
-  console.log("userDetail ", userDetail);
+  // console.log("userDetail ", userDetail);
   return (
     <>
       <div className='d-flex justify-content-between m-3'>

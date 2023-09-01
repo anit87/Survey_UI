@@ -4,13 +4,14 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { Formik, Form, useFormikContext } from "formik"
 import { useDispatch, useSelector } from 'react-redux'
 
-import { signUpSchema } from "../../utils/schemas/auth"
+import { signUpSchema, updateUserSchema } from "../../utils/schemas/auth"
 import { fetchAuthData } from '../../features/auth/authSlice'
 import TextInput from '../inputs/TextInput'
 import SelectInput from '../inputs/SelectInput'
 import Alert from '../Alert'
 import { verifyUser } from '../../utils/functions/verifyUser'
-import axios from 'axios' 
+import axios from 'axios'
+import { userToUpdate as userToUpdateAction } from '../../features/auth/authSlice'
 
 
 const apiUrl = `/auth/signup`
@@ -36,14 +37,13 @@ const CreateUser = () => {
     const navigate = useNavigate()
     let { id } = useParams();
     // const { values, submitForm } = useFormikContext();
-    const { data, error, loading, msg, token } = useSelector(state => state.auth)
+    const { data, error, loading, msg, token, singleUser } = useSelector(state => state.auth)
     const [userRole, setUserRole] = useState("")
     const [agentsList, setAgentsList] = useState([])
     const [userToUpdate, setUserToUpdate] = useState({
         status: false, data: {}
     })
     const [alert, setAlert] = useState(false);
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ", values, submitForm);
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
@@ -56,9 +56,11 @@ const CreateUser = () => {
         if (id) {
             userToUpdateFn()
         }
-        allAgents()
+        if (!id) {
+            allAgents()
+        }
     }, [])
-    console.log("create user , UserRole", userRole);
+    // console.log("create user , UserRole", userRole);
 
 
 
@@ -71,27 +73,32 @@ const CreateUser = () => {
         setAgentsList(newArr)
     }
     const userToUpdateFn = async () => {
-        const resp = await axios.get(serverURL + `/getuser/${id}`)
-        setUserToUpdate(resp.data)
+        try {
+            const resp = await axios.get(serverURL + `/getuser/${id}`)
+            dispatch(userToUpdateAction(resp.data.data))
+            // setUserToUpdate(resp.data)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const initialValues = {
-        displayName: '',
-        email: '',
+        displayName: id ? singleUser.displayName : '',
+        email: id ? singleUser.email : '',
         password: '',
         confirmPassword: '',
-        phoneNumber: "",
-        userRole: "2",
+        phoneNumber: id ? singleUser.phoneNumber : '',
+        userRole: id ? singleUser.userRole : "2",
         reportingAgent: ""
     }
-
+    // console.log("singleUser", singleUser);
     return (
         <>
             <Alert open={alert} type={error ? "error" : "info"} msg={msg} onClose={() => setAlert(false)} />
 
             <Formik
                 initialValues={initialValues}
-                validationSchema={signUpSchema}
+                validationSchema={id ? updateUserSchema : signUpSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     if (userRole !== 'admin') {
                         values.userRole = '3'
@@ -100,7 +107,7 @@ const CreateUser = () => {
                     dispatch(fetchAuthData(
                         {
                             apiUrl: import.meta.env.VITE_API_URL + apiUrl,
-                            bodyOfRequest: values,
+                            bodyOfRequest: id ? { ...values, id } : values,
                             method: "POST"
                         }
                     ));
@@ -119,7 +126,7 @@ const CreateUser = () => {
                         }}
                     >
                         <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Users</h6>
-                        {console.log("formik ", formik)}
+                        {/* {console.log("formik ", formik)} */}
 
                         <Box sx={{ mt: 1 }} >
                             <Form>
@@ -130,33 +137,41 @@ const CreateUser = () => {
                                             name="displayName"
                                             type="text"
                                             placeholder="Enter Your Name"
+                                        // value={formik.values.displayName}
+                                        // onChange={(e) => formik.setFieldValue('displayName', e.target.value)}
+
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
-
                                         <TextInput
                                             label="Email"
                                             name="email"
                                             type="email"
                                             placeholder="Enter Your Email"
+                                            value={formik.values.email}
+                                            onChange={(e) => formik.setFieldValue('email', e.target.value)}
                                         />
                                     </Grid>
-                                    <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="Password"
-                                            name="password"
-                                            type="password"
-                                            placeholder="*******"
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="Confirm Password"
-                                            name="confirmPassword"
-                                            type="password"
-                                            placeholder="*******"
-                                        />
-                                    </Grid>
+                                    {!id &&
+                                        <Grid item md={6} xs={12}>
+                                            <TextInput
+                                                label="Password"
+                                                name="password"
+                                                type="password"
+                                                placeholder="*******"
+                                            />
+                                        </Grid>
+                                    }
+                                    {!id &&
+                                        <Grid item md={6} xs={12}>
+                                            <TextInput
+                                                label="Confirm Password"
+                                                name="confirmPassword"
+                                                type="password"
+                                                placeholder="*******"
+                                            />
+                                        </Grid>
+                                    }
                                     <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="Phone Number"
@@ -173,6 +188,7 @@ const CreateUser = () => {
                                                 name="userRole"
                                                 id="userRole"
                                                 options={roles}
+                                                disabled={Boolean(id)}
                                             /> :
                                             <SelectInput
                                                 label="Choose Role"
@@ -187,15 +203,16 @@ const CreateUser = () => {
                                     </Grid>
 
                                     {userRole === 'admin' && formik.values.userRole === '3' && <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label="Choose Agent"
-                                            name="reportingAgent"
-                                            id="reportingAgent"
-                                            options={agentsList}
-                                        />
+                                        {!id &&
+                                            <SelectInput
+                                                label="Choose Agent"
+                                                name="reportingAgent"
+                                                id="reportingAgent"
+                                                options={agentsList}
+                                            />}
                                     </Grid>}
                                 </Grid>
-                                <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2, mr: 2 }} >Create</Button>
+                                <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2, mr: 2 }} >{id ? "Update" : "Create"}</Button>
                                 <Button variant='contained' type='button' onClick={() => navigate("/allusers")} sx={{ mt: 3, mb: 2 }} >Cancel</Button>
                             </Form>
                         </Box>
