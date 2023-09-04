@@ -168,8 +168,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                     <Formik
                         initialValues={formsDetail ? formsDetail : initialValues}
                         // validationSchema={surveyFormSchema}
-                        onSubmit={async (values, { setSubmitting }) => {                          
-                          setSavedResp(resp.data)
+                        onSubmit={async (values, { setSubmitting }) => {
+                            setSavedResp(resp.data)
                             // console.log("formik ", resp);
                             alertfn()
                             setSubmitting(false);
@@ -529,7 +529,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             )}
                                         />
                                     </Grid> */}
-                                    <DataTable formsDetail= {formsDetail.ageGroupOfMembers}/>
+                                    <DataTable formsDetail={formsDetail.ageGroupOfMembers} />
 
 
                                 </Grid>}

@@ -171,12 +171,13 @@ export default function SurveyForms() {
 
     const getData = async () => {
         try {
+            const {isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, cweEducation, startDate, endDate} = filterData
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem("surveyApp"),
             };
             setisLoading(true)
-            const url = `${apiUrl}?isOwnProperty=${filterData.isOwnProperty.toString() || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}&occupationStatus=${filterData.occupationStatus}&religion=${filterData.religion}&cweEducation=${filterData.cweEducation}`
+            const url = `${apiUrl}?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
 
             const response = await axios.get(url, { headers })
             setRows(response.data)
@@ -322,7 +323,7 @@ export default function SurveyForms() {
                     </FormControl>
 
 
-                    {/* <FormControl fullWidth>
+                    <FormControl fullWidth>
                         <Stack direction="row">
                             <Typography variant="h6"
                                 style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filled From</Typography>
@@ -342,25 +343,7 @@ export default function SurveyForms() {
                             }}
                         />
                     </FormControl>
-                    <FormControl fullWidth>
-                        <Typography variant="h6"
-                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom
-                        >Upto</Typography>
-                        <DatePicker
-                            defaultValue={dayjs()}
-                            name="endDate"
-                            // onError={(newError) => setError(newError)}
-                            onChange={(value) => setFilterData({ ...filterData, endDate: value.format('YYYY-MM-DD') })}
-                            slotProps={{
-                                textField: {
-                                    helperText: errorMessage,
-                                    size: "small"
-                                },
-                            }}
-                            minDate={dayjs(filterData.startDate)}
-                            maxDate={dayjs()}
-                        />
-                    </FormControl> */}
+                    
                 </Stack>
 
                 <Stack
@@ -444,6 +427,26 @@ export default function SurveyForms() {
                                 ))
                             }
                         </TextField>
+                    </FormControl>
+
+                    <FormControl fullWidth>
+                        <Typography variant="h6"
+                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom
+                        >Upto</Typography>
+                        <DatePicker
+                            defaultValue={dayjs()}
+                            name="endDate"
+                            // onError={(newError) => setError(newError)}
+                            onChange={(value) => setFilterData({ ...filterData, endDate: value.format('YYYY-MM-DD') })}
+                            slotProps={{
+                                textField: {
+                                    helperText: errorMessage,
+                                    size: "small"
+                                },
+                            }}
+                            minDate={dayjs(filterData.startDate)}
+                            maxDate={dayjs()}
+                        />
                     </FormControl>
                 </Stack>
 

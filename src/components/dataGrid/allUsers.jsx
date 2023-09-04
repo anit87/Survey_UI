@@ -63,7 +63,7 @@ function Row(props) {
         <TableCell >{capitalizeFirstLetter(row.displayName)}</TableCell>
         <TableCell >{row.phoneNumber || "- - -"}</TableCell>
         <TableCell >{row.email}</TableCell>
-        <TableCell>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</TableCell>
+        <TableCell>{row.userRole === '2' ? 'Admin' : '3' ? 'Field Agent' : ""}</TableCell>
         <TableCell  >
           <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
           <Button color="primary" onClick={() => (dispatch(userToUpdate(row)),navigate(`/createuser/${row._id}`))} >Edit</Button >
@@ -99,7 +99,7 @@ function Row(props) {
                         </TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber || "- - -"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
-                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : "a"}</TableCell>
+                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Admin' : '3' ? 'Field Agent' : "a"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center'>
                           <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
                           <Button sx={{ pr: 3 }} color="primary" onClick={() =>(dispatch(userToUpdate(historyRow)), navigate(`/createuser/${historyRow._id}`))} >Edit</Button >
@@ -144,7 +144,9 @@ export default function CollapsibleTable() {
   };
   const getUsers = async () => {
     setIsLoading(true)
+    console.time('myCode');
     const response = await axios.get(apiUrl, { headers })
+    console.timeEnd('myCode');
     setUsers(response.data)
     setIsLoading(false)
   }

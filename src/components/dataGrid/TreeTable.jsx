@@ -41,7 +41,7 @@ function TreeTable(props) {
                             <td>{row.displayName || `---`}</td>
                             <td>{row.email}</td>
                             <td>{row.phoneNumber || `---`}</td>
-                            <td>{row.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</td>
+                            <td>{row.userRole === '2' ? 'Admin' : '3' ? 'Field Agent' : ""}</td>
 
                         </tr>
                         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -52,7 +52,7 @@ function TreeTable(props) {
                                     <td>{subcategory.displayName}</td>
                                     <td>{subcategory.email}</td>
                                     <td>{subcategory.phoneNumber || `---`}</td>
-                                    <td>{subcategory.userRole === '2' ? 'Agent' : '3' ? 'Field Agent' : ""}</td>
+                                    <td>{subcategory.userRole === '2' ? 'Admin' : '3' ? 'Field Agent' : ""}</td>
                                 </tr>
                             ))}
                         </Collapse>

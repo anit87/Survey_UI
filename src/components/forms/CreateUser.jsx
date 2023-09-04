@@ -19,7 +19,7 @@ const serverURL = import.meta.env.VITE_API_URL + '/users'
 
 const roles = [
     {
-        label: "Agent",
+        label: "Admin",
         value: "2"
     },
     {
@@ -99,7 +99,7 @@ const CreateUser = () => {
             <Formik
                 initialValues={initialValues}
                 validationSchema={id ? updateUserSchema : signUpSchema}
-                onSubmit={(values, { setSubmitting }) => {
+                onSubmit={(values, { setSubmitting, resetForm }) => {
                     if (userRole !== 'admin') {
                         values.userRole = '3'
                     }
@@ -113,6 +113,7 @@ const CreateUser = () => {
                     ));
                     alertfn()
                     setSubmitting(false);
+                    resetForm()
                 }}
             >
                 {(formik) => (

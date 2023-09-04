@@ -58,7 +58,7 @@ const SurveyMultiSteps = () => {
       </Stepper>
       <div>
         <div >
-          {!id && <SurveyForm activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)} />}
+          {!id && <SurveyForm activeStep={activeStep} setActiveStep={setActiveStep} submitDisabled={Boolean(activeStep === steps.length - 1)} />}
           {id &&
             <SurveyFormNoneEdit
               activeStep={activeStep} submitDisabled={Boolean(activeStep === steps.length - 1)}
