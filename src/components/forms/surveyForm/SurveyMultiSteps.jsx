@@ -23,9 +23,11 @@ const SurveyMultiSteps = () => {
   const [formsDetail, setFormsDetail] = useState({})
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  console.log("formsDetail  ", formsDetail);
+  // console.log("formsDetail  ", formsDetail);
   useEffect(() => {
-    getUsers()
+    if (id) {
+      getUsers()
+    }
   }, [id])
 
   const getUsers = async () => {
@@ -40,11 +42,10 @@ const SurveyMultiSteps = () => {
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
-  console.log("id is ", id, "*");
+  // console.log("id is ", id, "*");
 
   return (
     <div>
-      {/* <ImageWithText image={isSmallScreen ? india1 : india} /> */}
       <Navbar/>
       <Toolbar />
       <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Survey Form</h6>
@@ -70,10 +71,10 @@ const SurveyMultiSteps = () => {
               <Button disabled={activeStep === 0} onClick={handleBack} variant="contained" color="primary" sx={{ mr: '1rem' }} >
                 Back
               </Button>}
-            {activeStep !== steps.length - 1 &&
+            {/* {activeStep !== steps.length - 1 &&
               <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" sx={{ mr: '1rem' }} onClick={handleNext}>
                 Next
-              </Button>}
+              </Button>} */}
             <Button variant="contained" color="primary" onClick={() =>navigate(-1)}>
               Cancel
             </Button>

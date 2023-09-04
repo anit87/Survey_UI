@@ -5,7 +5,7 @@ import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { surveyFormSchema } from '../../../utils/schemas/surveyForm';
+import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
 import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
@@ -101,6 +101,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
+    // console.log("st ", activeStep);
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -108,14 +109,31 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
                         initialValues={formsDetail ? formsDetail : initialValues}
-                        validationSchema={surveyFormSchema}
-                        onSubmit={async (values, { setSubmitting, resetForm }) => {
-                            const resp = await axios.post(apiUrl, { ...values, filledBy: userId })
-                            setSavedResp(resp.data)
-                            alertfn()
-                            resetForm()
-                            setActiveStep(0)
-                            setSubmitting(false);
+                        // validationSchema={surveyFormSchema}
+                        validationSchema={
+                            activeStep == 0 ? surveyFormSchemaStep0 :
+                                activeStep == 1 ? surveyFormSchemaStep1 :
+                                    activeStep == 2 ? surveyFormSchemaStep2 :
+                                        activeStep == 3 ? surveyFormSchemaStep3 :
+                                            activeStep == 4 ? surveyFormSchema : surveyFormSchema
+                        }
+                        submitting={true}
+                        validateOnBlur={false}
+                        validateOnChange={false}
+                        onSubmit={async (values, { setSubmitting, resetForm, validateForm, setFieldError }) => {
+                            console.log("valssssssssssss---------------------", values);
+                            if (activeStep != 4) {
+                                setActiveStep(activeStep + 1)
+                            } else if (activeStep == 4 && !values.ageGroupOfMembers[0].name) {
+                                setFieldError("ageGroupOfMembers", "Please Enter all Values")
+                            } else {
+                                const resp = await axios.post(apiUrl, { ...values, filledBy: userId })
+                                setSavedResp(resp.data)
+                                alertfn()
+                                resetForm()
+                                setActiveStep(0)
+                                setSubmitting(false);
+                            }
                         }}
                     >
                         {({ values, errors }) => (
@@ -131,7 +149,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             name="respondentName"
                                             type="text"
                                             placeholder="Please Provide Your Full Name"
-
                                         />
                                     </Grid>
 
@@ -383,8 +400,13 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                         />
                                     </Grid>
                                 </Grid>}
-                                <div className='d-flex flex-row-reverse bd-highlight'>
-                                    {submitDisabled && <Button variant='contained' style={{ textAlign: "right" }} type='submit' sx={{ mt: 2, pl: 3, pr: 3 }} >Submit</Button>}
+                                <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
+                                    {<Button variant='contained' style={{ textAlign: "right" }} type='submit'
+                                        sx={{ mt: 3, pl: 3, pr: 3 }}
+                                    >
+                                        {activeStep === 4 ? "Submit" : "Next"}
+                                    </Button>
+                                    }
                                 </div>
 
                             </Form>
