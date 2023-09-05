@@ -10,7 +10,8 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions } from '../../../utils/constants';
+import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions } from '../../../utils/constants';
+import { getLocation } from '../../../utils/location/getLocation';
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
 // const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
@@ -54,29 +55,31 @@ const initialValues = {
     cweEducation: '',
     respondentEducation: '',
     isParticipated: '',
+    categoryFallUnder: '',
     birthdayDate: '',
     registeredVoter: '',
-    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "" }],
-    // assemblyConstituencyMembers: [{ name: 'user', age: '20', gender: "female", assemblyName: "user" }],
-    // voterIDsList: [{ name: 'user', age: '20', gender: "male", assemblyName: "user" }],
+    voterIdNumber: '',
+    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum:"" }],
     maritalStatus: '',
     occupationStatus: '',
     monthlyHouseholdIncome: '',
 }
 
 const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDetail }) => {
+    const theme = useTheme();
     const navigate = useNavigate()
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
     const [userId, setUserId] = useState(" ")
     const [alert, setAlert] = useState(false);
     let [counter, setCounter] = useState(0)
     const [savedResp, setSavedResp] = useState({});
-    const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [editable, setEditable] = useState(formId)
     // const [formsDetail, setFormsDetail] = useState(initialValues)
+
     const token = localStorage.getItem('surveyApp')
     const mydata = useSelector(state => state.auth)
-    // console.log("token ", mydata.token);
+
     useEffect(() => {
         const data = mydata.token || token
         const { id } = verifyUser(data)
@@ -85,7 +88,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
 
     useEffect(() => {
         setCounter(counter++)
-
     }, [formsDetail])
 
 
@@ -101,7 +103,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
-    // console.log("st ", activeStep);
+
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -121,13 +123,14 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                         validateOnBlur={false}
                         validateOnChange={false}
                         onSubmit={async (values, { setSubmitting, resetForm, validateForm, setFieldError }) => {
-                            console.log("valssssssssssss---------------------", values);
+                            console.log("vals--------", values);
                             if (activeStep != 4) {
                                 setActiveStep(activeStep + 1)
                             } else if (activeStep == 4 && !values.ageGroupOfMembers[0].name) {
                                 setFieldError("ageGroupOfMembers", "Please Enter all Values")
                             } else {
-                                const resp = await axios.post(apiUrl, { ...values, filledBy: userId })
+                                const locat = await getLocation()
+                                const resp = await axios.post(apiUrl, { ...values, filledBy: userId, location: locat })
                                 setSavedResp(resp.data)
                                 alertfn()
                                 resetForm()
@@ -217,7 +220,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                         />
                                     </Grid>
 
-                                    <Grid item md={6} xs={12}>
+                                    {/* <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="Years of Residence in Current Location *"
                                             title="How Many Years Have You Lived Here?"
@@ -226,7 +229,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             placeholder="Years at Current Location"
 
                                         />
-                                    </Grid>
+                                    </Grid> */}
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
@@ -249,7 +252,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             placeholder="Total Members"
                                         />
                                     </Grid>
-                                    <Grid item md={6} xs={12}>
+                                    {/* <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="How Many of You Are Staying in This Property? *"
                                             title="Total Number of Members Staying in This Property"
@@ -257,7 +260,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             type="number"
                                             placeholder="Number Staying Here?"
                                         />
-                                    </Grid>
+                                    </Grid> */}
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
@@ -284,9 +287,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             placeholder="Kindly Indicate Your Caste"
                                         />
                                     </Grid>
-                                </Grid>}
-
-                                {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Select Education Details of Chief Wage Earner (Head of the family) *"
@@ -296,8 +296,12 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             options={educationalOptions}
                                         />
                                     </Grid>
+                                </Grid>}
 
-                                    <Grid item md={6} xs={12}>
+                                {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+
+
+                                    {/* <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Respondent's Highest Level of Education *"
                                             title="Provide Applicant's Education Details"
@@ -305,17 +309,35 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             name="respondentEducation"
                                             options={educationalOptions}
                                         />
+                                    </Grid> */}
+                                    <Grid item md={6} xs={12}>
+                                        <SelectInput
+                                            label="Is The Applicant a Registered Voter In This Assembly Constituency *"
+                                            title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
+                                            name="registeredVoter"
+                                            id="registeredVoter"
+                                            options={trueFalseOptions}
+                                        />
+                                    </Grid>
+
+                                    <Grid item md={6} xs={12}>
+                                        <TextInput
+                                            label="Voter ID"
+                                            title="Please Enter Voter ID Number"
+                                            name="voterIdNumber"
+                                            type="number"
+                                            placeholder="Please Provide Your Voter ID Number"
+                                        />
                                     </Grid>
                                 </Grid>}
 
                                 {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label={`In the Past 6 Months, Have You Participated in Surveys *`}
-                                            title={`Have You Participated in Any Market Research Survey, Interview, or Discussion in the Past 6 Months?`}
+                                            label={`Government Schemes Availed *`}
                                             name="isParticipated"
                                             id="isParticipated"
-                                            options={trueFalseOptions}
+                                            options={governmentSchemesOptions}
                                         />
                                     </Grid>
 
@@ -328,16 +350,16 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             options={ageOptions}
                                         />
                                     </Grid>
-
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Is The Applicant a Registered Voter In This Assembly Constituency *"
-                                            title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
-                                            name="registeredVoter"
-                                            id="registeredVoter"
-                                            options={trueFalseOptions}
+                                            label={`What Category Do You Fall Under?*`}
+                                            name="categoryFallUnder"
+                                            id="categoryFallUnder"
+                                            options={categoryOptions}
                                         />
                                     </Grid>
+
+
                                 </Grid>}
 
                                 {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -357,7 +379,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                                             <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} />
                                                             <TextInput
                                                                 label="Members Name *"
-                                                                title="Please Enter Name of Members"
                                                                 name={`ageGroupOfMembers[${index}].name`}
                                                                 type="text"
                                                                 placeholder="Name"
@@ -365,31 +386,33 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                                             />
                                                             <TextInput
                                                                 label="Age *"
-                                                                title="Please Enter Age of Member"
                                                                 name={`ageGroupOfMembers[${index}].age`}
                                                                 type="number"
                                                                 placeholder="Age"
                                                             />
                                                             <SelectInput
                                                                 label="Gender *"
-                                                                title="Select Gender"
                                                                 id={`ageGroupOfMembers[${index}].gender`}
                                                                 name={`ageGroupOfMembers[${index}].gender`}
                                                                 options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
                                                             />
                                                             <TextInput
-                                                                label="Assembly/Constituency *"
-                                                                title="Assembly/Constituency "
+                                                                label="Assembly/Constituency*"
                                                                 name={`ageGroupOfMembers[${index}].assembly`}
                                                                 type="text"
                                                                 placeholder="Assembly/Constituency"
                                                             />
                                                             <SelectInput
                                                                 label="Voter ID *"
-                                                                title="Have you Voter ID?"
                                                                 id={`ageGroupOfMembers[${index}].voterId`}
                                                                 name={`ageGroupOfMembers[${index}].voterId`}
                                                                 options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
+                                                            />
+                                                            <TextInput
+                                                                label="Voter ID Number"
+                                                                name={`ageGroupOfMembers[${index}].voterIdNum`}
+                                                                type="number"
+                                                                placeholder="Please Provide Your Voter ID Number"
                                                             />
 
                                                             {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}

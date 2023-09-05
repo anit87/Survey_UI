@@ -19,7 +19,7 @@ const serverURL = import.meta.env.VITE_API_URL + '/users'
 
 const roles = [
     {
-        label: "Admin",
+        label: "Supervisor",
         value: "2"
     },
     {

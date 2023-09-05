@@ -137,7 +137,7 @@ export default function SurveyForms() {
         startDate: '2023-08-01',
         endDate: new Date().toISOString().slice(0, 10)
     });
-    console.log("filters ", filterData);
+    // console.log("filters ", filterData);
 
     const [userDetail, setUserDetail] = useState({})
     const token = useSelector(state => state.auth.token)
@@ -213,7 +213,7 @@ export default function SurveyForms() {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TableContainer component={Paper}>
-                <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >All Survey's</h6>
+                <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >Smart Filters</h6>
 
                 <Stack
                     direction={{ xs: 'column', sm: 'row' }}
@@ -324,6 +324,27 @@ export default function SurveyForms() {
 
 
                     <FormControl fullWidth>
+                        <Typography variant="h6"
+                            style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom
+                        >Filled From</Typography>
+                        <DatePicker
+                            defaultValue={dayjs('2023-08-01')}
+                            name="startDate"
+                            onChange={(value) => setFilterData({ ...filterData, startDate: value.format('YYYY-MM-DD') })}
+                            slotProps={{
+                                textField: {
+                                    helperText: errorMessage,
+                                    size: "small"
+                                },
+                            }}
+                            minDate={dayjs(filterData.startDate)}
+                            maxDate={dayjs()}
+                            format="DD-MM-YYYY"
+                        />
+                    </FormControl>
+
+
+                    {/* <FormControl fullWidth>
                         <Stack direction="row">
                             <Typography variant="h6"
                                 style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filled From</Typography>
@@ -334,6 +355,7 @@ export default function SurveyForms() {
                             size="small"
                             id="startDate"
                             name="startDate"
+                            format="DD-MM-YYYY"
                             label={""}
                             type="date"
                             value={filterData.startDate}
@@ -342,7 +364,7 @@ export default function SurveyForms() {
                                 shrink: true,
                             }}
                         />
-                    </FormControl>
+                    </FormControl>*/}
                     
                 </Stack>
 
@@ -436,7 +458,6 @@ export default function SurveyForms() {
                         <DatePicker
                             defaultValue={dayjs()}
                             name="endDate"
-                            // onError={(newError) => setError(newError)}
                             onChange={(value) => setFilterData({ ...filterData, endDate: value.format('YYYY-MM-DD') })}
                             slotProps={{
                                 textField: {
@@ -446,6 +467,7 @@ export default function SurveyForms() {
                             }}
                             minDate={dayjs(filterData.startDate)}
                             maxDate={dayjs()}
+                            format="DD-MM-YYYY"
                         />
                     </FormControl>
                 </Stack>

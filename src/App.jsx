@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import './App.css'
-import SurveyForm from './pages/SurveyForm'
 import ProtectedRoute from "./components/ProtectedRoute"
 import LoginSignUp from './pages/LoginSignUp'
 import SignIn from './components/forms/LoginForm'

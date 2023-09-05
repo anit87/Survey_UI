@@ -100,3 +100,41 @@ export const educationalOptions = [
         value: 7
     }
 ]
+export const governmentSchemesOptions = [
+    { label: "Please Select", value: "" },
+    {
+        label: "Gruha Jyothi Scheme",
+        value: 1
+    },
+    {
+        label: "Gruha Lakshmi Scheme",
+        value: 2
+    },
+    {
+        label: "Yuva Nidhi Scheme",
+        value: 3
+    },
+    {
+        label: "Anna Bhagya Scheme",
+        value: 4
+    },
+    {
+        label: "Shakti Scheme",
+        value: 5
+    }
+]
+export const categoryOptions = [
+    { label: "Please Select", value: "" },
+    {
+        label: "BPL",
+        value: 1
+    },
+    {
+        label: "APL",
+        value: 2
+    },
+    {
+        label: "N/A",
+        value: 3
+    }
+]

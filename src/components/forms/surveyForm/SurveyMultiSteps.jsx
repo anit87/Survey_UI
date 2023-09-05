@@ -3,15 +3,12 @@ import { Stepper, Step, StepLabel, Button, Typography, Toolbar, useMediaQuery, u
 import { useParams, useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import SurveyFormNoneEdit from "./SurveyFormNoneEdit"
-import india from "../../../assets/india1440.png"
-import india1 from "../../../assets/india420.png"
-import ImageWithText from '../../imageWithText/ImageWithText';
 import Navbar from '../../Navbar';
 import axios from "axios"
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
-const steps = ['Basic Details', 'About Family', 'Qualifications', 'General', 'Family Details']; // Define your steps here
+const steps = ['Basic Details', 'About Family', 'Voter Details', 'General', 'Family Details']; // Define your steps here
 
 const SurveyMultiSteps = () => {
 
@@ -71,10 +68,10 @@ const SurveyMultiSteps = () => {
               <Button disabled={activeStep === 0} onClick={handleBack} variant="contained" color="primary" sx={{ mr: '1rem' }} >
                 Back
               </Button>}
-            {/* {activeStep !== steps.length - 1 &&
+            {activeStep !== steps.length - 1 && id &&
               <Button disabled={activeStep === steps.length - 1} variant="contained" color="primary" sx={{ mr: '1rem' }} onClick={handleNext}>
                 Next
-              </Button>} */}
+              </Button>}
             <Button variant="contained" color="primary" onClick={() =>navigate(-1)}>
               Cancel
             </Button>

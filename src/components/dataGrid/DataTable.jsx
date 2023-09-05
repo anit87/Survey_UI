@@ -49,6 +49,7 @@ export default function DataTable({ formsDetail }) {
                         <StyledTableCell align="right">Gender</StyledTableCell>
                         <StyledTableCell align="right">Assembly</StyledTableCell>
                         <StyledTableCell align="right">Voter Id</StyledTableCell>
+                        <StyledTableCell align="right">Voter Id</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -61,6 +62,7 @@ export default function DataTable({ formsDetail }) {
                             <StyledTableCell align="right">{row.gender}</StyledTableCell>
                             <StyledTableCell align="right">{row.assembly}</StyledTableCell>
                             <StyledTableCell align="right">{row.voterId == 1 ? "Yes" : "No"}</StyledTableCell>
+                            <StyledTableCell align="right">{row.voterIdNum}</StyledTableCell>
 
                         </StyledTableRow>
                     ))}
