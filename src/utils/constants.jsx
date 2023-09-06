@@ -2,11 +2,11 @@ export const trueFalseOptions = [
     { label: "Please Select", value: "" },
     {
         label: "Yes",
-        value: true
+        value: 1
     },
     {
         label: "No",
-        value: false
+        value: 0
     }
 ]
 

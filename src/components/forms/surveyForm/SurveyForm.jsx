@@ -12,6 +12,8 @@ import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
+import FileUpload from '../../inputs/FileUpload';
+import objectToFormData from '../../../utils/functions/objectToFormData';
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
 // const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
@@ -59,7 +61,7 @@ const initialValues = {
     birthdayDate: '',
     registeredVoter: '',
     voterIdNumber: '',
-    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum:"" }],
+    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "" }],
     maritalStatus: '',
     occupationStatus: '',
     monthlyHouseholdIncome: '',
@@ -75,8 +77,8 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
     let [counter, setCounter] = useState(0)
     const [savedResp, setSavedResp] = useState({});
     const [editable, setEditable] = useState(formId)
-    // const [formsDetail, setFormsDetail] = useState(initialValues)
-
+    const [selectedFile, setSelectedFile] = useState(null);
+    // console.log(selectedFile);
     const token = localStorage.getItem('surveyApp')
     const mydata = useSelector(state => state.auth)
 
@@ -104,6 +106,12 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
         setTimeout(() => setAlert(true), 1000);
     }
 
+    const handleFileChange = (event) => {
+        console.log("change ", event.target.files[0]);
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    };
+
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -123,14 +131,18 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                         validateOnBlur={false}
                         validateOnChange={false}
                         onSubmit={async (values, { setSubmitting, resetForm, validateForm, setFieldError }) => {
-                            console.log("vals--------", values);
+                            // console.log("vals--------", values);
                             if (activeStep != 4) {
                                 setActiveStep(activeStep + 1)
                             } else if (activeStep == 4 && !values.ageGroupOfMembers[0].name) {
                                 setFieldError("ageGroupOfMembers", "Please Enter all Values")
                             } else {
                                 const locat = await getLocation()
-                                const resp = await axios.post(apiUrl, { ...values, filledBy: userId, location: locat })
+                                const formData = objectToFormData(values)
+                                formData.append('voterIdImage', selectedFile);
+                                formData.append('location', JSON.stringify(locat));
+                                formData.append('filledBy', userId);
+                                const resp = await axios.post(apiUrl, formData)
                                 setSavedResp(resp.data)
                                 alertfn()
                                 resetForm()
@@ -328,6 +340,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             type="number"
                                             placeholder="Please Provide Your Voter ID Number"
                                         />
+                                        <FileUpload handleFileChange={handleFileChange} selectedFile={selectedFile} />
                                     </Grid>
                                 </Grid>}
 
@@ -374,49 +387,67 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                                         object={{ name: '', age: '', gender: "" }}
                                                     />
                                                     {values.ageGroupOfMembers.map((item, index) => (
-                                                        <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
+                                                        // <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
+                                                        <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                            <Grid item md={1} xs={12} style={{ display: "flex" }}>
+                                                                <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} />
+                                                            </Grid>
+                                                            <Grid item md={2} xs={12}>
+                                                                <TextInput
+                                                                    label="Members Name *"
+                                                                    name={`ageGroupOfMembers[${index}].name`}
+                                                                    type="text"
+                                                                    placeholder="Name"
 
-                                                            <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} />
-                                                            <TextInput
-                                                                label="Members Name *"
-                                                                name={`ageGroupOfMembers[${index}].name`}
-                                                                type="text"
-                                                                placeholder="Name"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item md={1} xs={12}>
+                                                                <TextInput
+                                                                    label="Age *"
+                                                                    name={`ageGroupOfMembers[${index}].age`}
+                                                                    type="number"
+                                                                    placeholder="Age"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item md={1} xs={12}>
+                                                                <SelectInput
+                                                                    label="Gender *"
+                                                                    id={`ageGroupOfMembers[${index}].gender`}
+                                                                    name={`ageGroupOfMembers[${index}].gender`}
+                                                                    options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item md={2} xs={12}>
+                                                                <TextInput
+                                                                    label="Assembly/Constituency*"
+                                                                    name={`ageGroupOfMembers[${index}].assembly`}
+                                                                    type="text"
+                                                                    placeholder="Assembly/Constituency"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item md={2} xs={12}>
+                                                                <SelectInput
+                                                                    label="Voter ID *"
+                                                                    id={`ageGroupOfMembers[${index}].voterId`}
+                                                                    name={`ageGroupOfMembers[${index}].voterId`}
+                                                                    options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
+                                                                />
+                                                            </Grid>
+                                                            <Grid item md={2} xs={12}>
 
-                                                            />
-                                                            <TextInput
-                                                                label="Age *"
-                                                                name={`ageGroupOfMembers[${index}].age`}
-                                                                type="number"
-                                                                placeholder="Age"
-                                                            />
-                                                            <SelectInput
-                                                                label="Gender *"
-                                                                id={`ageGroupOfMembers[${index}].gender`}
-                                                                name={`ageGroupOfMembers[${index}].gender`}
-                                                                options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
-                                                            />
-                                                            <TextInput
-                                                                label="Assembly/Constituency*"
-                                                                name={`ageGroupOfMembers[${index}].assembly`}
-                                                                type="text"
-                                                                placeholder="Assembly/Constituency"
-                                                            />
-                                                            <SelectInput
-                                                                label="Voter ID *"
-                                                                id={`ageGroupOfMembers[${index}].voterId`}
-                                                                name={`ageGroupOfMembers[${index}].voterId`}
-                                                                options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
-                                                            />
-                                                            <TextInput
-                                                                label="Voter ID Number"
-                                                                name={`ageGroupOfMembers[${index}].voterIdNum`}
-                                                                type="number"
-                                                                placeholder="Please Provide Your Voter ID Number"
-                                                            />
+                                                                <TextInput
+                                                                    label="Voter ID Number"
+                                                                    name={`ageGroupOfMembers[${index}].voterIdNum`}
+                                                                    type="number"
+                                                                    placeholder="Please Provide Your Voter ID Number"
+                                                                />
+                                                                <FileUpload />
+                                                            </Grid>
+
 
                                                             {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
-                                                        </Stack>
+                                                        </Grid>
+
                                                     ))}
                                                 </div>
                                             )}
