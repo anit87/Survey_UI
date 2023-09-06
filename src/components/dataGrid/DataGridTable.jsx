@@ -32,9 +32,18 @@ import { useNavigate } from "react-router-dom"
 import Loader from '../loader';
 import { incomeOptions, maritalOptions, trueFalseOptions, educationalOptions, religionOptions, occupationOptios } from "../../utils/constants"
 import NoData from '../NoData';
-const apiUrl = import.meta.env.VITE_API_URL + '/users/allrecords'
+const apiUrl = import.meta.env.VITE_API_URL
 
+const isAgentActive = (inputDate) => {
+    const inputDateObj = dayjs(inputDate)
+    let fiveDaysAgo = new Date();
 
+    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+    fiveDaysAgo = dayjs(fiveDaysAgo)
+
+    const isAfter = inputDateObj.isAfter(fiveDaysAgo);
+    return isAfter
+}
 const formatDate = (dateString) => {
     const parsedDate = moment(dateString);
     const formattedDate = parsedDate.format("DD-MM-YYYY HH:mm");
@@ -137,7 +146,12 @@ export default function SurveyForms() {
         startDate: '2023-08-01',
         endDate: new Date().toISOString().slice(0, 10)
     });
-    // console.log("filters ", filterData);
+
+    const [activeAgents, setActiveAgents] = useState({
+        status: false,
+        result: { agents: [], fieldAgents: [] }
+    })
+    // console.log("filters ", activeAgents);
 
     const [userDetail, setUserDetail] = useState({})
     const token = useSelector(state => state.auth.token)
@@ -158,26 +172,30 @@ export default function SurveyForms() {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const user = verifyUser(token)
         setUserDetail(user)
+        getActiveUsers()
     }, [])
 
-    // console.log("userDetail dash ", rows);
+    // console.log("userDetail dash ", userDetail.userRole);
 
     useEffect(() => {
         getData()
     }, [filterData])
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("surveyApp"),
+    };
+
     const getData = async () => {
         try {
-            const {isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, cweEducation, startDate, endDate} = filterData
-            const headers = {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem("surveyApp"),
-            };
+            const { isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, cweEducation, startDate, endDate } = filterData
+
             setisLoading(true)
-            const url = `${apiUrl}?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
+            const url = `${apiUrl}/users/allrecords?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
 
             const response = await axios.get(url, { headers })
             setRows(response.data)
@@ -185,6 +203,34 @@ export default function SurveyForms() {
             setisLoading(false)
         } catch (error) {
             console.log("Error in Dashboard ", error);
+        }
+    }
+    const getActiveUsers = async () => {
+        try {
+            const result = await axios.get(`${apiUrl}/users/getlastform`, { headers })
+            // console.log("*********************************", result.data.result);
+            const agents = await Promise.all(result.data.result.agents.map(obj => {
+                let userStatus = false
+                if (obj.surveys.length < 1) {
+                    return { ...obj, userStatus }
+                } else {
+                    userStatus = isAgentActive(obj.surveys[0].date)
+                    return { ...obj, userStatus }
+                }
+            }))
+            const fieldAgents = await Promise.all(result.data.result.fieldAgents.map(obj => {
+                let userStatus = false
+                if (obj.surveys.length < 1) {
+                    return { ...obj, userStatus }
+                } else {
+                    userStatus = isAgentActive(obj.surveys[0].date)
+                    return { ...obj, userStatus }
+                }
+            }))
+
+            setActiveAgents({ status: true, result: { agents, fieldAgents } })
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -213,6 +259,18 @@ export default function SurveyForms() {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TableContainer component={Paper}>
+
+                {userDetail.userRole==="admin" &&
+                    <>
+                        <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
+                            {`Active Supervisor: ${activeAgents.result.agents.filter(obj => obj.userStatus).length}`}
+                        </h6>
+                        <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
+                            {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj => obj.userStatus).length}`}
+                        </h6>
+                    </>
+                }
+
                 <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >Smart Filters</h6>
 
                 <Stack
@@ -365,7 +423,7 @@ export default function SurveyForms() {
                             }}
                         />
                     </FormControl>*/}
-                    
+
                 </Stack>
 
                 <Stack
