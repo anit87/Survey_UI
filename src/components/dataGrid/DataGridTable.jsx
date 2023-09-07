@@ -179,7 +179,7 @@ export default function SurveyForms() {
         getActiveUsers()
     }, [])
 
-    // console.log("userDetail dash ", userDetail.userRole);
+    // console.log("userDetail dash ", userDetail);
 
     useEffect(() => {
         getData()
@@ -267,6 +267,13 @@ export default function SurveyForms() {
                         </h6>
                         <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
                             {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj => obj.userStatus).length}`}
+                        </h6>
+                    </>
+                }
+                {userDetail.userRole==="2" &&
+                    <>
+                        <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
+                            {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj =>userDetail.id=== obj.creatorId.toString()).filter(obj => obj.userStatus).length}`}
                         </h6>
                     </>
                 }

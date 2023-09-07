@@ -20,6 +20,7 @@ function FileUpload(props) {
                 style={{ display: 'none' }}
                 inputProps={{ accept: '.pdf, .doc, .docx, .png, .jpg' }}
                 id="file-upload"
+                name= {props.name}
             />
             <label htmlFor="file-upload">
                 <Button

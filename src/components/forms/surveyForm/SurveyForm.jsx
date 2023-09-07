@@ -61,7 +61,7 @@ const initialValues = {
     birthdayDate: '',
     registeredVoter: '',
     voterIdNumber: '',
-    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "" }],
+    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }],
     maritalStatus: '',
     occupationStatus: '',
     monthlyHouseholdIncome: '',
@@ -106,10 +106,15 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
         setTimeout(() => setAlert(true), 1000);
     }
 
-    const handleFileChange = (event) => {
-        console.log("change ", event.target.files[0]);
-        const file = event.target.files[0];
-        setSelectedFile(file);
+    const handleFileChange = (event, id) => {
+        if (id === 0) {
+            console.log("change ", event.target.files[0]);
+            const file = event.target.files[0];
+            setSelectedFile(file);
+        } else if (id === 1) {
+            console.log("change----------- ", event.target.name, id, event.target.files);
+
+        }
     };
 
     return (
@@ -340,7 +345,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             type="number"
                                             placeholder="Please Provide Your Voter ID Number"
                                         />
-                                        <FileUpload handleFileChange={handleFileChange} selectedFile={selectedFile} />
+                                        <FileUpload name="voterIdImage" handleFileChange={(e) => handleFileChange(e, 0)} selectedFile={selectedFile} />
                                     </Grid>
                                 </Grid>}
 
@@ -441,7 +446,8 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                                                     type="number"
                                                                     placeholder="Please Provide Your Voter ID Number"
                                                                 />
-                                                                <FileUpload />
+                                                                {/* <FileUpload /> */}
+                                                                <FileUpload name={`ageGroupOfMembers[${index}].voterIdImg`} handleFileChange={(e) => handleFileChange(e, 1)} selectedFile={selectedFile} />
                                                             </Grid>
 
 

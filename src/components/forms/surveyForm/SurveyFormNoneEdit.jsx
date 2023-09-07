@@ -11,8 +11,9 @@ import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import DataTable from '../../dataGrid/DataTable';
 import { governmentSchemesOptions, categoryOptions } from '../../../utils/constants';
+import SmallImageCard from '../../SmallImageCard';
 
-const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
+const apiUrl = import.meta.env.VITE_API_URL
 
 const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
     return (
@@ -450,6 +451,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             textValue={formsDetail.voterIdNumber || "N/A"}
 
                                         />
+                                        <SmallImageCard imageUrl={`${apiUrl}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`} />                                        
                                     </Grid>
                                 </Grid>}
 
