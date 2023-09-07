@@ -5,15 +5,16 @@ import { styled } from '@mui/system';
 
 const SmallImageCardWrapper = styled(Card)({
   maxWidth: 100,
+  cursor:"pointer"
 });
 
 const SmallImageMedia = styled(CardMedia)({
   height: 50,
 });
 
-const SmallImageCard = ({ imageUrl }) => {
+const SmallImageCard = ({ imageUrl, onClick }) => {
   return (
-    <SmallImageCardWrapper>
+    <SmallImageCardWrapper onClick={onClick} >
       <SmallImageMedia
         component="img"
         image={imageUrl} 

@@ -8,7 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import SmallImageCard from '../SmallImageCard';
+const apiUrl = import.meta.env.VITE_API_URL
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -37,6 +38,7 @@ export default function DataTable({ formsDetail }) {
     let { id } = useParams();
     const navigate = useNavigate()
     // const [formsDetail, setFormsDetail] = useState([])
+    // console.log(formsDetail);
 
 
     return (
@@ -50,23 +52,31 @@ export default function DataTable({ formsDetail }) {
                         <StyledTableCell align="right">Assembly</StyledTableCell>
                         <StyledTableCell align="right">Voter Id</StyledTableCell>
                         <StyledTableCell align="right">Voter Id</StyledTableCell>
+                        <StyledTableCell align="right"></StyledTableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {formsDetail.map((row) => (
-                        <StyledTableRow key={row._id}>
-                            <StyledTableCell component="th" scope="row">
-                                {row.name}
-                            </StyledTableCell>
-                            <StyledTableCell align="right">{row.age}</StyledTableCell>
-                            <StyledTableCell align="right">{row.gender}</StyledTableCell>
-                            <StyledTableCell align="right">{row.assembly}</StyledTableCell>
-                            <StyledTableCell align="right">{row.voterId == 1 ? "Yes" : "No"}</StyledTableCell>
-                            <StyledTableCell align="right">{row.voterIdNum}</StyledTableCell>
+                {formsDetail &&
+                    <TableBody>
+                        {formsDetail.map((row) => (
+                            <StyledTableRow key={row._id}>
+                                <StyledTableCell component="th" scope="row">
+                                    {row.name}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">{row.age}</StyledTableCell>
+                                <StyledTableCell align="right">{row.gender}</StyledTableCell>
+                                <StyledTableCell align="right">{row.assembly}</StyledTableCell>
+                                <StyledTableCell align="right">{row.voterId == 1 ? "Yes" : "No"}</StyledTableCell>
+                                <StyledTableCell align="right">{row.voterIdNum}</StyledTableCell>
+                                <StyledTableCell align="right"
+                                    onClick={() => window.open(`${apiUrl}/uploads/${row.voterIdImg || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                >
+                                    <SmallImageCard imageUrl={`${apiUrl}/uploads/${row.voterIdImg || "Voter_Id_Image/no-image.png"}`} />
+                                </StyledTableCell>
 
-                        </StyledTableRow>
-                    ))}
-                </TableBody>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                }
             </Table>
         </TableContainer>
     );

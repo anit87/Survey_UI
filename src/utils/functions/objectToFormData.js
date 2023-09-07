@@ -14,4 +14,10 @@ function objectToFormData(obj) {
 
   return formData;
 }
-export default objectToFormData
+
+function appendArrayToFormData(formData, fieldName, arr) {
+  arr.forEach((value, index) => {
+    formData.append(`${fieldName}[${index}]`, value);
+  });
+}
+export {objectToFormData, appendArrayToFormData}

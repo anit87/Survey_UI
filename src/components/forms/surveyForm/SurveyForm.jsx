@@ -13,7 +13,7 @@ import { verifyUser } from '../../../utils/functions/verifyUser';
 import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
-import objectToFormData from '../../../utils/functions/objectToFormData';
+import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
 // const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
@@ -78,6 +78,12 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
     const [savedResp, setSavedResp] = useState({});
     const [editable, setEditable] = useState(formId)
     const [selectedFile, setSelectedFile] = useState(null);
+
+    const [selectedFileArray, setSelectedFileArray] = useState([
+        { id: 0, img: "" }
+    ]);
+    const [inputValues, setInputValues] = useState([]);
+
     // console.log(selectedFile);
     const token = localStorage.getItem('surveyApp')
     const mydata = useSelector(state => state.auth)
@@ -106,17 +112,18 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
         setTimeout(() => setAlert(true), 1000);
     }
 
-    const handleFileChange = (event, id) => {
-        if (id === 0) {
-            console.log("change ", event.target.files[0]);
+    const handleInputChange = (id, event, index) => {
+        if (id === 1) {
             const file = event.target.files[0];
             setSelectedFile(file);
-        } else if (id === 1) {
-            console.log("change----------- ", event.target.name, id, event.target.files);
-
+        } else if (id === 2) {
+            console.log("change 2 ", id, "*", index, event.target.files);
+            const updatedValues = [...inputValues];
+            updatedValues[index] = event.target.files[0];
+            setInputValues(updatedValues);
         }
     };
-
+    // console.log("arr files ", inputValues, selectedFile);
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -147,6 +154,10 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                 formData.append('voterIdImage', selectedFile);
                                 formData.append('location', JSON.stringify(locat));
                                 formData.append('filledBy', userId);
+                                if (inputValues.length > 0) {
+                                    appendArrayToFormData(formData, 'voterIdImageMember', inputValues)
+                                }
+
                                 const resp = await axios.post(apiUrl, formData)
                                 setSavedResp(resp.data)
                                 alertfn()
@@ -345,7 +356,8 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             type="number"
                                             placeholder="Please Provide Your Voter ID Number"
                                         />
-                                        <FileUpload name="voterIdImage" handleFileChange={(e) => handleFileChange(e, 0)} selectedFile={selectedFile} />
+                                        {/* <FileUpload name="voterIdImage" handleFileChange={(e) => handleFileChange(e, 0)} selectedFile={selectedFile} /> */}
+                                        <FileUpload name="voterIdImage" onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)} selectedFile={selectedFile} />
                                     </Grid>
                                 </Grid>}
 
@@ -389,7 +401,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                                     <FieldArrayAddIcon
                                                         label="Information On Family Members *"
                                                         arrayHelpers={arrayHelpers}
-                                                        object={{ name: '', age: '', gender: "" }}
+                                                        object={{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }}
                                                     />
                                                     {values.ageGroupOfMembers.map((item, index) => (
                                                         // <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
@@ -446,8 +458,9 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                                                     type="number"
                                                                     placeholder="Please Provide Your Voter ID Number"
                                                                 />
-                                                                {/* <FileUpload /> */}
-                                                                <FileUpload name={`ageGroupOfMembers[${index}].voterIdImg`} handleFileChange={(e) => handleFileChange(e, 1)} selectedFile={selectedFile} />
+
+                                                                {/* <FileUpload index={index} name={`ageGroupOfMembers[${index}].voterIdImg`} handleFileChange={(e, key) => handleFileChange(e, key, 1)} /> */}
+                                                                <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
                                                             </Grid>
 
 

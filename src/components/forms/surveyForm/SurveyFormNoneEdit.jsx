@@ -120,7 +120,7 @@ const initialValues = {
     isParticipated: '',
     birthdayDate: '',
     registeredVoter: '',
-    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum:"" }],
+    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "" }],
     // assemblyConstituencyMembers: [{ name: 'user', age: '20', gender: "female", assemblyName: "user" }],
     // voterIDsList: [{ name: 'user', age: '20', gender: "male", assemblyName: "user" }],
     maritalStatus: '',
@@ -161,7 +161,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
         setTimeout(() => setAlert(true), 1000);
     }
     // console.log(userId, " ", userId);
-    console.log("data", formsDetail.location, "---------", formsDetail);
+    // console.log("data", formsDetail.location, "---------", formsDetail);
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -451,7 +451,11 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             textValue={formsDetail.voterIdNumber || "N/A"}
 
                                         />
-                                        <SmallImageCard imageUrl={`${apiUrl}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`} />                                        
+                                        
+                                        <SmallImageCard
+                                            imageUrl={`${apiUrl}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`}
+                                            onClick={() => window.open(`${apiUrl}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                        />
                                     </Grid>
                                 </Grid>}
 
