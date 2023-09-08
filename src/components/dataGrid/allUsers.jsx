@@ -123,8 +123,7 @@ export default function CollapsibleTable() {
   const { token } = useSelector(state => state.auth)
   const [users, setUsers] = useState({
     status: false,
-    result: [],
-    totalResults: 0
+    result: []
   })
   const [userDetail, setUserDetail] = useState({})
   const [isLoading, setIsLoading] = useState(false)

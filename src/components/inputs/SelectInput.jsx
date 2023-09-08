@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { useField } from "formik"
 import Popper from '../Popper';
 
-export default function SelectTextFields({ id, label, title, options,editable,textValue, ...props }) {
+export default function SelectTextFields({ id, label, title, options, editable, textValue, ...props }) {
     const [field, meta] = useField(props);
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -23,7 +23,7 @@ export default function SelectTextFields({ id, label, title, options,editable,te
 
     return (
         <>
-            <FormControl fullWidth sx={{mt:1}}>
+            <FormControl fullWidth sx={{ mt: 1 }}>
                 <Stack direction="row">
                     <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>{label}</Typography>
                 </Stack>
@@ -33,48 +33,48 @@ export default function SelectTextFields({ id, label, title, options,editable,te
                     >
                         {textValue}
                     </Typography> :
-                <Stack direction="row">
-                    <TextField
-                        margin="none"
-                        id={id}
-                        select
-                        fullWidth
-                        size="small"
-                        InputLabelProps={{
-                            style: { fontSize: '14px', mb: "8px" }
-                        }}
-                        InputProps={{
-                            sx: { fontSize: '14px'}
-                        }}
-                        label=""
-                        title={title}
-                        defaultValue={null}
-                        variant="outlined"
-                        error={Boolean(meta.touched && meta.error)}
-                        helperText={Boolean(meta.touched && meta.error) ? meta.error : `   `}
-                        {...field} {...props}
-                    >
-                        {
-                            options.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))
-                        }
-                    </TextField>
-                    {!title
-                        ? null
-                        : <IconButton
+                    <Stack direction="row">
+                        <TextField
+                            margin="none"
+                            id={id}
+                            select
+                            fullWidth
                             size="small"
-                            aria-label="helper"
+                            InputLabelProps={{
+                                style: { fontSize: '14px', mb: "8px" }
+                            }}
+                            InputProps={{
+                                sx: { fontSize: '14px' }
+                            }}
+                            label=""
+                            title={title}
+                            defaultValue={null}
+                            variant="outlined"
+                            error={Boolean(meta.touched && meta.error)}
+                            helperText={Boolean(meta.touched && meta.error) ? meta.error : `   `}
+                            {...field} {...props}
                         >
-                            <InfoIcon fontSize="small"
-                                onClick={(event) =>
-                                    handleHelperIconClick(event, title)
-                                }
-                            />
-                        </IconButton>}
-                </Stack>}
+                            {
+                                options.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                        {!title
+                            ? null
+                            : <IconButton
+                                size="small"
+                                aria-label="helper"
+                            >
+                                <InfoIcon fontSize="small"
+                                    onClick={(event) =>
+                                        handleHelperIconClick(event, title)
+                                    }
+                                />
+                            </IconButton>}
+                    </Stack>}
                 <Popper
                     open={open} anchorEl={anchorEl} helperText={helperTextInfo} handlePopperClose={handlePopperClose}
                 />
