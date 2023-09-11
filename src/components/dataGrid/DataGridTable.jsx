@@ -25,13 +25,23 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { useDrawerData } from '../../utils/DrawerDataContext';
 import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import Loader from '../loader';
-import { incomeOptions, maritalOptions, trueFalseOptions, educationalOptions, religionOptions, occupationOptios } from "../../utils/constants"
+import { incomeOptions, maritalOptions, trueFalseOptions, educationalOptions, religionOptions, occupationOptios, casteOptions } from "../../utils/constants"
 import NoData from '../NoData';
+import TableHeader from './TableHeader';
+const tableCells = [
+    { label: 'S.No' },
+    { label: 'Respondent Name' },
+    { label: 'Mobile No', textAlign: "center" },
+    { label: 'Pincode', textAlign: "center" },
+    { label: 'Marital Status', textAlign: "center" },
+    { label: 'Created Date', textAlign: "center" },
+    { label: '' }
+]
+
 const apiUrl = import.meta.env.VITE_API_URL
 
 const isAgentActive = (inputDate) => {
@@ -134,7 +144,6 @@ export default function SurveyForms() {
     const [isLoading, setisLoading] = useState(false)
     const [error, setError] = React.useState(null);
 
-    // const { filterData } = useDrawerData();
     const [filterData, setFilterData] = useState({
         birthdayDate: '',
         maritalStatus: '',
@@ -142,6 +151,7 @@ export default function SurveyForms() {
         isOwnProperty: '',
         occupationStatus: '',
         religion: '',
+        caste: '',
         cweEducation: '',
         startDate: '2023-08-01',
         endDate: new Date().toISOString().slice(0, 10)
@@ -192,10 +202,10 @@ export default function SurveyForms() {
 
     const getData = async () => {
         try {
-            const { isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, cweEducation, startDate, endDate } = filterData
+            const { isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, caste, cweEducation, startDate, endDate } = filterData
 
             setisLoading(true)
-            const url = `${apiUrl}/users/allrecords?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
+            const url = `${apiUrl}/users/allrecords?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&caste=${caste}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
 
             const response = await axios.get(url, { headers })
             setRows(response.data)
@@ -260,17 +270,17 @@ export default function SurveyForms() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TableContainer component={Paper}>
 
-                {userDetail.userRole==="admin" &&
-                    <>
+                {userDetail.userRole === "admin" &&
+                    <div className='d-flex' >
                         <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
                             {`Active Supervisor: ${activeAgents.result.agents.filter(obj => obj.userStatus).length}`}
                         </h6>
                         <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
                             {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj => obj.userStatus).length}`}
                         </h6>
-                    </>
+                    </div>
                 }
-                {userDetail.userRole==="2" &&
+                {userDetail.userRole === "2" &&
                     <>
                         <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
                             {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj =>userDetail.id=== obj.creatorId.toString()).filter(obj => obj.userStatus).length}`}
@@ -438,6 +448,55 @@ export default function SurveyForms() {
                     spacing={{ xs: 1, sm: 2, md: 4 }}
                     sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
                 >
+
+                    <FormControl fullWidth >
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Religion</Typography>
+                        </Stack>
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="religion"
+                            label={""}
+                            value={filterData.religion}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                religionOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+
+                        <Stack direction="row">
+                            <Typography variant="h6"
+                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Caste</Typography>
+                        </Stack>
+                        <TextField id="select"
+                            margin="none"
+                            size="small"
+                            fullWidth
+                            name="caste"
+                            label={""}
+                            value={filterData.caste}
+                            onChange={(e) => changeHandler(e)}
+                            select
+                        >
+                            {
+                                casteOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))
+                            }
+                        </TextField>
+                    </FormControl>
+
                     <FormControl fullWidth >
                         <Stack direction="row">
                             <Typography variant="h6"
@@ -456,32 +515,6 @@ export default function SurveyForms() {
                         >
                             {
                                 occupationOptios.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))
-                            }
-                        </TextField>
-                    </FormControl>
-
-                    <FormControl fullWidth >
-                        <Stack direction="row">
-                            <Typography variant="h6"
-                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Religion</Typography>
-                        </Stack>
-
-                        <TextField id="select"
-                            margin="none"
-                            size="small"
-                            fullWidth
-                            name="religion"
-                            label={""}
-                            value={filterData.religion}
-                            onChange={(e) => changeHandler(e)}
-                            select
-                        >
-                            {
-                                religionOptions.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
                                         {option.label}
                                     </MenuItem>
@@ -537,13 +570,13 @@ export default function SurveyForms() {
                     </FormControl>
                 </Stack>
 
-
                 {
                     <>
 
                         {isLoading ? <Loader /> :
                             rows.data.length < 1 ? <NoData msg="No Surveys Found" />
                                 : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                                    {/* <TableHeader tableCells={ userDetail.userRole==="admin"? tableCells.splice(5, 0, { label: 'Field Agentqqq', textAlign:"center" }):  tableCells} /> */}
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell>S.No</StyledTableCell>

@@ -138,3 +138,15 @@ export const categoryOptions = [
         value: 3
     }
 ]
+export const casteOptions = [
+    { label: "Please Select", value: "" },
+    { label: "A", value: "1" },
+    { label: "B", value: "2" },
+    { label: "C", value: "3" },
+    { label: "D", value: "4" },
+    { label: "E", value: "5" }
+]
+export const constituencyOptions = [
+    { label: "Govindraj Nagar", value: "1" },
+    { label: "Vijay Nagar", value: "2" }
+]

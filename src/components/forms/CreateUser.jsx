@@ -12,6 +12,7 @@ import Alert from '../Alert'
 import { verifyUser } from '../../utils/functions/verifyUser'
 import axios from 'axios'
 import { userToUpdate as userToUpdateAction } from '../../features/auth/authSlice'
+import { constituencyOptions } from '../../utils/constants'
 
 
 const apiUrl = `/auth/signup`
@@ -88,6 +89,7 @@ const CreateUser = () => {
         password: '',
         confirmPassword: '',
         phoneNumber: id ? singleUser.phoneNumber : '',
+        boothNumber: id ? singleUser.boothNumber : '',
         userRole: id ? singleUser.userRole : "2",
         reportingAgent: ""
     }
@@ -203,15 +205,40 @@ const CreateUser = () => {
                                         }
                                     </Grid>
 
-                                    {userRole === 'admin' && formik.values.userRole === '3' && <Grid item md={6} xs={12}>
-                                        {!id &&
+                                    {userRole === 'admin' && formik.values.userRole === '3' &&
+                                        <Grid item md={6} xs={12}>
+                                            {!id &&
+                                                <SelectInput
+                                                    label="Choose Agent"
+                                                    name="reportingAgent"
+                                                    id="reportingAgent"
+                                                    options={agentsList}
+                                                />
+                                            }
+                                        </Grid>
+                                    }
+
+                                   { userRole === '2' &&
+                                    <>
+                                        <Grid item md={6} xs={12}>
+                                            <TextInput
+                                                label="Booth Number"
+                                                name="boothNumber"
+                                                type="text"
+                                                placeholder="Enter Booth Number"
+                                            />
+                                        </Grid>
+                                        <Grid item md={6} xs={12}>
                                             <SelectInput
-                                                label="Choose Agent"
-                                                name="reportingAgent"
-                                                id="reportingAgent"
-                                                options={agentsList}
-                                            />}
-                                    </Grid>}
+                                                label="Constituency"
+                                                title="Choose Constituency"
+                                                name="constituency"
+                                                id="constituency"
+                                                options={constituencyOptions}
+                                            />
+                                        </Grid>
+                                    </>}
+
                                 </Grid>
                                 <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2, mr: 2 }} >{id ? "Update" : "Create"}</Button>
                                 <Button variant='contained' type='button' onClick={() => navigate("/allusers")} sx={{ mt: 3, mb: 2 }} >Cancel</Button>

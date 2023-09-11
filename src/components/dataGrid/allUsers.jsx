@@ -23,20 +23,23 @@ import Loader from '../loader';
 import NoData from '../NoData';
 import { userToUpdate } from '../../features/auth/authSlice';
 import { fetchUsersData } from '../../features/auth/usersSlice';
+import TableHeader from './TableHeader';
+
+const tableCells=[{ label: '' }, { label: 'S.No' }, { label: 'Name' }, { label: 'Phone' }, { label: 'Email' }, { label: 'Role' }, { label: '' }]
 
 const subText = grey[600];
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users'
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#1565c0",
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+// const StyledTableCell = styled(TableCell)(({ theme }) => ({
+//   [`&.${tableCellClasses.head}`]: {
+//     backgroundColor: "#1565c0",
+//     color: theme.palette.common.white,
+//   },
+//   [`&.${tableCellClasses.body}`]: {
+//     fontSize: 14,
+//   },
+// }));
 
 function Row(props) {
   const { row, index, userDetail } = props;
@@ -99,7 +102,7 @@ function Row(props) {
                         </TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.phoneNumber || "- - -"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center' >{historyRow.email}</TableCell>
-                        <TableCell sx={{ color: subText }} align='center'>{historyRow.userRole === '2' ? 'Supervisor' : '3' ? 'Field Agent' : "a"}</TableCell>
+                        <TableCell sx={{ color: subText }} align='right'>{historyRow.userRole === '2' ? 'Supervisor' : '3' ? 'Field Agent' : "a"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center'>
                           <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
                           <Button sx={{ pr: 3 }} color="primary" onClick={() =>(dispatch(userToUpdate(historyRow)), navigate(`/createuser/${historyRow._id}`))} >Edit</Button >
@@ -149,7 +152,6 @@ export default function CollapsibleTable() {
     setUsers(response.data)
     setIsLoading(false)
   }
-  // console.log("userDetail ", userDetail);
   return (
     <>
       <div className='d-flex justify-content-between m-3'>
@@ -169,7 +171,8 @@ export default function CollapsibleTable() {
             users.result.length < 1 ?
               <NoData msg="No User Found" /> :
               <Table aria-label="collapsible table">
-                <TableHead>
+                <TableHeader tableCells={tableCells} />
+                {/* <TableHead>
                   <TableRow>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell>S.No</StyledTableCell>
@@ -179,7 +182,7 @@ export default function CollapsibleTable() {
                     <StyledTableCell>Role</StyledTableCell>
                     <StyledTableCell align="right"></StyledTableCell>
                   </TableRow>
-                </TableHead>
+                </TableHead> */}
                 <TableBody>
                   {users.status && users.result.map((row, index) => (
                     <Row key={row._id} row={row} index={index} userDetail={userDetail} />
@@ -190,8 +193,6 @@ export default function CollapsibleTable() {
         </TableContainer>
       }
       <br />
-
-
     </>
   );
 }

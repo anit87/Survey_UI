@@ -6,7 +6,7 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import DataTable from '../../dataGrid/DataTable';
-import { governmentSchemesOptions, categoryOptions, religionOptions, incomeOptions, occupationOptios, educationalOptions, trueFalseOptions, ageOptions } from '../../../utils/constants';
+import { governmentSchemesOptions, categoryOptions, religionOptions, casteOptions, incomeOptions, occupationOptios, educationalOptions, trueFalseOptions, ageOptions } from '../../../utils/constants';
 import SmallImageCard from '../../SmallImageCard';
 
 const apiUrl = import.meta.env.VITE_API_URL
@@ -174,13 +174,13 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             label="Caste"
                                             title="Caste"
                                             name="caste"
-                                            type="text"
                                             placeholder="Kindly Indicate Your Caste"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.caste}
+                                            textValue={(formsDetail.caste && casteOptions.find(option => option.value == formsDetail.caste))? casteOptions.find(option => option.value == formsDetail.caste) : "Not Found"}
 
                                         />
                                     </Grid>
+                                    
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Education Details of Chief Wage Earner (Head of the family)"

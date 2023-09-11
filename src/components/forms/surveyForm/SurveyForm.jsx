@@ -10,7 +10,7 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions } from '../../../utils/constants';
+import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions, casteOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
@@ -280,6 +280,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             placeholder="Total Members"
                                         />
                                     </Grid>
+
                                     {/* <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="How Many of You Are Staying in This Property? *"
@@ -305,16 +306,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             ]}
                                         />
                                     </Grid>
-
-                                    <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="Caste *"
-                                            title="Caste"
-                                            name="caste"
-                                            type="text"
-                                            placeholder="Kindly Indicate Your Caste"
-                                        />
-                                    </Grid>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Select Education Details of Chief Wage Earner (Head of the family) *"
@@ -324,6 +315,17 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             options={educationalOptions}
                                         />
                                     </Grid>
+
+                                    <Grid item md={6} xs={12}>
+                                        <SelectInput
+                                            label="Caste *"
+                                            title="Caste"
+                                            id="caste"
+                                            name="caste"
+                                            options={casteOptions}
+                                        />
+                                    </Grid>
+
                                 </Grid>}
 
                                 {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
