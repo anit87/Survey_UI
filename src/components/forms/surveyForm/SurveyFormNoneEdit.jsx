@@ -169,7 +169,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                         />
                                     </Grid>
 
-                                    <Grid item md={6} xs={12}>
+                                    {/* <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="Caste"
                                             title="Caste"
@@ -179,9 +179,9 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             textValue={(formsDetail.caste && casteOptions.find(option => option.value == formsDetail.caste))? casteOptions.find(option => option.value == formsDetail.caste) : "Not Found"}
 
                                         />
-                                    </Grid>
+                                    </Grid> */}
                                     
-                                    <Grid item md={6} xs={12}>
+                                    {/* <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Education Details of Chief Wage Earner (Head of the family)"
                                             title='I would now like to know the education level of the Chief Wage Earner (CWE) of your household. By Chief Wage Earner, I mean the person who contributes the maximum to the household income'
@@ -190,8 +190,9 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             editable={Boolean(formsDetail)}
                                             textValue={educationalOptions.find(option => option.value == formsDetail.cweEducation).label}
                                         />
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>}
+
 
                                 {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>

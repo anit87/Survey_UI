@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
+import { Button } from '@mui/material';
 
-function CameraCapture() {
+function CameraCapture(props) {
     const webcamRef = useRef(null);
-    const [imageSrc, setImageSrc] = useState(null);
     const [error, setError] = useState(null);
-    console.log("navigator------", navigator.mediaDevices);
+    
     useEffect(() => {
         const checkCameraAvailability = async () => {
             try {
@@ -23,8 +23,8 @@ function CameraCapture() {
 
     const capture = React.useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
-        setImageSrc(imageSrc);
-    }, [webcamRef, setImageSrc]);
+        props.setcapturedFile(imageSrc);
+    }, [webcamRef]);
 
     return (
         <div>
@@ -34,8 +34,8 @@ function CameraCapture() {
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
             />
-            <button onClick={capture}>Capture</button>
-            {imageSrc && <img src={imageSrc} alt="Captured" />}
+            <Button type="button" onClick={capture}>Capture</Button>
+            
         </div>
     );
 }

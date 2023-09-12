@@ -14,9 +14,10 @@ import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, govern
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
+
 import CameraCapture from '../../CameraCapture';
+import SmallImageCard from '../../SmallImageCard';
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
-// const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
 const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
     return (
@@ -85,6 +86,10 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
     ]);
     const [inputValues, setInputValues] = useState([]);
 
+    const [capturedFile, setcapturedFile] = useState(null);
+    const [isCapturing, setisCapturing] = useState(false);
+    const [capturingIndex, setCapturingIndex] = useState("");
+
     // console.log(selectedFile);
     const token = localStorage.getItem('surveyApp')
     const mydata = useSelector(state => state.auth)
@@ -113,18 +118,18 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
         setTimeout(() => setAlert(true), 1000);
     }
 
-    const handleInputChange = (id, event, index) => {
+    const handleInputChange = (id, event, index, img) => {
         if (id === 1) {
             const file = event.target.files[0];
             setSelectedFile(file);
+            setcapturedFile("")
         } else if (id === 2) {
-            console.log("change 2 ", id, "*", index, event.target.files);
             const updatedValues = [...inputValues];
-            updatedValues[index] = event.target.files[0];
+            updatedValues[index] = event ? event.target.files[0] : img;
             setInputValues(updatedValues);
         }
     };
-    // console.log("arr files ", inputValues, selectedFile);
+    // console.log("arr files ", inputValues);
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -133,7 +138,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
                         initialValues={formsDetail ? formsDetail : initialValues}
-                        // validationSchema={surveyFormSchema}
+
                         validationSchema={
                             activeStep == 0 ? surveyFormSchemaStep0 :
                                 activeStep == 1 ? surveyFormSchemaStep1 :
@@ -145,7 +150,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                         validateOnBlur={false}
                         validateOnChange={false}
                         onSubmit={async (values, { setSubmitting, resetForm, validateForm, setFieldError }) => {
-                            // console.log("vals--------", values);
+
                             if (activeStep != 4) {
                                 setActiveStep(activeStep + 1)
                             } else if (activeStep == 4 && !values.ageGroupOfMembers[0].name) {
@@ -154,6 +159,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                 const locat = await getLocation()
                                 const formData = objectToFormData(values)
                                 formData.append('voterIdImage', selectedFile);
+                                formData.append('voterIdImagee', capturedFile);
                                 formData.append('location', JSON.stringify(locat));
                                 formData.append('filledBy', userId);
                                 if (inputValues.length > 0) {
@@ -171,7 +177,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                     >
                         {({ values, errors }) => (
                             < Form >
-                                <CameraCapture />
 
                                 <br />
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -251,17 +256,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                         />
                                     </Grid>
 
-                                    {/* <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="Years of Residence in Current Location *"
-                                            title="How Many Years Have You Lived Here?"
-                                            name="residingYears"
-                                            type="number"
-                                            placeholder="Years at Current Location"
-
-                                        />
-                                    </Grid> */}
-
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Do You Own This Property? *"
@@ -283,15 +277,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             placeholder="Total Members"
                                         />
                                     </Grid>
-                                    {/* <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="How Many of You Are Staying in This Property? *"
-                                            title="Total Number of Members Staying in This Property"
-                                            name="stayingMembers"
-                                            type="number"
-                                            placeholder="Number Staying Here?"
-                                        />
-                                    </Grid> */}
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
@@ -332,16 +317,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
 
                                 {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-
-                                    {/* <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label="Respondent's Highest Level of Education *"
-                                            title="Provide Applicant's Education Details"
-                                            id="respondentEducation"
-                                            name="respondentEducation"
-                                            options={educationalOptions}
-                                        />
-                                    </Grid> */}
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Is The Applicant a Registered Voter In This Assembly Constituency *"
@@ -360,8 +335,16 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             type="number"
                                             placeholder="Please Provide Your Voter ID Number"
                                         />
-                                        {/* <FileUpload name="voterIdImage" handleFileChange={(e) => handleFileChange(e, 0)} selectedFile={selectedFile} /> */}
-                                        <FileUpload name="voterIdImage" onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)} selectedFile={selectedFile} />
+                                        <div className='d-flex'>
+                                            <FileUpload name="voterIdImage"
+                                                onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)}
+                                                selectedFile={selectedFile}
+                                            />
+                                            <Button className='mx-1' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
+                                        </div>
+                                        {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
+                                        {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""))} />}
+
                                     </Grid>
                                 </Grid>}
 
@@ -408,69 +391,80 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                                         object={{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }}
                                                     />
                                                     {values.ageGroupOfMembers.map((item, index) => (
-                                                        // <Stack key={index} sx={{ mb: 1 }} direction={isSmallScreen ? 'column' : 'row'} spacing={2}>
-                                                        <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                                            <Grid item md={1} xs={12} style={{ display: "flex" }}>
-                                                                <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} />
-                                                            </Grid>
-                                                            <Grid item md={2} xs={12}>
-                                                                <TextInput
-                                                                    label="Members Name *"
-                                                                    name={`ageGroupOfMembers[${index}].name`}
-                                                                    type="text"
-                                                                    placeholder="Name"
+                                                        <>
+                                                            <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                                <Grid item md={1} xs={12} style={{ display: "flex" }}>
+                                                                    <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} />
+                                                                </Grid>
+                                                                <Grid item md={2} xs={12}>
+                                                                    <TextInput
+                                                                        label="Members Name *"
+                                                                        name={`ageGroupOfMembers[${index}].name`}
+                                                                        type="text"
+                                                                        placeholder="Name"
 
-                                                                />
-                                                            </Grid>
-                                                            <Grid item md={1} xs={12}>
-                                                                <TextInput
-                                                                    label="Age *"
-                                                                    name={`ageGroupOfMembers[${index}].age`}
-                                                                    type="number"
-                                                                    placeholder="Age"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item md={1} xs={12}>
-                                                                <SelectInput
-                                                                    label="Gender *"
-                                                                    id={`ageGroupOfMembers[${index}].gender`}
-                                                                    name={`ageGroupOfMembers[${index}].gender`}
-                                                                    options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item md={2} xs={12}>
-                                                                <TextInput
-                                                                    label="Assembly/Constituency*"
-                                                                    name={`ageGroupOfMembers[${index}].assembly`}
-                                                                    type="text"
-                                                                    placeholder="Assembly/Constituency"
-                                                                />
-                                                            </Grid>
-                                                            <Grid item md={2} xs={12}>
-                                                                <SelectInput
-                                                                    label="Voter ID *"
-                                                                    id={`ageGroupOfMembers[${index}].voterId`}
-                                                                    name={`ageGroupOfMembers[${index}].voterId`}
-                                                                    options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item md={2} xs={12}>
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item md={1} xs={12}>
+                                                                    <TextInput
+                                                                        label="Age *"
+                                                                        name={`ageGroupOfMembers[${index}].age`}
+                                                                        type="number"
+                                                                        placeholder="Age"
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item md={1} xs={12}>
+                                                                    <SelectInput
+                                                                        label="Gender *"
+                                                                        id={`ageGroupOfMembers[${index}].gender`}
+                                                                        name={`ageGroupOfMembers[${index}].gender`}
+                                                                        options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item md={2} xs={12}>
+                                                                    <TextInput
+                                                                        label="Assembly/Constituency*"
+                                                                        name={`ageGroupOfMembers[${index}].assembly`}
+                                                                        type="text"
+                                                                        placeholder="Assembly/Constituency"
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item md={2} xs={12}>
+                                                                    <SelectInput
+                                                                        label="Voter ID *"
+                                                                        id={`ageGroupOfMembers[${index}].voterId`}
+                                                                        name={`ageGroupOfMembers[${index}].voterId`}
+                                                                        options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item md={2} xs={12}>
 
-                                                                <TextInput
-                                                                    label="Voter ID Number"
-                                                                    name={`ageGroupOfMembers[${index}].voterIdNum`}
-                                                                    type="number"
-                                                                    placeholder="Please Provide Your Voter ID Number"
-                                                                />
-
-                                                                {/* <FileUpload index={index} name={`ageGroupOfMembers[${index}].voterIdImg`} handleFileChange={(e, key) => handleFileChange(e, key, 1)} /> */}
-                                                                <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
-                                                            </Grid>
+                                                                    <TextInput
+                                                                        label="Voter ID Number"
+                                                                        name={`ageGroupOfMembers[${index}].voterIdNum`}
+                                                                        type="number"
+                                                                        placeholder="Please Provide Your Voter ID Number"
+                                                                    />
 
 
-                                                            {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
-                                                        </Grid>
+                                                                    <div className='d-flex'>
+                                                                        <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
+                                                                        <Button className='mx-1' type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>Capture</Button>
+                                                                    </div>
 
+                                                                    {(typeof inputValues[index] === "string") &&
+                                                                        <div className='my-2'> <SmallImageCard imageUrl={inputValues[index]} /></div>
+                                                                    }
+
+                                                                </Grid>
+
+                                                                {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
+
+                                                                {(isCapturing && capturingIndex === index) &&
+                                                                    <CameraCapture setcapturedFile={(img) => (handleInputChange(2, null, capturingIndex, img), setisCapturing(false))} />
+                                                                }
+                                                            </Grid>
+                                                        </>
                                                     ))}
                                                 </div>
                                             )}
