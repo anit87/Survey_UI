@@ -14,6 +14,7 @@ import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, govern
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
+import CameraCapture from '../../CameraCapture';
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
 // const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
 
@@ -127,6 +128,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
+
             <Container maxWidth="fixed">
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
@@ -169,6 +171,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                     >
                         {({ values, errors }) => (
                             < Form >
+                                <CameraCapture />
 
                                 <br />
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -280,7 +283,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             placeholder="Total Members"
                                         />
                                     </Grid>
-
                                     {/* <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="How Many of You Are Staying in This Property? *"
