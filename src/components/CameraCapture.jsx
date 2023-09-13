@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 function CameraCapture(props) {
     const webcamRef = useRef(null);
     const [error, setError] = useState(null);
-    
+
     useEffect(() => {
         const checkCameraAvailability = async () => {
             try {
@@ -17,7 +17,6 @@ function CameraCapture(props) {
                 setError('Camera not found or permission denied.');
             }
         };
-
         checkCameraAvailability();
     }, []);
 
@@ -26,16 +25,20 @@ function CameraCapture(props) {
         props.setcapturedFile(imageSrc);
     }, [webcamRef]);
 
+    if (error) {
+        return (
+            <div className="m-2">{error}</div>
+        )
+    }
+
     return (
         <div>
-            {error && <div className="error">{error}</div>}
             <Webcam
                 audio={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
             />
             <Button type="button" onClick={capture}>Capture</Button>
-            
         </div>
     );
 }

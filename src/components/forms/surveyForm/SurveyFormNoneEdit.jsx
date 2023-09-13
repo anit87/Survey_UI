@@ -36,7 +36,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                             < Form >
                                 <br />
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-
                                     <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="Applicant Name"
@@ -97,6 +96,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             textValue={formsDetail ? formsDetail.maritalStatus == 1 ? "Single" : "Married" : ""}
                                         />
                                     </Grid>
+
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Can You Please Tell Me Your Occupation Status?"
@@ -169,19 +169,18 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                         />
                                     </Grid>
 
-                                    {/* <Grid item md={6} xs={12}>
+                                    <Grid item md={6} xs={12}>
                                         <TextInput
                                             label="Caste"
                                             title="Caste"
                                             name="caste"
                                             placeholder="Kindly Indicate Your Caste"
                                             editable={Boolean(formsDetail)}
-                                            textValue={(formsDetail.caste && casteOptions.find(option => option.value == formsDetail.caste))? casteOptions.find(option => option.value == formsDetail.caste) : "Not Found"}
-
+                                            textValue={formsDetail.caste ? casteOptions.find(option => option.value == formsDetail.caste).label : "Not Found"}
                                         />
-                                    </Grid> */}
-                                    
-                                    {/* <Grid item md={6} xs={12}>
+                                    </Grid>
+
+                                    <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label="Education Details of Chief Wage Earner (Head of the family)"
                                             title='I would now like to know the education level of the Chief Wage Earner (CWE) of your household. By Chief Wage Earner, I mean the person who contributes the maximum to the household income'
@@ -190,9 +189,8 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             editable={Boolean(formsDetail)}
                                             textValue={educationalOptions.find(option => option.value == formsDetail.cweEducation).label}
                                         />
-                                    </Grid> */}
+                                    </Grid>
                                 </Grid>}
-
 
                                 {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
@@ -214,7 +212,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             placeholder="Please Provide Your Voter ID Number"
                                             editable={Boolean(formsDetail)}
                                             textValue={formsDetail.voterIdNumber || "N/A"}
-
                                         />
 
                                         <SmallImageCard
@@ -246,6 +243,7 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                             textValue={ageOptions.find(option => option.value == (formsDetail.birthdayDate || "")).label}
                                         />
                                     </Grid>
+
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
                                             label={`What Category Do You Fall Under?`}
@@ -261,10 +259,6 @@ const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
                                 {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <DataTable formsDetail={formsDetail.ageGroupOfMembers} />
                                 </Grid>}
-
-                                {/* <div className='d-flex flex-row-reverse bd-highlight'>
-                                    {submitDisabled && <Button variant='contained' style={{ textAlign: "right" }} type='submit' sx={{ mt: 2, pl: 3, pr: 3 }} >Submit</Button>}
-                                </div> */}
 
                             </Form>
                         )}
