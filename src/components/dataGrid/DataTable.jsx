@@ -9,18 +9,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useParams, useNavigate } from 'react-router-dom';
 import SmallImageCard from '../SmallImageCard';
+import TableHeader, { StyledTableCell } from './TableHeader';
 const apiUrl = import.meta.env.VITE_API_URL
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: "#1565c0",
-        // backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-    },
-}));
+const tableCells = [{ label: 'Name' }, { label: 'Age' }, { label: 'Gender' }, { label: 'Assembly' }, { label: 'Voter Id' }, { label: 'Voter Id' }, { label: '' }]
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -37,24 +29,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function DataTable({ formsDetail }) {
     let { id } = useParams();
     const navigate = useNavigate()
-    // const [formsDetail, setFormsDetail] = useState([])
-    // console.log(formsDetail);
-
 
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>Name</StyledTableCell>
-                        <StyledTableCell align="right">Age</StyledTableCell>
-                        <StyledTableCell align="right">Gender</StyledTableCell>
-                        <StyledTableCell align="right">Assembly</StyledTableCell>
-                        <StyledTableCell align="right">Voter Id</StyledTableCell>
-                        <StyledTableCell align="right">Voter Id</StyledTableCell>
-                        <StyledTableCell align="right"></StyledTableCell>
-                    </TableRow>
-                </TableHead>
+                <TableHeader tableCells={tableCells} />
                 {formsDetail &&
                     <TableBody>
                         {formsDetail.map((row) => (
@@ -62,12 +41,12 @@ export default function DataTable({ formsDetail }) {
                                 <StyledTableCell component="th" scope="row">
                                     {row.name}
                                 </StyledTableCell>
-                                <StyledTableCell align="right">{row.age}</StyledTableCell>
-                                <StyledTableCell align="right">{row.gender}</StyledTableCell>
-                                <StyledTableCell align="right">{row.assembly}</StyledTableCell>
-                                <StyledTableCell align="right">{row.voterId == 1 ? "Yes" : "No"}</StyledTableCell>
-                                <StyledTableCell align="right">{row.voterIdNum}</StyledTableCell>
-                                <StyledTableCell align="right"
+                                <StyledTableCell align="">{row.age}</StyledTableCell>
+                                <StyledTableCell align="">{row.gender}</StyledTableCell>
+                                <StyledTableCell align="">{row.assembly}</StyledTableCell>
+                                <StyledTableCell align="">{row.voterId == 1 ? "Yes" : "No"}</StyledTableCell>
+                                <StyledTableCell align="">{row.voterIdNum}</StyledTableCell>
+                                <StyledTableCell align=""
                                     onClick={() => window.open(`${apiUrl}/uploads/${row.voterIdImg || "Voter_Id_Image/no-image.png"}`, '_blank')}
                                 >
                                     <SmallImageCard imageUrl={`${apiUrl}/uploads/${row.voterIdImg || "Voter_Id_Image/no-image.png"}`} />

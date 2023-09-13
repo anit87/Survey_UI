@@ -4,13 +4,12 @@ import { Formik, Form, FieldArray } from "formik"
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
 import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions, casteOptions } from '../../../utils/constants';
+import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions, casteOptions, religionOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
@@ -69,29 +68,21 @@ const initialValues = {
     monthlyHouseholdIncome: '',
 }
 
-const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDetail }) => {
+const SurveyForm = ({ activeStep, setActiveStep }) => {
     const theme = useTheme();
-    const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [userId, setUserId] = useState(" ")
     const [alert, setAlert] = useState(false);
-    let [counter, setCounter] = useState(0)
     const [savedResp, setSavedResp] = useState({});
-    const [editable, setEditable] = useState(formId)
+
     const [selectedFile, setSelectedFile] = useState(null);
-    // const [imageToDisplay, setimageToDisplay] = useState(null);
-
-    const [selectedFileArray, setSelectedFileArray] = useState([
-        { id: 0, img: "" }
-    ]);
     const [inputValues, setInputValues] = useState([]);
-
+    // const [imageToDisplay, setimageToDisplay] = useState(null);
     const [capturedFile, setcapturedFile] = useState(null);
     const [isCapturing, setisCapturing] = useState(false);
     const [capturingIndex, setCapturingIndex] = useState("");
 
-    // console.log(selectedFile);
     const token = localStorage.getItem('surveyApp')
     const mydata = useSelector(state => state.auth)
 
@@ -100,20 +91,6 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
         const { id } = verifyUser(data)
         setUserId(id)
     }, [userId, token])
-
-    useEffect(() => {
-        setCounter(counter++)
-    }, [formsDetail])
-
-
-    // useEffect(() => {
-    //     getUsers()
-    // }, [formId])
-
-    // const getUsers = async () => {
-    //     const response = await axios.post(apiUrl, { id: formId })
-    //     setFormsDetail(response.data.data)
-    // }
 
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
@@ -140,8 +117,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
             <Container maxWidth="fixed">
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
-                        initialValues={formsDetail ? formsDetail : initialValues}
-
+                        initialValues={initialValues}
                         validationSchema={
                             activeStep == 0 ? surveyFormSchemaStep0 :
                                 activeStep == 1 ? surveyFormSchemaStep1 :
@@ -178,9 +154,8 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                             }
                         }}
                     >
-                        {({ values, errors }) => (
+                        {({ values }) => (
                             < Form >
-
                                 <br />
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
@@ -287,13 +262,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             title="Kindly Select Your Religion"
                                             id="religion"
                                             name="religion"
-                                            options={[
-                                                { label: "Hindu", value: "1" },
-                                                { label: "Muslim", value: "2" },
-                                                { label: "Christianity", value: "3" },
-                                                { label: "Sikh", value: "4" },
-                                                { label: "Other", value: "5" }
-                                            ]}
+                                            options={religionOptions}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
@@ -339,40 +308,17 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             placeholder="Please Provide Your Voter ID Number"
                                         />
                                         <div className='d-flex'>
+                                            <Button className='mx-2' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
                                             <FileUpload name="voterIdImage"
                                                 onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)}
                                                 selectedFile={selectedFile}
                                             />
-                                            <Button className='mx-1' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
                                         </div>
                                         {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
                                         {selectedFile && <div className='my-2'><h6>{selectedFile.name}</h6> </div>}
                                         {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""))} />}
 
                                     </Grid>
-
-
-                                    {/* testing */}
-                                    {/* <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label="Voter ID"
-                                            title="Please Enter Voter ID Number"
-                                            name="voterIdNumber"
-                                            type="number"
-                                            placeholder="Please Provide Your Voter ID Number"
-                                        />
-                                        <div className='d-flex'>
-                                            <FileUpload name="voterIdImage"
-                                                onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)}
-                                                selectedFile={selectedFile}
-                                            />
-                                            <Button className='mx-1' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
-                                        </div>
-                                        {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
-                                        {imageToDisplay && <div className='my-2'> <SmallImageCard imageUrl={imageToDisplay} /></div>}
-                                        {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""), document.getElementsByName("voterIdImage").files[0] = "")} />}
-
-                                    </Grid> */}
 
                                 </Grid>}
 
@@ -476,8 +422,8 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
 
 
                                                                     <div className='d-flex'>
+                                                                        <Button sx={{mx:2}} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>Capture</Button>
                                                                         <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
-                                                                        <Button className='mx-1' type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>Capture</Button>
                                                                     </div>
 
                                                                     {(typeof inputValues[index] === "string") &&

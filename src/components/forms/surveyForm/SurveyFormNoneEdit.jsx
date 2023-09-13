@@ -11,7 +11,7 @@ import SmallImageCard from '../../SmallImageCard';
 
 const apiUrl = import.meta.env.VITE_API_URL
 
-const SurveyForm = ({ activeStep, submitDisabled, formId, formsDetail }) => {
+const SurveyForm = ({ activeStep, formId, formsDetail }) => {
     const [userId, setUserId] = useState(" ")
     let [counter, setCounter] = useState(0)
 

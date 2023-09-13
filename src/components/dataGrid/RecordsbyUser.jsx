@@ -12,18 +12,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import NoData from "../NoData"
 import Loader from '../loader';
+import TableHeader, { StyledTableCell } from './TableHeader';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users/records'
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#1565c0",
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -56,6 +47,14 @@ export default function RecordsbyUser() {
     setFormsDetail(response.data)
     setIsLoading(false)
   }
+  const tableCells = [
+    { label: 'S.No' },
+    { label: 'Respondent Name' },
+    { label: 'Mobile No' },
+    { label: 'Pincode' },
+    { label: 'Marital Status' },
+    { label: '' }
+  ]
   return (
     <>
       <h6 style={{ fontSize: "20px", fontWeight: "600" }} >{`Surveys By ${formsDetail.user.displayName}`}</h6>
@@ -65,17 +64,7 @@ export default function RecordsbyUser() {
             : formsDetail.data.length < 1 ?
               <NoData msg="No Surveys Found" /> :
               <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>S.No</StyledTableCell>
-                    <StyledTableCell>Respondent Name</StyledTableCell>
-                    <StyledTableCell align="right">Mobile No</StyledTableCell>
-                    <StyledTableCell align="right">Address</StyledTableCell>
-                    <StyledTableCell align="right">Pincode</StyledTableCell>
-                    <StyledTableCell align="right">Marital Status</StyledTableCell>
-                    <StyledTableCell align="right"></StyledTableCell>
-                  </TableRow>
-                </TableHead>
+                <TableHeader tableCells={tableCells} />
                 <TableBody>
                   {formsDetail.data.map((row, i) => (
                     <StyledTableRow key={row._id}>
@@ -85,11 +74,11 @@ export default function RecordsbyUser() {
                       <StyledTableCell scope="row">
                         {row.respondentName}
                       </StyledTableCell>
-                      <StyledTableCell align="right">{row.mobileNo}</StyledTableCell>
-                      <StyledTableCell align="right">{row.address.slice(0, 7) + '...'}</StyledTableCell>
-                      <StyledTableCell align="right">{row.pincode}</StyledTableCell>
-                      <StyledTableCell align="right">{row.maritalStatus === 1 ? "Single" : "Married"}</StyledTableCell>
-                      <StyledTableCell align="right">
+                      <StyledTableCell>{row.mobileNo}</StyledTableCell>
+                      {/* <StyledTableCell align="right">{row.address.slice(0, 7) + '...'}</StyledTableCell> */}
+                      <StyledTableCell>{row.pincode}</StyledTableCell>
+                      <StyledTableCell>{row.maritalStatus === 1 ? "Single" : "Married"}</StyledTableCell>
+                      <StyledTableCell>
                         <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
                       </StyledTableCell>
                     </StyledTableRow>

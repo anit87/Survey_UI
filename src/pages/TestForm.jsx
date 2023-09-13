@@ -1,31 +1,31 @@
-// // import { Button, Form } from 'react-bootstrap';
-// // import TextInput from '../components/TextInput';
-// // function BasicExample() {
-// //   return (
-// //     <>
-// //       <div className="container">
-// //         <div className="row col-md-12">
-// //           <div className="col-md-6">
-// //             <TextInput
-// //               label="RESPONDENT NAME"
-// //               name="respondentName"
-// //               type="text"
-// //               placeholder="Please provide your full name..."
-// //             />
-// //           </div>
-// //           <div className="col-md-6">
-// //             <Form.Group className="mb-3" controlId="formBasicEmail">
-// //               <Form.Label>Email address</Form.Label>
-// //               <Form.Control type="email" placeholder="Enter email" />
-// //             </Form.Group>
-// //           </div>
-// //         </div>
-// //       </div>
-// //     </>
-// //   );
-// // }
+// import { Button, Form } from 'react-bootstrap';
+// import TextInput from '../components/TextInput';
+// function BasicExample() {
+//   return (
+//     <>
+//       <div className="container">
+//         <div className="row col-md-12">
+//           <div className="col-md-6">
+//             <TextInput
+//               label="RESPONDENT NAME"
+//               name="respondentName"
+//               type="text"
+//               placeholder="Please provide your full name..."
+//             />
+//           </div>
+//           <div className="col-md-6">
+//             <Form.Group className="mb-3" controlId="formBasicEmail">
+//               <Form.Label>Email address</Form.Label>
+//               <Form.Control type="email" placeholder="Enter email" />
+//             </Form.Group>
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
 
-// // export default BasicExample;
+// export default BasicExample;
 
 // import React, { useState } from 'react';
 // import { Button, Container, Typography, Box } from '@mui/material';
@@ -383,55 +383,55 @@
 // export default FormWithHelperIcons;
 
 
-import React, { useState } from 'react';
-import { Stepper, Step, StepLabel, Button } from '@mui/material';
+// import React, { useState } from 'react';
+// import { Stepper, Step, StepLabel, Button } from '@mui/material';
 
-const steps = ['Step 1', 'Step 2', 'Step 3']; // Define your steps here
+// const steps = ['Step 1', 'Step 2', 'Step 3']; // Define your steps here
 
-const MultiStepForm = () => {
-  const [activeStep, setActiveStep] = useState(0);
+// const MultiStepForm = () => {
+//   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = () => {
-    setActiveStep((prevStep) => prevStep + 1);
-  };
+//   const handleNext = () => {
+//     setActiveStep((prevStep) => prevStep + 1);
+//   };
 
-  const handleBack = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-  };
+//   const handleBack = () => {
+//     setActiveStep((prevStep) => prevStep - 1);
+//   };
 
-  return (
-    <div>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      <div>
-        {activeStep === steps.length ? (
-          <div>
-            <p>All steps completed</p>
-          </div>
-        ) : (
-          <div>
-            {/* Render the form content for the current step */}
-            {activeStep === 0 && <Step1Form />}
-            {activeStep === 1 && <Step2Form />}
-            {activeStep === 2 && <Step3Form />}
+//   return (
+//     <div>
+//       <Stepper activeStep={activeStep} alternativeLabel>
+//         {steps.map((label) => (
+//           <Step key={label}>
+//             <StepLabel>{label}</StepLabel>
+//           </Step>
+//         ))}
+//       </Stepper>
+//       <div>
+//         {activeStep === steps.length ? (
+//           <div>
+//             <p>All steps completed</p>
+//           </div>
+//         ) : (
+//           <div>
+//             {/* Render the form content for the current step */}
+//             {activeStep === 0 && <Step1Form />}
+//             {activeStep === 1 && <Step2Form />}
+//             {activeStep === 2 && <Step3Form />}
 
-            {/* Navigation buttons */}
-            <Button disabled={activeStep === 0} onClick={handleBack}>
-              Back
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+//             {/* Navigation buttons */}
+//             <Button disabled={activeStep === 0} onClick={handleBack}>
+//               Back
+//             </Button>
+//             <Button variant="contained" color="primary" onClick={handleNext}>
+//               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+//             </Button>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
 
-export default MultiStepForm;
+// export default MultiStepForm;

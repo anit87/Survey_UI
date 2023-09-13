@@ -60,16 +60,6 @@ const formatDate = (dateString) => {
     return formattedDate
 }
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: "#1565c0",
-        color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-    },
-}));
-
 function TablePaginationActions(props) {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
@@ -130,8 +120,6 @@ TablePaginationActions.propTypes = {
     page: PropTypes.number.isRequired,
     rowsPerPage: PropTypes.number.isRequired,
 };
-
-
 
 export default function SurveyForms() {
     const navigate = useNavigate()
@@ -265,7 +253,7 @@ export default function SurveyForms() {
             [e.target.name]: e.target.value
         })
     }
-    // console.log("dat ", dayjs('2023-08-10'));
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TableContainer component={Paper}>
@@ -283,7 +271,7 @@ export default function SurveyForms() {
                 {userDetail.userRole === "2" &&
                     <>
                         <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
-                            {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj =>userDetail.id=== obj.creatorId.toString()).filter(obj => obj.userStatus).length}`}
+                            {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj => userDetail.id === obj.creatorId.toString()).filter(obj => obj.userStatus).length}`}
                         </h6>
                     </>
                 }
@@ -295,30 +283,6 @@ export default function SurveyForms() {
                     spacing={{ xs: 1, sm: 2, md: 4 }}
                     sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
                 >
-                    {/* <FormControl fullWidth >
-                        <Stack direction="row">
-                            <Typography variant="h6"
-                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filter By Age</Typography>
-                        </Stack>
-                        <TextField id="select"
-                            margin="none"
-                            size="small"
-                            fullWidth
-                            name="birthdayDate"
-                            label={""}
-                            value={filterData.birthdayDate}
-                            onChange={(e) => changeHandler(e)}
-                            select
-                        >
-                            {
-                                ageOptions.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))
-                            }
-                        </TextField>
-                    </FormControl> */}
                     <FormControl fullWidth >
                         <Stack direction="row">
                             <Typography variant="h6"
@@ -417,29 +381,6 @@ export default function SurveyForms() {
                             format="DD-MM-YYYY"
                         />
                     </FormControl>
-
-
-                    {/* <FormControl fullWidth>
-                        <Stack direction="row">
-                            <Typography variant="h6"
-                                style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Filled From</Typography>
-                        </Stack>
-
-                        <TextField
-                            margin="none"
-                            size="small"
-                            id="startDate"
-                            name="startDate"
-                            format="DD-MM-YYYY"
-                            label={""}
-                            type="date"
-                            value={filterData.startDate}
-                            onChange={(e) => changeHandler(e)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </FormControl>*/}
 
                 </Stack>
 
@@ -572,24 +513,15 @@ export default function SurveyForms() {
 
                 {
                     <>
-
                         {isLoading ? <Loader /> :
-                            rows.data.length < 1 ? <NoData msg="No Surveys Found" />
-                                : rows.status && <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                                    {/* <TableHeader tableCells={ userDetail.userRole==="admin"? tableCells.splice(5, 0, { label: 'Field Agentqqq', textAlign:"center" }):  tableCells} /> */}
-                                    <TableHead>
-                                        <TableRow>
-                                            <StyledTableCell>S.No</StyledTableCell>
-                                            <StyledTableCell>Respondent Name</StyledTableCell>
-                                            <StyledTableCell align="center">Mobile No</StyledTableCell>
-                                            <StyledTableCell align="center">Pincode</StyledTableCell>
-                                            <StyledTableCell align="center">Marital Status</StyledTableCell>
-                                            {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                                                <StyledTableCell align="center">Field Agent</StyledTableCell>}
-                                            <StyledTableCell align="center">Created Date</StyledTableCell>
-                                            <StyledTableCell align="right"></StyledTableCell>
-                                        </TableRow>
-                                    </TableHead>
+                            rows.data.length < 1 ?
+                                <NoData msg="No Surveys Found" /> :
+                                rows.status &&
+                                <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                                    <TableHeader tableCells={userDetail.userRole === "admin" ?
+                                        [...tableCells.slice(0, 5), { label: 'Field Agent', textAlign: "center" }, ...tableCells.slice(5)] :
+                                        tableCells}
+                                    />
 
                                     <TableBody>
                                         {(rowsPerPage > 0
@@ -630,33 +562,32 @@ export default function SurveyForms() {
                                             </TableRow>
                                         )}
                                     </TableBody>
-                                    {(rows.status && rows.data.length > 10) && <TableFooter>
-                                        <TableRow>
-                                            <TablePagination
-                                                rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                                                colSpan={3}
-                                                count={rows.data.length}
-                                                rowsPerPage={rowsPerPage}
-                                                page={page}
-                                                SelectProps={{
-                                                    inputProps: {
-                                                        'aria-label': 'rows per page',
-                                                    },
-                                                    native: true,
-                                                }}
-                                                onPageChange={handleChangePage}
-                                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                                ActionsComponent={TablePaginationActions}
-                                            />
-                                        </TableRow>
-                                    </TableFooter>}
-                                </Table>}
+                                    {(rows.status && rows.data.length > 10) &&
+                                        <TableFooter>
+                                            <TableRow>
+                                                <TablePagination
+                                                    rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+                                                    colSpan={3}
+                                                    count={rows.data.length}
+                                                    rowsPerPage={rowsPerPage}
+                                                    page={page}
+                                                    SelectProps={{
+                                                        inputProps: {
+                                                            'aria-label': 'rows per page',
+                                                        },
+                                                        native: true,
+                                                    }}
+                                                    onPageChange={handleChangePage}
+                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                    ActionsComponent={TablePaginationActions}
+                                                />
+                                            </TableRow>
+                                        </TableFooter>
+                                    }
+                                </Table>
+                        }
                     </>}
             </TableContainer>
         </LocalizationProvider>
     );
 }
-
-
-
-// const url = `${apiUrl}?birthdayDate=${filterData.birthdayDate || ""}&maritalStatus=${filterData.maritalStatus || ""}&monthlyHouseholdIncome=${filterData.monthlyHouseholdIncome || ""}&startDate=${filterData.startDate}&endDate=${filterData.endDate}`

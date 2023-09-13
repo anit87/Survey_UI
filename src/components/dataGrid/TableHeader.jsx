@@ -21,10 +21,10 @@ const TableHeader = ({tableCells}) => {
                 {
                     tableCells.map((obj, index)=><StyledTableCell key={index} align={obj.textAlign||"left"}>{obj.label}</StyledTableCell>)
                 }
-                
             </TableRow>
         </TableHead>
     )
 }
 
 export default TableHeader
+export {StyledTableCell}

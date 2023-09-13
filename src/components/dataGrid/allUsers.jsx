@@ -18,28 +18,18 @@ import axios from 'axios';
 import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
 import { grey } from '@mui/material/colors'
 import { useNavigate } from "react-router-dom"
-import {useDispatch ,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../loader';
 import NoData from '../NoData';
 import { userToUpdate } from '../../features/auth/authSlice';
 import { fetchUsersData } from '../../features/auth/usersSlice';
 import TableHeader from './TableHeader';
 
-const tableCells=[{ label: '' }, { label: 'S.No' }, { label: 'Name' }, { label: 'Phone' }, { label: 'Email' }, { label: 'Role' }, { label: '' }]
+const tableCells = [{ label: '' }, { label: 'S.No' }, { label: 'Name' }, { label: 'Phone' }, { label: 'Email' }, { label: 'Role' }, { label: '' }]
 
 const subText = grey[600];
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users'
-
-// const StyledTableCell = styled(TableCell)(({ theme }) => ({
-//   [`&.${tableCellClasses.head}`]: {
-//     backgroundColor: "#1565c0",
-//     color: theme.palette.common.white,
-//   },
-//   [`&.${tableCellClasses.body}`]: {
-//     fontSize: 14,
-//   },
-// }));
 
 function Row(props) {
   const { row, index, userDetail } = props;
@@ -69,7 +59,7 @@ function Row(props) {
         <TableCell>{row.userRole === '2' ? 'Supervisor' : '3' ? 'Field Agent' : ""}</TableCell>
         <TableCell  >
           <Button color="primary" onClick={() => navigate(`/allRecords/${row._id}`)} >View</Button >
-          <Button color="primary" onClick={() => (dispatch(userToUpdate(row)),navigate(`/createuser/${row._id}`))} >Edit</Button >
+          <Button color="primary" onClick={() => (dispatch(userToUpdate(row)), navigate(`/createuser/${row._id}`))} >Edit</Button >
         </TableCell>
       </TableRow>
       {row.userRole !== "fielduser" &&
@@ -105,7 +95,7 @@ function Row(props) {
                         <TableCell sx={{ color: subText }} align='right'>{historyRow.userRole === '2' ? 'Supervisor' : '3' ? 'Field Agent' : "a"}</TableCell>
                         <TableCell sx={{ color: subText }} align='center'>
                           <Button sx={{ pr: 3 }} color="primary" onClick={() => navigate(`/allRecords/${historyRow._id}`)} >View</Button >
-                          <Button sx={{ pr: 3 }} color="primary" onClick={() =>(dispatch(userToUpdate(historyRow)), navigate(`/createuser/${historyRow._id}`))} >Edit</Button >
+                          <Button sx={{ pr: 3 }} color="primary" onClick={() => (dispatch(userToUpdate(historyRow)), navigate(`/createuser/${historyRow._id}`))} >Edit</Button >
                         </TableCell>
                       </TableRow>
                     ))}
@@ -172,17 +162,6 @@ export default function CollapsibleTable() {
               <NoData msg="No User Found" /> :
               <Table aria-label="collapsible table">
                 <TableHeader tableCells={tableCells} />
-                {/* <TableHead>
-                  <TableRow>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell>S.No</StyledTableCell>
-                    <StyledTableCell>Name</StyledTableCell>
-                    <StyledTableCell>Phone</StyledTableCell>
-                    <StyledTableCell>Email</StyledTableCell>
-                    <StyledTableCell>Role</StyledTableCell>
-                    <StyledTableCell align="right"></StyledTableCell>
-                  </TableRow>
-                </TableHead> */}
                 <TableBody>
                   {users.status && users.result.map((row, index) => (
                     <Row key={row._id} row={row} index={index} userDetail={userDetail} />
