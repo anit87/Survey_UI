@@ -80,6 +80,7 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
     const [savedResp, setSavedResp] = useState({});
     const [editable, setEditable] = useState(formId)
     const [selectedFile, setSelectedFile] = useState(null);
+    // const [imageToDisplay, setimageToDisplay] = useState(null);
 
     const [selectedFileArray, setSelectedFileArray] = useState([
         { id: 0, img: "" }
@@ -123,6 +124,8 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
             const file = event.target.files[0];
             setSelectedFile(file);
             setcapturedFile("")
+            // setimageToDisplay(URL.createObjectURL(event.target.files[0]))
+
         } else if (id === 2) {
             const updatedValues = [...inputValues];
             updatedValues[index] = event ? event.target.files[0] : img;
@@ -343,9 +346,34 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
                                             <Button className='mx-1' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
                                         </div>
                                         {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
+                                        {selectedFile && <div className='my-2'><h6>{selectedFile.name}</h6> </div>}
                                         {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""))} />}
 
                                     </Grid>
+
+
+                                    {/* testing */}
+                                    {/* <Grid item md={6} xs={12}>
+                                        <TextInput
+                                            label="Voter ID"
+                                            title="Please Enter Voter ID Number"
+                                            name="voterIdNumber"
+                                            type="number"
+                                            placeholder="Please Provide Your Voter ID Number"
+                                        />
+                                        <div className='d-flex'>
+                                            <FileUpload name="voterIdImage"
+                                                onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)}
+                                                selectedFile={selectedFile}
+                                            />
+                                            <Button className='mx-1' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
+                                        </div>
+                                        {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
+                                        {imageToDisplay && <div className='my-2'> <SmallImageCard imageUrl={imageToDisplay} /></div>}
+                                        {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""), document.getElementsByName("voterIdImage").files[0] = "")} />}
+
+                                    </Grid> */}
+
                                 </Grid>}
 
                                 {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -454,6 +482,9 @@ const SurveyForm = ({ activeStep, setActiveStep, submitDisabled, formId, formsDe
 
                                                                     {(typeof inputValues[index] === "string") &&
                                                                         <div className='my-2'> <SmallImageCard imageUrl={inputValues[index]} /></div>
+                                                                    }
+                                                                    {inputValues[index] &&
+                                                                        <div className='my-2'><h6>{inputValues[index].name}</h6> </div>
                                                                     }
 
                                                                 </Grid>

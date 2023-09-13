@@ -8,12 +8,21 @@ function FileUpload(props) {
 
     return (
         <div className='mt-2' >
-            <Input
+            {/* <Input
                 type="file"
                 onChange={handleChildInputChange}
                 inputProps={{ accept: '.pdf, .doc, .docx, .png, .jpg' }}
                 id="file-upload"
                 name={props.name}
+            /> */}
+            
+            <input
+                style={{ color: "transparent" }}
+                type="file"
+                onChange={handleChildInputChange}
+                id='file-upload'
+                name={props.name}
+                accept='.pdf, .doc, .docx, .png, .jpeg, .jpg'
             />
         </div>
     );
