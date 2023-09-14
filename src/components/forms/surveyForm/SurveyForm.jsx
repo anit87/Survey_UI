@@ -422,7 +422,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
 
                                                                     <div className='d-flex'>
-                                                                        <Button sx={{mx:2}} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>Capture</Button>
+                                                                        <Button sx={{ mx: 2 }} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>Capture</Button>
                                                                         <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
                                                                     </div>
 

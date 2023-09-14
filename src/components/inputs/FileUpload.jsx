@@ -1,31 +1,34 @@
-import React, { useState } from 'react';
-import Input from '@mui/material/Input';
+import React from 'react';
+import { Button } from '@mui/material';
 
-function FileUpload(props) {
-    const handleChildInputChange = (event) => {
-        props.onInputChange(event, props.index);
-    };
+const inputStyles = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  opacity: 0,
+  width: '100%',
+  height: '100%',
+  cursor: 'pointer',
+}
 
-    return (
-        <div className='mt-2' >
-            {/* <Input
-                type="file"
-                onChange={handleChildInputChange}
-                inputProps={{ accept: '.pdf, .doc, .docx, .png, .jpg' }}
-                id="file-upload"
-                name={props.name}
-            /> */}
-            
-            <input
-                style={{ color: "transparent" }}
-                type="file"
-                onChange={handleChildInputChange}
-                id='file-upload'
-                name={props.name}
-                accept='.pdf, .doc, .docx, .png, .jpeg, .jpg'
-            />
-        </div>
-    );
+function FileUpload({ onInputChange, index, name }) {
+  const handleChildInputChange = (event) => {
+    onInputChange(event, index);
+  };
+
+  return (
+    <Button>
+      Upload
+      <input
+        style={ inputStyles }
+        type="file"
+        onChange={handleChildInputChange}
+        id='file-upload'
+        name={name}
+        accept='.pdf, .doc, .docx, .png, .jpeg, .jpg'
+      />
+    </Button>
+  );
 }
 
 export default FileUpload;

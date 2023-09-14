@@ -140,9 +140,6 @@ const CreateUser = () => {
                                             name="displayName"
                                             type="text"
                                             placeholder="Enter Your Name"
-                                        // value={formik.values.displayName}
-                                        // onChange={(e) => formik.setFieldValue('displayName', e.target.value)}
-
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>

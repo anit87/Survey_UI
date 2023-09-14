@@ -19,11 +19,7 @@ const apiUrl = import.meta.env.VITE_API_URL + '/users/records'
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  }
 }));
 
 
@@ -75,7 +71,6 @@ export default function RecordsbyUser() {
                         {row.respondentName}
                       </StyledTableCell>
                       <StyledTableCell>{row.mobileNo}</StyledTableCell>
-                      {/* <StyledTableCell align="right">{row.address.slice(0, 7) + '...'}</StyledTableCell> */}
                       <StyledTableCell>{row.pincode}</StyledTableCell>
                       <StyledTableCell>{row.maritalStatus === 1 ? "Single" : "Married"}</StyledTableCell>
                       <StyledTableCell>

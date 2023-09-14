@@ -153,10 +153,8 @@ export default function CollapsibleTable() {
         </div >
       </div>
 
-
       {isLoading ? <Loader /> :
         <TableContainer component={Paper}>
-
           {
             users.result.length < 1 ?
               <NoData msg="No User Found" /> :

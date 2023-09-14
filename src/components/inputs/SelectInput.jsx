@@ -83,4 +83,42 @@ export default function SelectTextFields({ id, label, title, options, editable, 
         </>
 
     );
-}   
+}
+
+
+
+
+const SelectInput = ({label, name, value, options, changeHandler}) => {
+    return (
+        <FormControl fullWidth >
+            <Stack direction="row">
+                <Typography variant="h6" gutterBottom
+                    style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }}
+                >
+                    {label}
+                </Typography>
+            </Stack>
+
+            <TextField id="select"
+                margin="none"
+                size="small"
+                fullWidth
+                name={name}
+                label={""}
+                value={value}
+                onChange={changeHandler}
+                select
+            >
+                {
+                    options.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))
+                }
+            </TextField>
+        </FormControl>
+    )
+}
+
+export { SelectInput }
