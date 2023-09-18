@@ -30,6 +30,9 @@ function CameraCapture(props) {
             <div className="m-2">{error}</div>
         )
     }
+    const videoConstraints = {
+        facingMode: { exact: "environment" }
+    };
 
     return (
         <div>
@@ -37,6 +40,7 @@ function CameraCapture(props) {
                 audio={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
             />
             <Button type="button" onClick={capture}>Capture</Button>
         </div>
