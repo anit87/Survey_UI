@@ -43,7 +43,7 @@ export default function DataTable({ formsDetail }) {
                                 </StyledTableCell>
                                 <StyledTableCell align="">{row.age}</StyledTableCell>
                                 <StyledTableCell align="">{row.gender}</StyledTableCell>
-                                <StyledTableCell align="">{row.assembly}</StyledTableCell>
+                                <StyledTableCell align="">{row.assembly == 1 ? "Govindraj Nagar": row.assembly == 2? "Vijay Nagar":"N/A" }</StyledTableCell>
                                 <StyledTableCell align="">{row.voterId == 1 ? "Yes" : "No"}</StyledTableCell>
                                 <StyledTableCell align="">{row.voterIdNum}</StyledTableCell>
                                 <StyledTableCell align=""

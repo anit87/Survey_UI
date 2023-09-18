@@ -9,7 +9,7 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions, casteOptions, religionOptions } from '../../../utils/constants';
+import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions, casteOptions, religionOptions, constituencyOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
@@ -396,11 +396,11 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                                                     />
                                                                 </Grid>
                                                                 <Grid item md={2} xs={12}>
-                                                                    <TextInput
+                                                                    <SelectInput
                                                                         label="Assembly/Constituency*"
                                                                         name={`ageGroupOfMembers[${index}].assembly`}
-                                                                        type="text"
-                                                                        placeholder="Assembly/Constituency"
+                                                                        id={`ageGroupOfMembers[${index}].assembly`}
+                                                                        options={constituencyOptions}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item md={2} xs={12}>
