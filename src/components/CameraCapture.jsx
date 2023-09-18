@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 function CameraCapture(props) {
     const webcamRef = useRef(null);
     const [error, setError] = useState(null);
+    const [videoConstraint, setvideoConstraint] = useState(null);
 
     useEffect(() => {
         const checkCameraAvailability = async () => {
@@ -25,14 +26,51 @@ function CameraCapture(props) {
         props.setcapturedFile(imageSrc);
     }, [webcamRef]);
 
+
+    const getCameraDevices = async () => {
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+            const backCamera = videoDevices.find((device) => device.label.includes('back'));
+
+            if (backCamera) {
+                const videoConstraints = {
+                    deviceId: { exact: backCamera.deviceId },
+                };
+                setvideoConstraint(videoConstraints)
+
+                return videoConstraints;
+            }
+        } catch (error) {
+            console.error('Error getting camera devices:', error);
+        }
+
+        return null;
+    };
+
+    const initCamera = async () => {
+        const videoConstraints = await getCameraDevices();
+        if (videoConstraints) {
+            webcamRef.current.getUserMedia({ video: videoConstraints });
+        } else {
+            webcamRef.current.getUserMedia({ video: true });
+        }
+    };
+
+    // Call initCamera when the component mounts
+    React.useEffect(() => {
+        initCamera();
+    }, []);
+
     if (error) {
         return (
             <div className="m-2">{error}</div>
         )
     }
-    const videoConstraints = {
-        facingMode: { exact: "environment" }
-    };
+    // const videoConstraints = {
+    //     facingMode: { exact: "environment" }
+    // };
+    console.log("-----------videoConstraints", videoConstraint);
 
     return (
         <div>
@@ -40,7 +78,7 @@ function CameraCapture(props) {
                 audio={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
+                videoConstraints={videoConstraint}
             />
             <Button type="button" onClick={capture}>Capture</Button>
         </div>
