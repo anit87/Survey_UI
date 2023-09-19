@@ -37,7 +37,7 @@ export const surveyFormSchema = Yup.object().shape({
     ageGroupOfMembers: Yup.array()
         .of(
             Yup.object().shape({
-                name: Yup.string().min(4, 'Too Short').required('Required'),
+                name: Yup.string().min(2, 'Too Short').required('Required'),
                 age: Yup.number().required('Required'),
                 gender: Yup.string().required('Required'),
                 assembly: Yup.string(),
@@ -48,19 +48,19 @@ export const surveyFormSchema = Yup.object().shape({
     assemblyConstituencyMembers: Yup.array()
         .of(
             Yup.object().shape({
-                name: Yup.string().min(3, 'Too Short'),
+                name: Yup.string().min(2, 'Too Short'),
                 age: Yup.number(),
                 gender: Yup.string(),
-                assemblyName: Yup.string().min(3, 'Too Short'),
+                assemblyName: Yup.string().min(2, 'Too Short'),
             })
         ),
     voterIDsList: Yup.array()
         .of(
             Yup.object().shape({
-                name: Yup.string().min(3, 'Too Short'),
+                name: Yup.string().min(2, 'Too Short'),
                 age: Yup.number(),
                 gender: Yup.string(),
-                assemblyName: Yup.string().min(3, 'Too Short'),
+                assemblyName: Yup.string().min(2, 'Too Short'),
             })
         ),
     maritalStatus: Yup.string()

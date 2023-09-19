@@ -86,8 +86,6 @@ export default function SelectTextFields({ id, label, title, options, editable, 
 }
 
 
-
-
 const SelectInput = ({label, name, value, options, changeHandler}) => {
     return (
         <FormControl fullWidth >
