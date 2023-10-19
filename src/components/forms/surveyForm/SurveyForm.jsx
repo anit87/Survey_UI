@@ -85,6 +85,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
     const [selectedLocationFile, setSelectedLocationFile] = useState(null);
     const [capturedLocationFile, setcapturedLocationFile] = useState(null);
+    const [isLocationCapturing, setisLocationCapturing] = useState(false);
 
     const token = localStorage.getItem('surveyApp')
     const mydata = useSelector(state => state.auth)
@@ -460,7 +461,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                     <Grid item md={6} xs={12}>
                                         <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Picture Of The Location *</Typography>
                                         <div className='d-flex'>
-                                            <Button className='mx-2' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
+                                            <Button className='mx-2' type="button" onClick={() => setisLocationCapturing(true)}>Capture</Button>
                                             <FileUpload name="locationPicture"
                                                 onInputChange={(event, newIndex) => handleInputChange(3, event, newIndex)}
                                                 selectedFile={selectedLocationFile}
@@ -468,7 +469,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                         </div>
                                         {capturedLocationFile && <div className='my-2'> <SmallImageCard imageUrl={capturedLocationFile} /></div>}
                                         {selectedLocationFile && <div className='my-2'><h6>{selectedLocationFile.name}</h6> </div>}
-                                        {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedLocationFile(img), setisCapturing(false), setSelectedLocationFile(""))} />}
+                                        {isLocationCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedLocationFile(img), setisLocationCapturing(false), setSelectedLocationFile(""))} />}
 
                                     </Grid>
 

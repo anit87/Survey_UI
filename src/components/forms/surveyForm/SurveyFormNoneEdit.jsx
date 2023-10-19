@@ -140,6 +140,10 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             editable={Boolean(formsDetail)}
                                             textValue={formsDetail.location.location}
                                         />
+                                        <SmallImageCard
+                                            imageUrl={`${apiUrl}/uploads/${formsDetail.locationPicture || "Voter_Id_Image/no-image.png"}`}
+                                            onClick={() => window.open(`${apiUrl}/uploads/${formsDetail.locationPicture || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                        />
                                     </Grid>}
 
                                 </Grid>
