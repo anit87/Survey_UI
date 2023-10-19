@@ -83,6 +83,9 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
     const [isCapturing, setisCapturing] = useState(false);
     const [capturingIndex, setCapturingIndex] = useState("");
 
+    const [selectedLocationFile, setSelectedLocationFile] = useState(null);
+    const [capturedLocationFile, setcapturedLocationFile] = useState(null);
+
     const token = localStorage.getItem('surveyApp')
     const mydata = useSelector(state => state.auth)
 
@@ -107,6 +110,10 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
             const updatedValues = [...inputValues];
             updatedValues[index] = event ? event.target.files[0] : img;
             setInputValues(updatedValues);
+        } else if (id === 3) {
+            const file = event.target.files[0];
+            setSelectedLocationFile(file);
+            setcapturedLocationFile("")
         }
     };
     // console.log("arr files ", inputValues);
@@ -139,6 +146,8 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                 const formData = objectToFormData(values)
                                 formData.append('voterIdImage', selectedFile);
                                 formData.append('voterIdImagee', capturedFile);
+                                formData.append('locationPicture', selectedLocationFile);
+                                formData.append('locationPicturee', capturedLocationFile);
                                 formData.append('location', JSON.stringify(locat));
                                 formData.append('filledBy', userId);
                                 if (inputValues.length > 0) {
@@ -447,6 +456,22 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                             )}
                                         />
                                     </Grid>
+
+                                    <Grid item md={6} xs={12}>
+                                        <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Picture Of The Location *</Typography>
+                                        <div className='d-flex'>
+                                            <Button className='mx-2' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
+                                            <FileUpload name="locationPicture"
+                                                onInputChange={(event, newIndex) => handleInputChange(3, event, newIndex)}
+                                                selectedFile={selectedLocationFile}
+                                            />
+                                        </div>
+                                        {capturedLocationFile && <div className='my-2'> <SmallImageCard imageUrl={capturedLocationFile} /></div>}
+                                        {selectedLocationFile && <div className='my-2'><h6>{selectedLocationFile.name}</h6> </div>}
+                                        {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedLocationFile(img), setisCapturing(false), setSelectedLocationFile(""))} />}
+
+                                    </Grid>
+
                                 </Grid>}
                                 <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
                                     {<Button variant='contained' style={{ textAlign: "right" }} type='submit'

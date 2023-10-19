@@ -140,11 +140,14 @@ export const categoryOptions = [
 ]
 export const casteOptions = [
     { label: "Please Select", value: "" },
-    { label: "A", value: "1" },
-    { label: "B", value: "2" },
-    { label: "C", value: "3" },
-    { label: "D", value: "4" },
-    { label: "E", value: "5" }
+    { label: "Vokkaliga / Gowda", value: "1" },
+    { label: "Lingayat", value: "2" },
+    { label: "Brahmin", value: "3" },
+    { label: "Kuruba", value: "4" },
+    { label: "Schedule Caste (R/L)", value: "5" },
+    { label: "Schedule Tribe", value: "6" },
+    { label: "OBC", value: "7" },
+    { label: "Others", value: "8" }
 ]
 export const constituencyOptions = [
     { label: "Govindraj Nagar", value: "1" },
