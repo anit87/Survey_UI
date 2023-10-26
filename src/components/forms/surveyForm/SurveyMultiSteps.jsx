@@ -41,7 +41,7 @@ const SurveyMultiSteps = () => {
     <div>
       <Navbar />
       <Toolbar />
-      <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Survey Form</h6>
+      <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Sahaya Hasta</h6>
       <br />
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (

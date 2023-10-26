@@ -5,7 +5,6 @@ import { reset } from "../features/auth/authSlice"
 import flag from "../assets/flag.png"
 import "./Navbar.css"
 import { verifyUser } from '../utils/functions/verifyUser';
-import { fetchUsersData } from '../features/auth/usersSlice';
 
 const Navbar = () => {
     const dispatch = useDispatch()
@@ -35,7 +34,6 @@ const Navbar = () => {
                             </Link>
                         </li>
 
-
                         {userDetail.userRole !== '3' &&
                             <li className="nav-item">
                                 <Link to="/allusers" style={{ textDecoration: "none" }} >
@@ -43,10 +41,6 @@ const Navbar = () => {
                                 </Link>
                             </li>
                         }
-                        {/* onClick={() => dispatch(fetchUsersData({
-                            apiUrl: '/users',
-                            method: "GET"
-                        }))} */}
                         {
                             userDetail.userRole !== 'admin' &&
                             <li className="nav-item">
