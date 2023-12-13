@@ -67,12 +67,11 @@ export default function SelectTextFields({ id, label, title, options, editable, 
                             : <IconButton
                                 size="small"
                                 aria-label="helper"
+                                onClick={(event) =>
+                                    handleHelperIconClick(event, title)
+                                }
                             >
-                                <InfoIcon fontSize="small"
-                                    onClick={(event) =>
-                                        handleHelperIconClick(event, title)
-                                    }
-                                />
+                                <InfoIcon fontSize="small" />
                             </IconButton>}
                     </Stack>}
                 <Popper
@@ -86,7 +85,7 @@ export default function SelectTextFields({ id, label, title, options, editable, 
 }
 
 
-const SelectInput = ({label, name, value, options, changeHandler}) => {
+const SelectInput = ({ label, name, value, options, changeHandler }) => {
     return (
         <FormControl fullWidth >
             <Stack direction="row">

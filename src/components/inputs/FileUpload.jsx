@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { useLanguageData } from '../../utils/LanguageContext';
 
 const inputStyles = {
   position: 'absolute',
@@ -12,15 +13,16 @@ const inputStyles = {
 }
 
 function FileUpload({ onInputChange, index, name }) {
+  const {translate} = useLanguageData();
   const handleChildInputChange = (event) => {
     onInputChange(event, index);
   };
 
   return (
     <Button>
-      Upload
+      {translate('Upload')}
       <input
-        style={ inputStyles }
+        style={inputStyles}
         type="file"
         onChange={handleChildInputChange}
         id='file-upload'

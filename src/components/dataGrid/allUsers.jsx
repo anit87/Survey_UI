@@ -66,7 +66,8 @@ function Row(props) {
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
+            <Box sx={{ margin: 1, maxHeight: open ? '200px' : '0', overflow: 'hidden', transition: 'max-height 0.5s ease' }}>
+              {/* <Box sx={{ margin: 1 }}> */}
                 <Typography variant="h6" gutterBottom component="div">
                   {row.fieldUsers.length < 1
                     ? "No Field Agent"
@@ -136,9 +137,7 @@ export default function CollapsibleTable() {
   };
   const getUsers = async () => {
     setIsLoading(true)
-    console.time('myCode');
     const response = await axios.get(apiUrl, { headers })
-    console.timeEnd('myCode');
     setUsers(response.data)
     setIsLoading(false)
   }

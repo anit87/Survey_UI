@@ -1,11 +1,11 @@
-export const trueFalseOptions = [
-    { label: "Please Select", value: "" },
+export const generateTrueFalseOptions = (translate) => [
+    { label: translate("PleaseSelect"), value: "" },
     {
-        label: "Yes",
+        label: translate("Yes"),
         value: 1
     },
     {
-        label: "No",
+        label: translate("No"),
         value: 0
     }
 ]
@@ -17,50 +17,51 @@ export const occupationOptios = [
     { label: "Part-time/freelancer", value: "3" },
     { label: "Home maker", value: "4" }
 ]
-export const religionOptions = [
-    { label: "Please Select", value: "" },
-    { label: "Hindu", value: "1" },
-    { label: "Muslim", value: "2" },
-    { label: "Christianity", value: "3" },
-    { label: "Sikh", value: "4" },
-    { label: "Other", value: "5" }
+export const generatereligionOptions =(t)=> [
+    { label: t("PleaseSelect"), value: "" },
+    { label: t("Religion.Hindu"), value: "1" },
+    { label: t("Religion.Muslim"), value: "2" },
+    { label: t("Religion.Christianity"), value: "3" },
+    { label: t("Religion.Sikh"), value: "4" },
+    { label: t("Religion.Other"), value: "5" }
 ]
 
-export const ageOptions = [
+
+export const generateageOptions =(t)=> [
     {
-        label: "Please Select",
+        label: t("PleaseSelect"),
         value: ""
     },
     {
-        label: "18 years or below",
+        label: t("18OrBelow"),
         value: 1
     },
     {
-        label: "19 - 24",
+        label: t("19To24"),
         value: 2
     },
     {
-        label: "25 - 35",
+        label: t("24To35"),
         value: 3
     },
     {
-        label: "35 - 45",
+        label:t("35To45"),
         value: 4
     },
     {
-        label: "Above 45 years",
+        label: t("above45"),
         value: 5
     }
 ]
 
-export const incomeOptions = [
-    { label: "Please Select", value: "" },
-    { label: "Below Rs. 20,000.", value: "1" },
-    { label: "Rs. 20,000 to Rs. 50,000.", value: "2" },
-    { label: "Rs. 50,000 to Rs. 1,00,000.", value: "3" },
-    { label: "Rs. 1,00,000 to Rs. 3,00,000.", value: "4" },
-    { label: "Above Rs. 3,00,000.", value: "5" },
-]
+export const generateIncomeOptions = (translate) => [
+    { label: translate('PleaseSelect'), value: '' },
+    { label: translate('IncomeOptions.below20000'), value: '1' },
+    { label: translate('IncomeOptions.20000to50000'), value: '2' },
+    { label: translate('IncomeOptions.50000to100000'), value: '3' },
+    { label: translate('IncomeOptions.100000to300000'), value: '4' },
+    { label: translate('IncomeOptions.above300000'), value: '5' },
+];
 
 export const maritalOptions = [
     { label: "Please Select", value: "" },
@@ -68,86 +69,85 @@ export const maritalOptions = [
     { label: "Married", value: "2" }
 ]
 
-
-export const educationalOptions = [
-    { label: "Please Select", value: "" },
+export const generateEducationalOptions = (t) => [
+    { label: t("PleaseSelect"), value: "" },
     {
-        label: "Illiterate",
+        label: t("EducationDetails.Illiterate"),
         value: 1
     },
     {
-        label: "Literate but no formal education (0-4 years)",
+        label: t("EducationDetails.LiterateNoFormal"),
         value: 2
     },
     {
-        label: "School 5-9 years",
+        label: t("EducationDetails.School59"),
         value: 3
     },
     {
-        label: "SSC/HSC",
+        label: t("EducationDetails.SSC/HSC"),
         value: 4
     },
     {
-        label: "Undergraduate",
+        label: t("EducationDetails.Undergraduate"),
         value: 5
     },
     {
-        label: "Postgraduate",
+        label: t("EducationDetails.Postgraduate"),
         value: 6
     },
     {
-        label: "Professional (Lawyer, Doctor, CA)",
+        label: t("EducationDetails.Professional"),
         value: 7
     }
 ]
-export const governmentSchemesOptions = [
-    { label: "Please Select", value: "" },
+export const generategovernmentSchemesOptions =(t)=> [
+    { label: t('PleaseSelect'), value: "" },
     {
-        label: "Gruha Jyothi Scheme",
+        label: t("GruhaJyothiScheme"),
         value: 1
     },
     {
-        label: "Gruha Lakshmi Scheme",
+        label: t("GruhaLakshmiScheme"),
         value: 2
     },
     {
-        label: "Yuva Nidhi Scheme",
+        label: t("YuvaNidhiScheme"),
         value: 3
     },
     {
-        label: "Anna Bhagya Scheme",
+        label: t("AnnaBhagyaScheme"),
         value: 4
     },
     {
-        label: "Shakti Scheme",
+        label: t("ShaktiScheme"),
         value: 5
     }
 ]
-export const categoryOptions = [
-    { label: "Please Select", value: "" },
+export const generatecategoryOptions =(t)=> [
+    { label: t("PleaseSelect"), value: "" },
     {
-        label: "BPL",
+        label: t("BPL"),
         value: 1
     },
     {
-        label: "APL",
+        label: t("APL"),
         value: 2
     },
     {
-        label: "N/A",
+        label: t("N/A"),
         value: 3
     }
 ]
-export const casteOptions = [
-    { label: "Please Select", value: "" },
-    { label: "Vokkaliga / Gowda", value: "1" },
-    { label: "Lingayat", value: "2" },
-    { label: "Brahmin", value: "3" },
-    { label: "Kuruba", value: "4" },
-    { label: "Schedule Caste (R/L)", value: "5" },
-    { label: "Schedule Tribe", value: "6" },
-    { label: "OBC", value: "7" },
-    { label: "Others", value: "8" }
+export const generateCasteOptions =(t)=> [
+    { label: t("PleaseSelect"), value: "" },
+    { label: t("Caste.Vokkaliga/Gowda"), value: "1" },
+    { label: t("Caste.Lingayat"), value: "2" },
+    { label: t("Caste.Brahmin"), value: "3" },
+    { label: t("Caste.Kuruba"), value: "4" },
+    { label: t("Caste.SC"), value: "5" },
+    { label: t("Caste.ST"), value: "6" },
+    { label: t("Caste.OBC"), value: "7" },
+    { label: t("Caste.Others"), value: "8" }
 ]
 export const constituencyOptions = [
     { label: "Govindraj Nagar", value: "1" },

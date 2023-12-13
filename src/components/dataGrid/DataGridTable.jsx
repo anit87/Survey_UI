@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Button, Stack, FormControl } from '@mui/material';
 import Table from '@mui/material/Table';
@@ -22,7 +22,8 @@ import Loader from '../loader';
 import NoData from '../NoData';
 import TableHeader from './TableHeader';
 import { SelectInput } from '../inputs/SelectInput';
-import { incomeOptions, maritalOptions, trueFalseOptions, educationalOptions, religionOptions, occupationOptios, casteOptions } from "../../utils/constants"
+import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants"
+import { useLanguageData } from '../../utils/LanguageContext';
 
 const tableCells = [
     { label: 'S.No' },
@@ -54,6 +55,14 @@ const formatDate = (dateString) => {
 
 export default function SurveyForms() {
     const navigate = useNavigate()
+
+    const { translate } = useLanguageData()
+    const incomeOptions = generateIncomeOptions(translate);
+    const trueFalseOptions = generateTrueFalseOptions(translate);
+    const educationalOptions = generateEducationalOptions(translate);
+    const casteOptions = generateCasteOptions(translate);
+    const religionOptions = generatereligionOptions(translate);
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [rows, setRows] = useState({

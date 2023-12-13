@@ -12,3 +12,23 @@
     height: 5rem;
     width: 5rem;
 }
+
+/* .language-switch label {
+    margin-bottom: 0;
+    cursor: pointer;
+} */
+
+.language-switch {
+    margin-right: 20px;
+    margin-bottom: 0px !important;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.language-switch input,
+.language-switch label {
+    cursor: pointer;
+    margin-left: 4px !important;
+}

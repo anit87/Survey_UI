@@ -9,13 +9,15 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { ageOptions, incomeOptions, trueFalseOptions, educationalOptions, governmentSchemesOptions, categoryOptions, casteOptions, religionOptions, constituencyOptions } from '../../../utils/constants';
+import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions,generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
 
 import CameraCapture from '../../CameraCapture';
 import SmallImageCard from '../../SmallImageCard';
+import { useLanguageData } from '../../../utils/LanguageContext';
+
 const apiUrl = import.meta.env.VITE_API_URL + '/forms'
 
 const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
@@ -28,14 +30,14 @@ const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
         </Stack>
     )
 }
-const FieldArrayRemoveIcon = ({ index, arrayHelpers, array }) => {
+const FieldArrayRemoveIcon = ({ index, arrayHelpers, array, translate }) => {
     return (
         <Box
             display="flex"
             justifyContent="left"
             alignItems="center"
         >
-            <Typography variant="subtitle2" style={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom > Member&nbsp;{index + 1} </Typography>
+            <Typography variant="subtitle2" style={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom > {translate('Member')}&nbsp;{index + 1} </Typography>
             <IconButton disabled={array.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
                 <RemoveCircle fontSize="small" />
             </IconButton>
@@ -71,6 +73,16 @@ const initialValues = {
 const SurveyForm = ({ activeStep, setActiveStep }) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    
+    const { translate } = useLanguageData()
+    const incomeOptions = generateIncomeOptions(translate);
+    const trueFalseOptions = generateTrueFalseOptions(translate);
+    const educationalOptions = generateEducationalOptions(translate);
+    const casteOptions = generateCasteOptions(translate);
+    const religionOptions = generatereligionOptions(translate);
+    const governmentSchemesOptions = generategovernmentSchemesOptions(translate);
+    const ageOptions = generateageOptions(translate);
+    const categoryOptions = generatecategoryOptions(translate);
 
     const [userId, setUserId] = useState(" ")
     const [alert, setAlert] = useState(false);
@@ -171,7 +183,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Applicant Name *"
+                                            label={translate("ApplicantName")}
                                             title="Please Enter Your Name"
                                             name="respondentName"
                                             type="text"
@@ -181,7 +193,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Address *"
+                                            label={translate("Address")}
                                             title="Please Enter Your Full Address"
                                             name="address"
                                             type="text"
@@ -191,7 +203,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Pincode *"
+                                            label={translate('Pincode')}
                                             title="Enter Your Area Pincode"
                                             name="pincode"
                                             type="number"
@@ -201,7 +213,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Mobile Number *"
+                                            label={translate('MobileNumber')}
                                             title="Enter Your Mobile No"
                                             name="mobileNo"
                                             type="number"
@@ -211,32 +223,32 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Can You Please Tell Me Your Marital Status *"
+                                            label={translate('MaritalStatus')}
                                             title="Are You Married?"
                                             id="maritalStatus"
                                             name="maritalStatus"
-                                            options={[{ label: "Single", value: "1" }, { label: "Married", value: "2" }]}
+                                            options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
                                         />
                                     </Grid>
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Can You Please Tell Me Your Occupation Status *"
+                                            label={translate('OccupationStatus')}
                                             title="Can You Please Tell Me Your Occupation Status?"
                                             id="occupationStatus"
                                             name="occupationStatus"
                                             options={[
-                                                { label: "Self-employed", value: "1" },
-                                                { label: "Full-time", value: "2" },
-                                                { label: "Part-time/freelancer", value: "3" },
-                                                { label: "Home maker", value: "4" }
+                                                { label: translate('Self-employed'), value: "1" },
+                                                { label: translate('Full-time'), value: "2" },
+                                                { label: translate('Part-time/freelancer'), value: "3" },
+                                                { label: translate('Home maker'), value: "4" }
                                             ]}
                                         />
                                     </Grid>
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="What Is the Monthly Household Income (MHI) *"
+                                            label={translate('MHI')}
                                             title="What is the Monthly Household Income (MHI)."
                                             id="monthlyHouseholdIncome"
                                             name="monthlyHouseholdIncome"
@@ -246,7 +258,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Do You Own This Property? *"
+                                            label={translate('OwnProperty')}
                                             title="Is This Your Own Property?"
                                             name="isOwnProperty"
                                             id="isOwnProperty"
@@ -258,7 +270,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                 {activeStep === 1 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="How Many Members Are There in Your Family? *"
+                                            label={translate("TotalMembers")}
                                             title="Total Number of Members in Your Family"
                                             name="totalMembers"
                                             type="number"
@@ -268,7 +280,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Religion *"
+                                            label={translate("Religion")}
                                             title="Kindly Select Your Religion"
                                             id="religion"
                                             name="religion"
@@ -277,8 +289,8 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                     </Grid>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Select Education Details of Chief Wage Earner (Head of the family) *"
-                                            title='I would now like to know the education level of the Chief Wage Earner (CWE) of your household. By Chief Wage Earner, I mean the person who contributes the maximum to the household income'
+                                            label={translate("EducationDetailsCWE")}
+                                            title='Education level of the Chief Wage Earner (CWE) of your household. Person who contributes the maximum to the household income'
                                             id="chiefWageEarnereEducation"
                                             name="cweEducation"
                                             options={educationalOptions}
@@ -287,7 +299,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Caste *"
+                                            label={translate("Caste")}
                                             title="Caste"
                                             id="caste"
                                             name="caste"
@@ -301,7 +313,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Is The Applicant a Registered Voter In This Assembly Constituency *"
+                                            label={translate('RegisteredVoter')}
                                             title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
                                             name="registeredVoter"
                                             id="registeredVoter"
@@ -311,14 +323,14 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Voter ID"
-                                            title="Please Enter Voter ID Number"
+                                            label={translate("VoterID")}
+                                            title={translate('VoterIDPlaceholder')}
                                             name="voterIdNumber"
                                             type="number"
-                                            placeholder="Please Provide Your Voter ID Number"
+                                            placeholder={translate('VoterIDPlaceholder')}
                                         />
                                         <div className='d-flex'>
-                                            <Button className='mx-2' type="button" onClick={() => setisCapturing(true)}>Capture</Button>
+                                            <Button className='mx-2' type="button" onClick={() => setisCapturing(true)}>{translate('Capture')}</Button>
                                             <FileUpload name="voterIdImage"
                                                 onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)}
                                                 selectedFile={selectedFile}
@@ -335,7 +347,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                 {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label={`Government Schemes Availed *`}
+                                            label={translate('GovernmentSchemes')}
                                             name="isParticipated"
                                             id="isParticipated"
                                             options={governmentSchemesOptions}
@@ -344,7 +356,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Applicant's age *"
+                                            label={translate("ApplicantsAge")}
                                             title="Please Provide Your Age Based On Your Last Birthday."
                                             id="birthdayDate"
                                             name="birthdayDate"
@@ -353,7 +365,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                     </Grid>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label={`What Category Do You Fall Under?*`}
+                                            label={translate(`Category`)}
                                             name="categoryFallUnder"
                                             id="categoryFallUnder"
                                             options={categoryOptions}
@@ -370,7 +382,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                             render={arrayHelpers => (
                                                 <div>
                                                     <FieldArrayAddIcon
-                                                        label="Information On Family Members *"
+                                                        label={translate("Information on Family Members")}
                                                         arrayHelpers={arrayHelpers}
                                                         object={{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }}
                                                     />
@@ -378,28 +390,28 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                                         <>
                                                             <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                                                 <Grid item md={1} xs={12} style={{ display: "flex" }}>
-                                                                    <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} />
+                                                                    <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} translate={translate} />
                                                                 </Grid>
                                                                 <Grid item md={2} xs={12}>
                                                                     <TextInput
-                                                                        label="Members Name *"
+                                                                        label={translate("Members Name")}
                                                                         name={`ageGroupOfMembers[${index}].name`}
                                                                         type="text"
-                                                                        placeholder="Name"
+                                                                        placeholder={translate("Members Name")}
 
                                                                     />
                                                                 </Grid>
                                                                 <Grid item md={1} xs={12}>
                                                                     <TextInput
-                                                                        label="Age *"
+                                                                        label={translate("Age")}
                                                                         name={`ageGroupOfMembers[${index}].age`}
                                                                         type="number"
-                                                                        placeholder="Age"
+                                                                        placeholder={translate("Age")}
                                                                     />
                                                                 </Grid>
                                                                 <Grid item md={1} xs={12}>
                                                                     <SelectInput
-                                                                        label="Gender *"
+                                                                        label={translate("Gender")}
                                                                         id={`ageGroupOfMembers[${index}].gender`}
                                                                         name={`ageGroupOfMembers[${index}].gender`}
                                                                         options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
@@ -407,7 +419,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                                                 </Grid>
                                                                 <Grid item md={2} xs={12}>
                                                                     <SelectInput
-                                                                        label="Assembly/Constituency*"
+                                                                        label={translate("Assembly/Constituency")}
                                                                         name={`ageGroupOfMembers[${index}].assembly`}
                                                                         id={`ageGroupOfMembers[${index}].assembly`}
                                                                         options={constituencyOptions}
@@ -415,7 +427,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                                                 </Grid>
                                                                 <Grid item md={2} xs={12}>
                                                                     <SelectInput
-                                                                        label="Voter ID *"
+                                                                        label={translate("VoterID")}
                                                                         id={`ageGroupOfMembers[${index}].voterId`}
                                                                         name={`ageGroupOfMembers[${index}].voterId`}
                                                                         options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
@@ -424,15 +436,15 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                                                 <Grid item md={2} xs={12}>
 
                                                                     <TextInput
-                                                                        label="Voter ID Number"
+                                                                        label={translate("Voter ID Number")}
                                                                         name={`ageGroupOfMembers[${index}].voterIdNum`}
                                                                         type="number"
-                                                                        placeholder="Please Provide Your Voter ID Number"
+                                                                        placeholder={translate("Voter ID Number")}
                                                                     />
 
 
                                                                     <div className='d-flex'>
-                                                                        <Button sx={{ mx: 2 }} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>Capture</Button>
+                                                                        <Button sx={{ mx: 2 }} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>{translate('Capture')}</Button>
                                                                         <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
                                                                     </div>
 
@@ -459,9 +471,9 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                     </Grid>
 
                                     <Grid item md={6} xs={12}>
-                                        <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>Picture Of The Location *</Typography>
+                                        <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>{translate('Picture of the location')}</Typography>
                                         <div className='d-flex'>
-                                            <Button className='mx-2' type="button" onClick={() => setisLocationCapturing(true)}>Capture</Button>
+                                            <Button className='mx-2' type="button" onClick={() => setisLocationCapturing(true)}>{translate('Capture')}</Button>
                                             <FileUpload name="locationPicture"
                                                 onInputChange={(event, newIndex) => handleInputChange(3, event, newIndex)}
                                                 selectedFile={selectedLocationFile}
@@ -478,7 +490,7 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                     {<Button variant='contained' style={{ textAlign: "right" }} type='submit'
                                         sx={{ mt: 3, pl: 3, pr: 3 }}
                                     >
-                                        {activeStep === 4 ? "Submit" : "Next"}
+                                        {activeStep === 4 ? translate("Submit") : translate("Next")}
                                     </Button>
                                     }
                                 </div>

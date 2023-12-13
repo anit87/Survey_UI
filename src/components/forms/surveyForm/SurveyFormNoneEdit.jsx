@@ -6,12 +6,23 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput'
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import DataTable from '../../dataGrid/DataTable';
-import { governmentSchemesOptions, categoryOptions, religionOptions, casteOptions, incomeOptions, occupationOptios, educationalOptions, trueFalseOptions, ageOptions } from '../../../utils/constants';
+import { generategovernmentSchemesOptions, generatecategoryOptions, generatereligionOptions, generateCasteOptions, generateIncomeOptions, occupationOptios, generateEducationalOptions, generateTrueFalseOptions, generateageOptions } from '../../../utils/constants';
 import SmallImageCard from '../../SmallImageCard';
+import { useLanguageData } from '../../../utils/LanguageContext';
 
 const apiUrl = import.meta.env.VITE_API_URL
 
 const SurveyForm = ({ activeStep, formId, formsDetail }) => {
+    const { translate } = useLanguageData()
+    const incomeOptions = generateIncomeOptions(translate);
+    const trueFalseOptions = generateTrueFalseOptions(translate);
+    const educationalOptions = generateEducationalOptions(translate);
+    const casteOptions = generateCasteOptions(translate);
+    const religionOptions = generatereligionOptions(translate);
+    const governmentSchemesOptions = generategovernmentSchemesOptions(translate);
+    const ageOptions = generateageOptions(translate);
+    const categoryOptions = generatecategoryOptions(translate);
+
     const [userId, setUserId] = useState(" ")
     let [counter, setCounter] = useState(0)
 
@@ -38,7 +49,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                 {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Applicant Name"
+                                            label={translate("ApplicantName")}
                                             title="Please Enter Your Name"
                                             name="respondentName"
                                             type="text"
@@ -51,7 +62,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Address"
+                                            label={translate('Address')}
                                             title="Please Enter Your Full Address"
                                             name="address"
                                             type="text"
@@ -63,7 +74,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Pincode"
+                                            label={translate('Pincode')}
                                             title="Enter Your Area Pincode"
                                             name="pincode"
                                             type="number"
@@ -75,7 +86,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Mobile Number"
+                                            label={translate('MobileNumber')}
                                             title="Enter Your Mobile No"
                                             name="mobileNo"
                                             type="number"
@@ -87,30 +98,30 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Can You Please Tell Me Your Marital Status?"
+                                            label={translate('MaritalStatus')}
                                             title="Are You Married?"
                                             id="maritalStatus"
                                             name="maritalStatus"
-                                            options={[{ label: "Single", value: "1" }, { label: "Married", value: "2" }]}
+                                            options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail ? formsDetail.maritalStatus == 1 ? "Single" : "Married" : ""}
+                                            textValue={formsDetail ? formsDetail.maritalStatus == 1 ? translate('Single') : translate("Married") : ""}
                                         />
                                     </Grid>
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Can You Please Tell Me Your Occupation Status?"
+                                            label={translate('OccupationStatus')}
                                             title="Can You Please Tell Me Your Occupation Status?"
                                             id="occupationStatus"
                                             name="occupationStatus"
                                             editable={Boolean(formsDetail)}
-                                            textValue={occupationOptios.find(option => option.value == (formsDetail.occupationStatus || "")).label}
+                                            textValue={translate(occupationOptios.find(option => option.value == (formsDetail.occupationStatus || "")).label)}
                                         />
                                     </Grid>
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="What Is the Monthly Household Income (MHI)"
+                                            label={translate('MHI')}
                                             title="What is the Monthly Household Income (MHI)."
                                             id="monthlyHouseholdIncome"
                                             name="monthlyHouseholdIncome"
@@ -121,7 +132,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Do You Own This Property?"
+                                            label={translate('OwnProperty')}
                                             title="Is This Your Own Property?"
                                             name="isOwnProperty"
                                             id="isOwnProperty"
@@ -132,7 +143,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     {formsDetail.location && <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Location"
+                                            label={translate("Location")}
                                             title=""
                                             name="location"
                                             type="text"
@@ -152,7 +163,8 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                 {activeStep === 1 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="How Many Members Are There in Your Family?"
+                                            label={translate("TotalMembers")}
+                                            // label="How Many Members Are There in Your Family?"
                                             title="Total Number of Members in Your Family"
                                             name="totalMembers"
                                             type="number"
@@ -162,9 +174,11 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                         />
                                     </Grid>
 
+
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Religion"
+                                            // label="Religion"
+                                            label={translate("Religion")}
                                             title="Kindly Select Your Religion"
                                             id="religion"
                                             name="religion"
@@ -175,7 +189,8 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Caste"
+                                            // label="Caste"
+                                            label={translate("Caste")}
                                             title="Caste"
                                             name="caste"
                                             placeholder="Kindly Indicate Your Caste"
@@ -186,7 +201,8 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Education Details of Chief Wage Earner (Head of the family)"
+                                            label={translate("EducationDetailsCWE")}
+                                            // label="Education Details of Chief Wage Earner (Head of the family)"
                                             title='I would now like to know the education level of the Chief Wage Earner (CWE) of your household. By Chief Wage Earner, I mean the person who contributes the maximum to the household income'
                                             id="chiefWageEarnereEducation"
                                             name="cweEducation"
@@ -199,18 +215,18 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                 {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Is The Applicant a Registered Voter In This Assembly Constituency?"
+                                            label={translate('RegisteredVoter')}
                                             title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
                                             name="registeredVoter"
                                             id="registeredVoter"
                                             options={trueFalseOptions}
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.registeredVoter == true ? "Yes" : "No"}
+                                            textValue={formsDetail.registeredVoter == true ? translate("Yes") : translate("No")}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
                                         <TextInput
-                                            label="Voter ID"
+                                            label={translate("VoterID")}
                                             name="voterIdNumber"
                                             type="number"
                                             placeholder="Please Provide Your Voter ID Number"
@@ -228,7 +244,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                 {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label={`Government Schemes Availed`}
+                                            label={translate('GovernmentSchemes')}
                                             name="isParticipated"
                                             id="isParticipated"
                                             options={trueFalseOptions}
@@ -236,10 +252,11 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             textValue={governmentSchemesOptions.find(option => option.value == formsDetail.isParticipated).label}
                                         />
                                     </Grid>
+                                    
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label="Applicant's age"
+                                            label={translate("ApplicantsAge")}
                                             title="Please Provide Your Age Based On Your Last Birthday."
                                             id="birthdayDate"
                                             name="birthdayDate"
@@ -250,7 +267,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label={`What Category Do You Fall Under?`}
+                                            label={translate(`Category`)}
                                             name="categoryFallUnder"
                                             id="categoryFallUnder"
                                             options={categoryOptions}

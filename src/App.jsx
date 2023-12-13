@@ -12,10 +12,13 @@ import CollapsibleTable from './components/dataGrid/allUsers'
 import RecordsbyUser from './components/dataGrid/RecordsbyUser'
 import DataGridTable from './components/dataGrid/DataGridTable'
 
+import { LanguageProvider } from './utils/LanguageContext'
+
 function App() {
   return (
     <>
       <BrowserRouter>
+        <LanguageProvider>
           <Routes>
             <Route path='/' element={<ProtectedRoute><LoginSignUp /></ProtectedRoute>}>
               <Route index element={<SignIn />} />
@@ -30,6 +33,7 @@ function App() {
             <Route path='/createuser/:id' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />
             <Route path='/surveys' element={<ProtectedRoute><Layout><DataGridTable /></Layout></ProtectedRoute>} />
           </Routes>
+        </LanguageProvider>
       </BrowserRouter>
     </>
   )

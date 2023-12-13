@@ -58,12 +58,11 @@ const TextInput = ({ label, title, editable,textValue, ...props }) => {
                                 : <IconButton
                                     size="small"
                                     aria-label="helper"
+                                    onClick={(event) =>
+                                        handleHelperIconClick(event, title)
+                                    }
                                 >
-                                    <InfoIcon fontSize="small"
-                                        onClick={(event) =>
-                                            handleHelperIconClick(event, title)
-                                        }
-                                    />
+                                    <InfoIcon fontSize="small"/>
                                 </IconButton>
                         }
                     </Stack>
