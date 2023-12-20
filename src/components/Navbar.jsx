@@ -84,7 +84,7 @@ const Navbar = () => {
                                 checked={language === 'fr'}
                             />
                             <label className="form-check-label ms-2" htmlFor="switchSizeLarge" style={{ width: '70px' }}>
-                                Language
+                                {language === 'en'?'English':'Kannada'}
                             </label>
                         </div>
 
