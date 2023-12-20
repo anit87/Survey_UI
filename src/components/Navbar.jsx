@@ -6,6 +6,10 @@ import flag from '../assets/flag.png';
 import './Navbar.css';
 import { verifyUser } from '../utils/functions/verifyUser';
 import { useLanguageData } from '../utils/LanguageContext';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const Navbar = () => {
     const { changeLanguage, language } = useLanguageData();
@@ -18,15 +22,14 @@ const Navbar = () => {
         setUserDetail(user);
     }, []);
 
-    console.log("default Language is ", language);
-
     useEffect(() => {
         changeLanguage(language);
     }, [changeLanguage, language]);
 
     const handleLanguageChange = (e) => {
-        const newLanguage = e.target.checked ? 'fr' : 'en';
-        changeLanguage(newLanguage);
+        changeLanguage(e.target.value);
+        // const newLanguage = e.target.checked ? 'fr' : 'en';
+        // changeLanguage(newLanguage);
     };
 
     return (
@@ -74,7 +77,7 @@ const Navbar = () => {
                     </ul>
                     <form className="d-flex align-items-center">
                         {/* Language Switch */}
-                        <div className="form-check form-switch language-switch">
+                        {/* <div className="form-check form-switch language-switch">
                             <input
                                 className="form-check-input"
                                 type="checkbox"
@@ -84,9 +87,23 @@ const Navbar = () => {
                                 checked={language === 'fr'}
                             />
                             <label className="form-check-label ms-2" htmlFor="switchSizeLarge" style={{ width: '70px' }}>
-                                {language === 'en'?'English':'Kannada'}
+                                {language === 'en' ? 'English' : 'Kannada'}
                             </label>
-                        </div>
+                        </div> */}
+                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                            <InputLabel id="demo-select-small-label"></InputLabel>
+                            <Select
+                                labelId="demo-select-small-label"
+                                id="demo-select-small"
+                                value={language}
+                                label=""
+                                onChange={handleLanguageChange}
+                                style={{ color: '#ffffff' }}
+                            >
+                                <MenuItem value={'en'}>English</MenuItem>
+                                <MenuItem value={'fr'}>Kannada</MenuItem>
+                            </Select>
+                        </FormControl>
 
                         <Link
                             style={{ color: '#ffffff', textDecoration: 'none' }}
