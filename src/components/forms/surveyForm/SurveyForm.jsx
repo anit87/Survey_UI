@@ -155,13 +155,13 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                             } else if (activeStep == 4 && !values.ageGroupOfMembers[0].name) {
                                 setFieldError("ageGroupOfMembers", "Please Enter all Values")
                             } else {
-                                const locat = await getLocation()
+                                // const locat = await getLocation()
                                 const formData = objectToFormData(values)
                                 formData.append('voterIdImage', selectedFile);
                                 formData.append('voterIdImagee', capturedFile);
                                 formData.append('locationPicture', selectedLocationFile);
                                 formData.append('locationPicturee', capturedLocationFile);
-                                formData.append('location', JSON.stringify(locat));
+                                // formData.append('location', JSON.stringify(locat));
                                 formData.append('filledBy', userId);
                                 if (inputValues.length > 0) {
                                     appendArrayToFormData(formData, 'voterIdImageMember', inputValues)

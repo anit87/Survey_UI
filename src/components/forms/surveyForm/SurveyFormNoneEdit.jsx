@@ -272,7 +272,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="categoryFallUnder"
                                             options={categoryOptions}
                                             editable={Boolean(formsDetail)}
-                                            textValue={categoryOptions.find(option => option.value == formsDetail.isParticipated).label}
+                                            textValue={categoryOptions.find(option => option.value == formsDetail.categoryFallUnder).label}
                                         />
                                     </Grid>
                                 </Grid>}
