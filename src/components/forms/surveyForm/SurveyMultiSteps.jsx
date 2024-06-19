@@ -2,34 +2,39 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Stepper, Step, StepLabel, Button, Toolbar } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
-import SurveyFormNoneEdit from "./SurveyFormNoneEdit"
+import SurveyFormNoneEdit from "./SurveyFormNoneEdit";
 import Navbar from '../../Navbar';
-import axios from "axios"
+import axios from "axios";
 import { useLanguageData } from '../../../utils/LanguageContext';
 
-const apiUrl = import.meta.env.VITE_API_URL + '/users/record'
+const apiUrl = import.meta.env.VITE_API_URL + '/users/record';
 
 const steps = ['Basic Details', 'About Family', 'Voter Details', 'General', 'Family Details'];
 
 const SurveyMultiSteps = () => {
 
-  const { translate } = useLanguageData()
-  let { id } = useParams();
-  const navigate = useNavigate()
+  const { translate } = useLanguageData();
+  let { id, formId } = useParams();
+  const navigate = useNavigate();
 
   const [activeStep, setActiveStep] = useState(0);
-  const [formsDetail, setFormsDetail] = useState({})
+  const [formsDetail, setFormsDetail] = useState({});
 
   useEffect(() => {
-    if (id) {
-      getUsers()
+    const formKey = id || formId;
+    if (formKey) {
+      getFormDetail(formKey);
     }
-  }, [id])
+  }, [id, formId]);
 
-  const getUsers = async () => {
-    const response = await axios.post(apiUrl, { id: id })
-    setFormsDetail(response.data.data)
-  }
+  const getFormDetail = async (formKey) => {
+    try {
+      const response = await axios.post(apiUrl, { id: formKey });
+      setFormsDetail(response.data.data);
+    } catch (error) {
+      console.error('Error fetching form details:', error);
+    }
+  };
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
@@ -55,7 +60,16 @@ const SurveyMultiSteps = () => {
       </Stepper>
       <div>
         <div >
-          {!id && <SurveyForm activeStep={activeStep} setActiveStep={setActiveStep} />}
+          {!id && !formId && <SurveyForm activeStep={activeStep} setActiveStep={setActiveStep} formId={null} />}
+          
+          {formId && Object.keys(formsDetail).length > 0 &&
+            <SurveyForm
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              formsDetail={formsDetail}
+              formId={formId}
+            />
+          }
           {id &&
             <SurveyFormNoneEdit
               activeStep={activeStep}

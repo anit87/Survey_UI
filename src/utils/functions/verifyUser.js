@@ -33,7 +33,7 @@ export const verifyUser = function (mytoken) {
 //     });
 // };
 
-export const capitalizeFirstLetter=(str)=> {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
+export const capitalizeFirstLetter = (str) => {
+    return typeof str === 'string' ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+};
 

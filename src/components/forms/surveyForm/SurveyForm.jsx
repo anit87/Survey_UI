@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Grid, Typography, Container, Button, Stack, IconButton, useMediaQuery, useTheme } from "@mui/material"
-import { Formik, Form, FieldArray } from "formik"
+import React, { useState, useEffect } from 'react';
+import { Box, Grid, Typography, Container, Button, Stack, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { Formik, Form, FieldArray } from "formik";
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
 import TextInput from '../../inputs/TextInput';
-import SelectInput from '../../inputs/SelectInput'
+import SelectInput from '../../inputs/SelectInput';
 import Alert from '../../Alert';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions,generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions } from '../../../utils/constants';
+import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions, generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
@@ -18,7 +18,7 @@ import CameraCapture from '../../CameraCapture';
 import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
 
-const apiUrl = import.meta.env.VITE_API_URL + '/forms'
+const apiUrl = import.meta.env.VITE_API_URL + '/forms';
 
 const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
     return (
@@ -28,53 +28,25 @@ const FieldArrayAddIcon = ({ label, arrayHelpers, object }) => {
                 <AddCircle fontSize="small" />
             </IconButton>
         </Stack>
-    )
-}
+    );
+};
+
 const FieldArrayRemoveIcon = ({ index, arrayHelpers, array, translate }) => {
     return (
-        <Box
-            display="flex"
-            justifyContent="left"
-            alignItems="center"
-        >
-            <Typography variant="subtitle2" style={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom > {translate('Member')}&nbsp;{index + 1} </Typography>
+        <Box display="flex" justifyContent="left" alignItems="center">
+            <Typography variant="subtitle2" style={{ fontSize: "14px", fontWeight: "bold" }} gutterBottom>{translate('Member')}&nbsp;{index + 1}</Typography>
             <IconButton disabled={array.length < 2} size="small" onClick={() => arrayHelpers.remove(index)}>
                 <RemoveCircle fontSize="small" />
             </IconButton>
         </Box>
-    )
-}
+    );
+};
 
-
-const initialValues = {
-    respondentName: '',
-    address: '',
-    pincode: '',
-    mobileNo: '',
-    residingYears: '',
-    isOwnProperty: '',
-    totalMembers: '',
-    stayingMembers: '',
-    religion: '',
-    caste: '',
-    cweEducation: '',
-    respondentEducation: '',
-    isParticipated: '',
-    categoryFallUnder: '',
-    birthdayDate: '',
-    registeredVoter: '',
-    voterIdNumber: '',
-    ageGroupOfMembers: [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }],
-    maritalStatus: '',
-    occupationStatus: '',
-    monthlyHouseholdIncome: '',
-}
-
-const SurveyForm = ({ activeStep, setActiveStep }) => {
+const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = null }) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    
-    const { translate } = useLanguageData()
+
+    const { translate } = useLanguageData();
     const incomeOptions = generateIncomeOptions(translate);
     const trueFalseOptions = generateTrueFalseOptions(translate);
     const educationalOptions = generateEducationalOptions(translate);
@@ -84,41 +56,36 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
     const ageOptions = generateageOptions(translate);
     const categoryOptions = generatecategoryOptions(translate);
 
-    const [userId, setUserId] = useState(" ")
+    const [userId, setUserId] = useState(" ");
     const [alert, setAlert] = useState(false);
     const [savedResp, setSavedResp] = useState({});
-
     const [selectedFile, setSelectedFile] = useState(null);
     const [inputValues, setInputValues] = useState([]);
-    // const [imageToDisplay, setimageToDisplay] = useState(null);
     const [capturedFile, setcapturedFile] = useState(null);
     const [isCapturing, setisCapturing] = useState(false);
     const [capturingIndex, setCapturingIndex] = useState("");
-
     const [selectedLocationFile, setSelectedLocationFile] = useState(null);
     const [capturedLocationFile, setcapturedLocationFile] = useState(null);
     const [isLocationCapturing, setisLocationCapturing] = useState(false);
 
-    const token = localStorage.getItem('surveyApp')
-    const mydata = useSelector(state => state.auth)
+    const token = localStorage.getItem('surveyApp');
+    const mydata = useSelector(state => state.auth);
 
     useEffect(() => {
-        const data = mydata.token || token
-        const { id } = verifyUser(data)
-        setUserId(id)
-    }, [userId, token])
+        const data = mydata.token || token;
+        const { id } = verifyUser(data);
+        setUserId(id);
+    }, [userId, token]);
 
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
-    }
+    };
 
     const handleInputChange = (id, event, index, img) => {
         if (id === 1) {
             const file = event.target.files[0];
             setSelectedFile(file);
-            setcapturedFile("")
-            // setimageToDisplay(URL.createObjectURL(event.target.files[0]))
-
+            setcapturedFile("");
         } else if (id === 2) {
             const updatedValues = [...inputValues];
             updatedValues[index] = event ? event.target.files[0] : img;
@@ -126,10 +93,40 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
         } else if (id === 3) {
             const file = event.target.files[0];
             setSelectedLocationFile(file);
-            setcapturedLocationFile("")
+            setcapturedLocationFile("");
         }
     };
-    // console.log("arr files ", inputValues);
+
+    const initialValues = {
+        respondentName: formsDetail ? formsDetail.respondentName : '',
+        address: formsDetail ? formsDetail.address : '',
+        pincode: formsDetail ? formsDetail.pincode : '',
+        mobileNo: formsDetail ? formsDetail.mobileNo : '',
+        isOwnProperty: formsDetail ? formsDetail.isOwnProperty : '',
+        totalMembers: formsDetail ? formsDetail.totalMembers : '',
+        religion: formsDetail ? formsDetail.religion : '',
+        caste: formsDetail ? formsDetail.caste : '',
+        cweEducation: formsDetail ? formsDetail.cweEducation : '',
+        isParticipated: formsDetail ? formsDetail.isParticipated : '',
+        categoryFallUnder: formsDetail ? formsDetail.categoryFallUnder : '',
+        birthdayDate: formsDetail ? formsDetail.birthdayDate : '',
+        registeredVoter: formsDetail ? formsDetail.registeredVoter : '',
+        voterIdNumber: formsDetail ? formsDetail.voterIdNumber : '',
+        ageGroupOfMembers: formsDetail ? (formsDetail.ageGroupOfMembers.length > 0 ? formsDetail.ageGroupOfMembers : [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }]) : [{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }],
+        maritalStatus: formsDetail ? formsDetail.maritalStatus : '',
+        occupationStatus: formsDetail ? formsDetail.occupationStatus : '',
+        monthlyHouseholdIncome: formsDetail ? formsDetail.monthlyHouseholdIncome : '',
+    }
+
+    useEffect(() => {
+        if (formId && formsDetail) {
+            setSelectedFile({ name: formsDetail.voterIdImage });
+            setSelectedLocationFile({ name: formsDetail.locationPicture });
+        }
+
+    }, [formId, formsDetail])
+
+
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -139,21 +136,24 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                     <Formik
                         initialValues={initialValues}
                         validationSchema={
-                            activeStep == 0 ? surveyFormSchemaStep0 :
-                                activeStep == 1 ? surveyFormSchemaStep1 :
-                                    activeStep == 2 ? surveyFormSchemaStep2 :
-                                        activeStep == 3 ? surveyFormSchemaStep3 :
-                                            activeStep == 4 ? surveyFormSchema : surveyFormSchema
+                            !formId ?
+                                (
+                                    activeStep === 0 ? surveyFormSchemaStep0 :
+                                        activeStep === 1 ? surveyFormSchemaStep1 :
+                                            activeStep === 2 ? surveyFormSchemaStep2 :
+                                                activeStep === 3 ? surveyFormSchemaStep3 :
+                                                    activeStep === 4 ? surveyFormSchema : surveyFormSchema
+                                )
+                                : ""
                         }
-                        submitting={true}
+
                         validateOnBlur={false}
                         validateOnChange={false}
-                        onSubmit={async (values, { setSubmitting, resetForm, validateForm, setFieldError }) => {
-
-                            if (activeStep != 4) {
-                                setActiveStep(activeStep + 1)
-                            } else if (activeStep == 4 && !values.ageGroupOfMembers[0].name) {
-                                setFieldError("ageGroupOfMembers", "Please Enter all Values")
+                        onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
+                            if (activeStep !== 4) {
+                                setActiveStep(activeStep + 1);
+                            } else if (activeStep === 4 && !values.ageGroupOfMembers[0].name) {
+                                setFieldError("ageGroupOfMembers", "Please Enter all Values");
                             } else {
                                 // const locat = await getLocation()
                                 const formData = objectToFormData(values)
@@ -167,11 +167,11 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                     appendArrayToFormData(formData, 'voterIdImageMember', inputValues)
                                 }
 
-                                const resp = await axios.post(apiUrl, formData)
-                                setSavedResp(resp.data)
-                                alertfn()
-                                resetForm()
-                                setActiveStep(0)
+                                const resp = formId ? await axios.put(`${apiUrl}/${formId}`, formData) : await axios.post(apiUrl, formData);
+                                setSavedResp(resp.data);
+                                alertfn();
+                                resetForm();
+                                setActiveStep(0);
                                 setSubmitting(false);
                             }
                         }}
@@ -372,7 +372,6 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                         />
                                     </Grid>
 
-
                                 </Grid>}
 
                                 {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -387,83 +386,86 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
                                                         object={{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }}
                                                     />
                                                     {values.ageGroupOfMembers.map((item, index) => (
-                                                        <>
-                                                            <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                                                <Grid item md={1} xs={12} style={{ display: "flex" }}>
-                                                                    <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} translate={translate} />
-                                                                </Grid>
-                                                                <Grid item md={2} xs={12}>
-                                                                    <TextInput
-                                                                        label={translate("Members Name")}
-                                                                        name={`ageGroupOfMembers[${index}].name`}
-                                                                        type="text"
-                                                                        placeholder={translate("Members Name")}
+                                                        <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item md={1} xs={12}>
-                                                                    <TextInput
-                                                                        label={translate("Age")}
-                                                                        name={`ageGroupOfMembers[${index}].age`}
-                                                                        type="number"
-                                                                        placeholder={translate("Age")}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item md={1} xs={12}>
-                                                                    <SelectInput
-                                                                        label={translate("Gender")}
-                                                                        id={`ageGroupOfMembers[${index}].gender`}
-                                                                        name={`ageGroupOfMembers[${index}].gender`}
-                                                                        options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item md={2} xs={12}>
-                                                                    <SelectInput
-                                                                        label={translate("Assembly/Constituency")}
-                                                                        name={`ageGroupOfMembers[${index}].assembly`}
-                                                                        id={`ageGroupOfMembers[${index}].assembly`}
-                                                                        options={constituencyOptions}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item md={2} xs={12}>
-                                                                    <SelectInput
-                                                                        label={translate("VoterID")}
-                                                                        id={`ageGroupOfMembers[${index}].voterId`}
-                                                                        name={`ageGroupOfMembers[${index}].voterId`}
-                                                                        options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item md={2} xs={12}>
+                                                            <Grid item md={1} xs={12} style={{ display: "flex" }}>
+                                                                <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={values.ageGroupOfMembers} translate={translate} />
+                                                            </Grid>
 
-                                                                    <TextInput
-                                                                        label={translate("Voter ID Number")}
-                                                                        name={`ageGroupOfMembers[${index}].voterIdNum`}
-                                                                        type="number"
-                                                                        placeholder={translate("Voter ID Number")}
-                                                                    />
+                                                            <Grid item md={2} xs={12}>
+                                                                <TextInput
+                                                                    label={translate("Members Name")}
+                                                                    name={`ageGroupOfMembers[${index}].name`}
+                                                                    type="text"
+                                                                    placeholder={translate("Members Name")}
 
+                                                                />
+                                                            </Grid>
 
-                                                                    <div className='d-flex'>
-                                                                        <Button sx={{ mx: 2 }} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>{translate('Capture')}</Button>
-                                                                        <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
-                                                                    </div>
+                                                            <Grid item md={1} xs={12}>
+                                                                <TextInput
+                                                                    label={translate("Age")}
+                                                                    name={`ageGroupOfMembers[${index}].age`}
+                                                                    type="number"
+                                                                    placeholder={translate("Age")}
+                                                                />
+                                                            </Grid>
 
-                                                                    {(typeof inputValues[index] === "string") &&
-                                                                        <div className='my-2'> <SmallImageCard imageUrl={inputValues[index]} /></div>
-                                                                    }
-                                                                    {inputValues[index] &&
-                                                                        <div className='my-2'><h6>{inputValues[index].name}</h6> </div>
-                                                                    }
+                                                            <Grid item md={1} xs={12}>
+                                                                <SelectInput
+                                                                    label={translate("Gender")}
+                                                                    id={`ageGroupOfMembers[${index}].gender`}
+                                                                    name={`ageGroupOfMembers[${index}].gender`}
+                                                                    options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
+                                                                />
+                                                            </Grid>
 
-                                                                </Grid>
+                                                            <Grid item md={2} xs={12}>
+                                                                <SelectInput
+                                                                    label={translate("Assembly/Constituency")}
+                                                                    name={`ageGroupOfMembers[${index}].assembly`}
+                                                                    id={`ageGroupOfMembers[${index}].assembly`}
+                                                                    options={constituencyOptions}
+                                                                />
+                                                            </Grid>
 
-                                                                {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
+                                                            <Grid item md={2} xs={12}>
+                                                                <SelectInput
+                                                                    label={translate("VoterID")}
+                                                                    id={`ageGroupOfMembers[${index}].voterId`}
+                                                                    name={`ageGroupOfMembers[${index}].voterId`}
+                                                                    options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
+                                                                />
+                                                            </Grid>
 
-                                                                {(isCapturing && capturingIndex === index) &&
-                                                                    <CameraCapture setcapturedFile={(img) => (handleInputChange(2, null, capturingIndex, img), setisCapturing(false))} />
+                                                            <Grid item md={2} xs={12}>
+                                                                <TextInput
+                                                                    label={translate("Voter ID Number")}
+                                                                    name={`ageGroupOfMembers[${index}].voterIdNum`}
+                                                                    type="number"
+                                                                    placeholder={translate("Voter ID Number")}
+                                                                />
+
+                                                                <div className='d-flex'>
+                                                                    <Button sx={{ mx: 2 }} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>{translate('Capture')}</Button>
+                                                                    <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
+                                                                </div>
+
+                                                                {(typeof inputValues[index] === "string") &&
+                                                                    <div className='my-2'> <SmallImageCard imageUrl={inputValues[index]} /></div>
+                                                                    
+                                                                }
+                                                                {inputValues[index] &&
+                                                                    <div className='my-2'><h6>{inputValues[index].name}</h6> </div>
                                                                 }
                                                             </Grid>
-                                                        </>
+
+                                                            {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
+
+                                                            {(isCapturing && capturingIndex === index) &&
+                                                                <CameraCapture setcapturedFile={(img) => (handleInputChange(2, null, capturingIndex, img), setisCapturing(false))} />
+                                                            }
+                                                        </Grid>
                                                     ))}
                                                 </div>
                                             )}
@@ -505,4 +507,4 @@ const SurveyForm = ({ activeStep, setActiveStep }) => {
     )
 }
 
-export default SurveyForm
+export default SurveyForm;

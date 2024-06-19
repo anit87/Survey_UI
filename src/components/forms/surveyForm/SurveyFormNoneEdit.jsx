@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Grid, Container, Button } from "@mui/material"
-import { Formik, Form } from "formik"
-
+import React, { useState, useEffect } from 'react';
+import { Box, Grid, Container, Button } from "@mui/material";
+import { Formik, Form } from "formik";
 import TextInput from '../../inputs/TextInput';
-import SelectInput from '../../inputs/SelectInput'
+import SelectInput from '../../inputs/SelectInput';
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import DataTable from '../../dataGrid/DataTable';
 import { generategovernmentSchemesOptions, generatecategoryOptions, generatereligionOptions, generateCasteOptions, generateIncomeOptions, occupationOptios, generateEducationalOptions, generateTrueFalseOptions, generateageOptions } from '../../../utils/constants';
 import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
 
-const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const SurveyForm = ({ activeStep, formId, formsDetail }) => {
-    const { translate } = useLanguageData()
+    const { translate } = useLanguageData();
     const incomeOptions = generateIncomeOptions(translate);
     const trueFalseOptions = generateTrueFalseOptions(translate);
     const educationalOptions = generateEducationalOptions(translate);
@@ -23,15 +22,15 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
     const ageOptions = generateageOptions(translate);
     const categoryOptions = generatecategoryOptions(translate);
 
-    const [userId, setUserId] = useState(" ")
-    let [counter, setCounter] = useState(0)
+    const [userId, setUserId] = useState(" ");
+    let [counter, setCounter] = useState(0);
 
     useEffect(() => {
-        const { id } = verifyUser()
-        setUserId(id)
+        const { id } = verifyUser();
+        setUserId(id);
     }, [userId])
     useEffect(() => {
-        setCounter(counter++)
+        setCounter(counter++);
     }, [formsDetail])
 
     return (

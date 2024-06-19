@@ -11,19 +11,16 @@ export const surveyFormSchema = Yup.object().shape({
     mobileNo: Yup.string()
         .length(10, 'Mobile Number must be 10 characters')
         .required('Mobile Number is required'),
-    residingYears: Yup.number(),
     isOwnProperty: Yup.string()
         .required('Please enter the required value.'),
     totalMembers: Yup.number()
         .required('Please enter the required value.'),
-    stayingMembers: Yup.number(),
     religion: Yup.string()
         .required('Please enter the required value.'),
     caste: Yup.string()
         .required('Please enter the required value.'),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
-    respondentEducation: Yup.string(),
     isParticipated: Yup.string()
         .required('Please enter the required value.'),
     categoryFallUnder: Yup.string()
@@ -82,7 +79,6 @@ export const surveyFormSchemaStep0 = Yup.object().shape({
     mobileNo: Yup.string()
         .length(10, 'Mobile Number must be 10 characters')
         .required('Mobile Number is required'),
-    residingYears: Yup.number(),
     isOwnProperty: Yup.string()
         .required('Please enter the required value.'),
     maritalStatus: Yup.string()
@@ -104,7 +100,6 @@ export const surveyFormSchemaStep1 = Yup.object().shape({
     mobileNo: Yup.string()
         .length(10, 'Mobile Number must be 10 characters')
         .required('Mobile Number is required'),
-    residingYears: Yup.number(),
     isOwnProperty: Yup.string()
         .required('Please enter the required value.'),
     maritalStatus: Yup.string()
@@ -115,7 +110,6 @@ export const surveyFormSchemaStep1 = Yup.object().shape({
         .required('Please enter the required value.'),
     totalMembers: Yup.number()
         .required('Please enter the required value.'),
-    stayingMembers: Yup.number(),
     religion: Yup.string()
         .required('Please enter the required value.'),
     caste: Yup.string()
@@ -136,7 +130,6 @@ export const surveyFormSchemaStep2 = Yup.object().shape({
     mobileNo: Yup.string()
         .length(10, 'Mobile Number must be 10 characters')
         .required('Mobile Number is required'),
-    residingYears: Yup.number(),
     isOwnProperty: Yup.string()
         .required('Please enter the required value.'),
     maritalStatus: Yup.string()
@@ -147,14 +140,12 @@ export const surveyFormSchemaStep2 = Yup.object().shape({
         .required('Please enter the required value.'),
     totalMembers: Yup.number()
         .required('Please enter the required value.'),
-    stayingMembers: Yup.number(),
     religion: Yup.string()
         .required('Please enter the required value.'),
     caste: Yup.string()
         .required('Please enter the required value.'),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
-    respondentEducation: Yup.string(),
     registeredVoter: Yup.string()
         .required('Please enter the required value.'),
 
@@ -170,7 +161,6 @@ export const surveyFormSchemaStep3 = Yup.object().shape({
     mobileNo: Yup.string()
         .length(10, 'Mobile Number must be 10 characters')
         .required('Mobile Number is required'),
-    residingYears: Yup.number(),
     isOwnProperty: Yup.string()
         .required('Please enter the required value.'),
     maritalStatus: Yup.string()
@@ -181,14 +171,12 @@ export const surveyFormSchemaStep3 = Yup.object().shape({
         .required('Please enter the required value.'),
     totalMembers: Yup.number()
         .required('Please enter the required value.'),
-    stayingMembers: Yup.number(),
     religion: Yup.string()
         .required('Please enter the required value.'),
     caste: Yup.string()
         .required('Please enter the required value.'),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
-    respondentEducation: Yup.string(),
     isParticipated: Yup.string()
         .required('Please enter the required value.'),
     categoryFallUnder: Yup.string()

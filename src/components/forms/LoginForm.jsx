@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { Stack, Button, Box, Typography, Grid, Container } from "@mui/material"
-import { Link, useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from 'react-redux'
-import { Formik, Form } from "formik"
+import React, { useState, useEffect } from 'react';
+import { Button, Box, Typography, Grid, Container } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { Formik, Form } from "formik";
 
-import Alert from '../Alert'
-import { verifyUser } from '../../utils/functions/verifyUser'
-import TextInput from '../inputs/TextInput'
-import { signInSchema } from "../../utils/schemas/auth"
-import { fetchAuthData } from '../../features/auth/authSlice'
+import Alert from '../Alert';
+import { verifyUser } from '../../utils/functions/verifyUser';
+import TextInput from '../inputs/TextInput';
+import { signInSchema } from "../../utils/schemas/auth";
+import { fetchAuthData } from '../../features/auth/authSlice';
 
-const apiUrl = `/auth/signin`
+const apiUrl = `/auth/signin`;
 
 const initialValues = {
   email: '',
@@ -21,25 +21,23 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [loginDetails, setLoginDetails] = useState("")
   const [alert, setAlert] = useState(false);
 
-  const token = localStorage.getItem("surveyApp")
+  const token = localStorage.getItem("surveyApp");
 
   useEffect(() => {
     if (!token) {
-      navigate("/")
+      navigate("/");
     } else {
-      const resp = verifyUser()
+      const resp = verifyUser();
       if (resp) {
         console.log(resp);
-        navigate("/surveys")
+        navigate("/surveys");
       }
     }
   }, [token])
 
-
-  const { error, loading, msg } = useSelector(state => state.auth)
+  const { error, loading, msg } = useSelector(state => state.auth);
 
   const alertfn = () => {
     setTimeout(() => setAlert(true), 100);
@@ -61,11 +59,15 @@ const SignIn = () => {
             .unwrap()
             .then((originalPromiseResult) => {
               if (originalPromiseResult.status) {
-                navigate("/surveys")
+                navigate("/surveys");
               }
             })
-          alertfn()
-          setSubmitting(false);
+            .catch((error) => {
+              alertfn();
+            })
+            .finally(() => {
+              setSubmitting(false);
+            });
         }}
       >
         <Container component="main" maxWidth="sm">
@@ -115,4 +117,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default SignIn;

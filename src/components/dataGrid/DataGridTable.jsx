@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { Button, Stack, FormControl } from '@mui/material';
+import { Stack, FormControl, IconButton } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -149,8 +149,6 @@ export default function SurveyForms() {
             console.log(error)
         }
     }
-
-
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -318,23 +316,37 @@ export default function SurveyForms() {
                                             </TableCell>
                                             {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
                                                 <TableCell style={{ width: 160 }} align="center">
-                                                    {capitalizeFirstLetter(row.userInfo.displayName || "admin")}
+                                                    {capitalizeFirstLetter(row?.userInfo?.displayName) || "Admin"}
                                                 </TableCell>}
                                             <TableCell align="center">
                                                 {formatDate(row.date)}
                                             </TableCell>
-                                            <TableCell align="right">
-                                                <Button onClick={() => navigate(`/formdetail/${row._id}`)} >View</Button>
+                                            <TableCell align="center">
+                                                <IconButton color="primary" aria-label="add to shopping cart"
+                                                    onClick={() => navigate(`/formdetail/${row._id}`)}
+                                                >
+                                                    <VisibilityIcon />
+                                                </IconButton>
+
+                                                {userDetail.userRole === "admin" &&
+                                                    <IconButton color="primary" aria-label="add to shopping cart"
+                                                        onClick={() => navigate(`/form/${row._id}`)}
+                                                    >
+                                                        <EditTwoToneIcon />
+                                                    </IconButton>
+                                                }
                                             </TableCell>
                                         </TableRow>
                                     ))}
-                                    {emptyRows > 0 && (
+                                    {
+                                        emptyRows > 0 &&
                                         <TableRow style={{ height: 53 * emptyRows }}>
                                             <TableCell colSpan={6} />
                                         </TableRow>
-                                    )}
+                                    }
                                 </TableBody>
-                                {(rows.status && rows.data.length > 10) &&
+                                {
+                                    (rows.status && rows.data.length > 10) &&
                                     <CustomTablePagination
                                         count={rows.data.length}
                                         rowsPerPage={rowsPerPage}
@@ -343,28 +355,6 @@ export default function SurveyForms() {
                                         onRowsPerPageChange={handleChangeRowsPerPage}
                                     />
                                 }
-                                {/* {(rows.status && rows.data.length > 10) &&
-                                    <TableFooter>
-                                        <TableRow>
-                                            <TablePagination
-                                                rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
-                                                colSpan={3}
-                                                count={rows.data.length}
-                                                rowsPerPage={rowsPerPage}
-                                                page={page}
-                                                SelectProps={{
-                                                    inputProps: {
-                                                        'aria-label': 'rows per page',
-                                                    },
-                                                    native: true,
-                                                }}
-                                                onPageChange={handleChangePage}
-                                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                                ActionsComponent={TablePaginationActions}
-                                            />
-                                        </TableRow>
-                                    </TableFooter>
-                                } */}
                             </Table>
                     }
                 </>}
