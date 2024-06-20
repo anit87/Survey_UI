@@ -20,3 +20,11 @@
 ::-ms-input-placeholder { /* Microsoft Edge */
   text-transform: capitalize !important;
 }
+
+#select{
+  padding: 7.5px 14px;
+}
+
+.multiple_val .MuiChip-filled{
+  height: auto !important
+}
