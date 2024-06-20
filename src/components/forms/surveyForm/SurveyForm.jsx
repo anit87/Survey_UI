@@ -159,7 +159,6 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                         validateOnChange={false}
                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
                             if (activeStep === 1 && values.religion === 1 && !values.caste) {
-                                console.log("caste ", activeStep, " ", values.religion);
                                 setFieldError("caste", "Please Select Caste");
                             } else if (activeStep !== 4) {
                                 setActiveStep(activeStep + 1);

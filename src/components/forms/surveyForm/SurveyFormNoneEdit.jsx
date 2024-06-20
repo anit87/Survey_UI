@@ -249,10 +249,12 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="isParticipated"
                                             options={trueFalseOptions}
                                             editable={Boolean(formsDetail)}
-                                            textValue={governmentSchemesOptions.find(option => option.value == formsDetail.isParticipated).label}
+                                            textValue={governmentSchemesOptions
+                                                .filter(scheme => formsDetail.isParticipated.includes(scheme.value))
+                                                .map(scheme => scheme.label)
+                                                .join(', ')}
                                         />
                                     </Grid>
-
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
