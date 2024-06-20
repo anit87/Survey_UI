@@ -21,9 +21,7 @@ const SurveyMultiSteps = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [formsDetail, setFormsDetail] = useState({});
-  const [isLoading, setisLoading] = useState(false)
-
-  console.log("check formdetail", formsDetail);
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
     const formKey = id || formId;

@@ -14,7 +14,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyUser';
 import { useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 import CustomTablePagination from '../TablePaginationActions';
 import DynamicDatePicker from '../inputs/DynamicDatePicker';
@@ -22,7 +22,7 @@ import Loader from '../loader';
 import NoData from '../NoData';
 import TableHeader from './TableHeader';
 import { SelectInput } from '../inputs/SelectInput';
-import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants"
+import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants";
 import { useLanguageData } from '../../utils/LanguageContext';
 import { useGetUserTableDataMutation } from '../../features/auth/userDasbord';
 
@@ -36,14 +36,14 @@ const tableCells = [
     { label: '' }
 ]
 
-const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const isAgentActive = (inputDate) => {
-    const inputDateObj = dayjs(inputDate)
+    const inputDateObj = dayjs(inputDate);
     let fiveDaysAgo = new Date();
 
     fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
-    fiveDaysAgo = dayjs(fiveDaysAgo)
+    fiveDaysAgo = dayjs(fiveDaysAgo);
 
     const isAfter = inputDateObj.isAfter(fiveDaysAgo);
     return isAfter
@@ -55,11 +55,11 @@ const formatDate = (dateString) => {
 }
 
 export default function SurveyForms() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const [getUserTableData, { isLoading: verifyLoading, error: verifyError, isError: verifyIsError, data }] = useGetUserTableDataMutation();
 
-    const { translate } = useLanguageData()
+    const { translate } = useLanguageData();
     const incomeOptions = generateIncomeOptions(translate);
     const trueFalseOptions = generateTrueFalseOptions(translate);
     const educationalOptions = generateEducationalOptions(translate);
@@ -71,10 +71,10 @@ export default function SurveyForms() {
     const [rows, setRows] = useState({
         status: false,
         data: []
-    })
+    });
 
     console.log("response rows 55", data);
-    const [isLoading, setisLoading] = useState(false)
+    const [isLoading, setisLoading] = useState(false);
 
     const [filterData, setFilterData] = useState({
         birthdayDate: '',
@@ -92,14 +92,14 @@ export default function SurveyForms() {
     const [activeAgents, setActiveAgents] = useState({
         status: false,
         result: { agents: [], fieldAgents: [] }
-    })
+    });
 
-    const [userDetail, setUserDetail] = useState({})
-    const token = useSelector(state => state.auth.token)
+    const [userDetail, setUserDetail] = useState({});
+    const token = useSelector(state => state.auth.token);
 
     useEffect(() => {
         if (data) {
-            setRows(data);            
+            setRows(data);
         }
     }, [data]);
 
@@ -301,12 +301,12 @@ export default function SurveyForms() {
             {
                 <>
                     {verifyLoading ? <Loader /> :
-                    rows.length < 1 ? <NoData msg="No Surveys Found" /> : rows.status &&
-                        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                            <TableHeader tableCells={userDetail.userRole === "admin" ?
-                                [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :
-                                tableCells}
-                            />
+                        rows.length < 1 ? <NoData msg="No Surveys Found" /> : rows.status &&
+                            <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                                <TableHeader tableCells={userDetail.userRole === "admin" ?
+                                    [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :
+                                    tableCells}
+                                />
                                 <TableBody>
                                     {(rowsPerPage > 0
                                         ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -359,17 +359,17 @@ export default function SurveyForms() {
                                         </TableRow>
                                     }
                                 </TableBody>
-                            {
-                                (rows.status && rows.data.length > 10) &&
-                                <CustomTablePagination
-                                    count={rows.data.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            }
-                        </Table>
+                                {
+                                    (rows.status && rows.data.length > 10) &&
+                                    <CustomTablePagination
+                                        count={rows.data.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                    />
+                                }
+                            </Table>
                     }
                 </>}
         </TableContainer>

@@ -22,36 +22,28 @@ const MenuProps = {
     },
 };
 
-const names = [
-    { label: 'GruhaJyothiScheme', value: 1 },
-    { label: 'GruhaLakshmiScheme', value: 2 },
-    { label: 'YuvaNidhiScheme', value: 3 },
-    { label: 'AnnaBhagyaScheme', value: 4 },
-    { label: 'ShaktiScheme', value: 5 },
-    { label: 'Others', value: 6 },
-    { label: 'None Of Above', value: -1 }
-];
-
-export default function SelectInput1({ label, name, value, changeHandler }) {
+export default function MultiSelectInput({ label, value, changeHandler, setFieldValue, options }) {
     const theme = useTheme();
+
     const handleChange = (event) => {
         const {
             target: { value: selectedValue },
         } = event;
-        let newValue;
 
-        if (selectedValue.includes(-1)) {
+        let newValue = Array.isArray(selectedValue) ? [...selectedValue] : [];
+
+        if (newValue.includes(-1)) {
             newValue = [-1]; // Only allow "None of the Above"
         } else {
-            newValue = selectedValue.filter((val) => val !== -1); // Remove "None of the Above" if other options are selected
+            newValue = newValue.filter((val) => val !== -1); // Remove "None of the Above" if other options are selected
         }
 
-        changeHandler(newValue);
+        setFieldValue('isParticipated', newValue); // Update the form value using setFieldValue
     };
 
     return (
         <div>
-            <FormControl fullWidth className='multiple_selectdata' sx={{marginTop:"8px"}}>
+            <FormControl fullWidth className='multiple_selectdata' sx={{ marginTop: "8px" }}>
                 <Stack direction="row">
                     <Typography
                         variant="h6"
@@ -70,14 +62,14 @@ export default function SelectInput1({ label, name, value, changeHandler }) {
                     renderValue={(selected) => (
                         <Box className="multiple_val" sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                             {selected.map((val) => {
-                                const item = names.find((item) => item.value === val);
+                                const item = options.find((item) => item.value === val);
                                 return item ? <Chip key={val} label={item.label} /> : null;
                             })}
                         </Box>
                     )}
                     MenuProps={MenuProps}
                 >
-                    {names.map((option) => (
+                    {options.map((option) => (
                         <MenuItem key={option.value} value={option.value} >
                             <Checkbox checked={value.indexOf(option.value) > -1} />
                             <ListItemText primary={option.label} />

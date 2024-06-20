@@ -27,8 +27,6 @@ const roles = [
         value: "3"
     }
 ]
-const userRoleOp = [{ label: "User", value: "user" }];
-const fieldRoleOp = [{ label: "Field User", value: "fielduser" }];
 
 const CreateUser = () => {
     const dispatch = useDispatch();
@@ -36,19 +34,19 @@ const CreateUser = () => {
     let { id } = useParams();
     // const { values, submitForm } = useFormikContext();
     const { data, error, loading, msg, token, singleUser } = useSelector(state => state.auth);
+
     const [userRole, setUserRole] = useState("");
     const [agentsList, setAgentsList] = useState([]);
-    const [userToUpdate, setUserToUpdate] = useState({
-        status: false, data: {}
-    });
     const [alert, setAlert] = useState(false);
+
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
     }
+
     useEffect(() => {
-        const { userRole } = verifyUser(token)
-        setUserRole(userRole)
-    }, [userRole])
+        const { userRole } = verifyUser(token);
+        setUserRole(userRole);
+    }, [userRole, token])
 
     useEffect(() => {
         if (id) {
@@ -61,18 +59,18 @@ const CreateUser = () => {
     // console.log("create user , UserRole", userRole);
 
     const allAgents = async () => {
-        const resp = await axios.get(serverURL + '/agentslist')
-        const data = resp.data.data
+        const resp = await axios.get(serverURL + '/agentslist');
+        const data = resp.data.data;
         const newArr = data.map(obj => {
             return { label: obj.displayName, value: obj._id }
         })
-        setAgentsList(newArr)
+        setAgentsList(newArr);
     }
+
     const userToUpdateFn = async () => {
         try {
-            const resp = await axios.get(serverURL + `/getuser/${id}`)
-            dispatch(userToUpdateAction(resp.data.data))
-            // setUserToUpdate(resp.data)
+            const resp = await axios.get(serverURL + `/getuser/${id}`);
+            dispatch(userToUpdateAction(resp.data.data));
         } catch (error) {
             console.log(error);
         }
@@ -85,6 +83,7 @@ const CreateUser = () => {
         confirmPassword: '',
         phoneNumber: id ? singleUser.phoneNumber : '',
         boothNumber: id ? singleUser.boothNumber : '',
+        wardNumber: id ? singleUser.wardNumber : '',
         userRole: id ? singleUser.userRole : "2",
         reportingAgent: ""
     }
@@ -195,21 +194,20 @@ const CreateUser = () => {
                                             />
                                         }
                                     </Grid>
-
-                                    {userRole === 'admin' && formik.values.userRole === '3' &&
+                                    
+                                    {userRole === 'admin' && formik.values.userRole === '3' && !id && (
                                         <Grid item md={6} xs={12}>
-                                            {!id &&
-                                                <SelectInput
-                                                    label="Choose Supervisor"
-                                                    name="reportingAgent"
-                                                    id="reportingAgent"
-                                                    options={agentsList}
-                                                />
-                                            }
+                                            <SelectInput
+                                                label="Choose Supervisor"
+                                                name="reportingAgent"
+                                                id="reportingAgent"
+                                                options={agentsList}
+                                            />
                                         </Grid>
-                                    }
+                                    )}
 
-                                    {userRole === '2' &&
+
+                                    {((userRole === 'admin' && formik.values.userRole === '3') || userRole === '2') &&
                                         <>
                                             <Grid item md={6} xs={12}>
                                                 <TextInput
@@ -226,6 +224,14 @@ const CreateUser = () => {
                                                     name="constituency"
                                                     id="constituency"
                                                     options={constituencyOptions}
+                                                />
+                                            </Grid>
+                                            <Grid item md={6} xs={12}>
+                                                <TextInput
+                                                    label="Ward Number"
+                                                    name="wardNumber"
+                                                    type="number"
+                                                    placeholder="Enter Ward Number"
                                                 />
                                             </Grid>
                                         </>

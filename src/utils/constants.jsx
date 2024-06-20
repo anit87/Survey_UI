@@ -103,7 +103,6 @@ export const generateEducationalOptions = (t) => [
 ]
 
 export const generategovernmentSchemesOptions = (t) => [
-    { label: t('PleaseSelect'), value: "" },
     {
         label: t("GruhaJyothiScheme"),
         value: 1
@@ -130,7 +129,7 @@ export const generategovernmentSchemesOptions = (t) => [
     },
     {
         label: t("None Of Above"),
-        value: 7
+        value: -1
     }
 ]
 

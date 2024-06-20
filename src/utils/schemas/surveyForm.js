@@ -20,7 +20,8 @@ export const surveyFormSchema = Yup.object().shape({
     caste: Yup.string(),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
-    isParticipated: Yup.string()
+    isParticipated: Yup.array()
+        .min(1, 'Please select at least one option')
         .required('Please enter the required value.'),
     categoryFallUnder: Yup.string()
         .required('Please enter the required value.'),
@@ -173,7 +174,8 @@ export const surveyFormSchemaStep3 = Yup.object().shape({
     caste: Yup.string(),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
-    isParticipated: Yup.string()
+    isParticipated: Yup.array()
+        .min(1, 'Please select at least one option')
         .required('Please enter the required value.'),
     categoryFallUnder: Yup.string()
         .required('Please enter the required value.'),
