@@ -6,6 +6,8 @@ import SurveyFormNoneEdit from "./SurveyFormNoneEdit";
 import Navbar from '../../Navbar';
 import axios from "axios";
 import { useLanguageData } from '../../../utils/LanguageContext';
+// import Loader from '../loader';
+import Loader from '../../loader';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/users/record';
 
@@ -19,6 +21,9 @@ const SurveyMultiSteps = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [formsDetail, setFormsDetail] = useState({});
+  const [isLoading, setisLoading] = useState(false)
+
+  console.log("check formdetail", formsDetail);
 
   useEffect(() => {
     const formKey = id || formId;
@@ -29,8 +34,10 @@ const SurveyMultiSteps = () => {
 
   const getFormDetail = async (formKey) => {
     try {
+      setisLoading(true)
       const response = await axios.post(apiUrl, { id: formKey });
       setFormsDetail(response.data.data);
+      setisLoading(false)
     } catch (error) {
       console.error('Error fetching form details:', error);
     }
@@ -61,8 +68,8 @@ const SurveyMultiSteps = () => {
       <div>
         <div >
           {!id && !formId && <SurveyForm activeStep={activeStep} setActiveStep={setActiveStep} formId={null} />}
-          
-          {formId && Object.keys(formsDetail).length > 0 &&
+
+          {isLoading ? <Loader /> : <div>{formId && Object.keys(formsDetail).length > 0 &&
             <SurveyForm
               activeStep={activeStep}
               setActiveStep={setActiveStep}
@@ -70,12 +77,13 @@ const SurveyMultiSteps = () => {
               formId={formId}
             />
           }
-          {id &&
-            <SurveyFormNoneEdit
-              activeStep={activeStep}
-              formsDetail={formsDetail}
-            />
-          }
+            {id &&
+              <SurveyFormNoneEdit
+                activeStep={activeStep}
+                formsDetail={formsDetail}
+              />
+            }
+          </div>}
           <div style={{ margin: activeStep !== steps.length - 1 ? "1.5rem" : "1rem" }}>
             {activeStep !== 0 &&
               <Button disabled={activeStep === 0} onClick={handleBack} variant="contained" color="primary" sx={{ mr: '1rem' }} >

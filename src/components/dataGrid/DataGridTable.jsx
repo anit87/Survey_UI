@@ -24,6 +24,7 @@ import TableHeader from './TableHeader';
 import { SelectInput } from '../inputs/SelectInput';
 import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants"
 import { useLanguageData } from '../../utils/LanguageContext';
+import { useGetUserTableDataMutation } from '../../features/auth/userDasbord';
 
 const tableCells = [
     { label: 'S.No' },
@@ -56,6 +57,8 @@ const formatDate = (dateString) => {
 export default function SurveyForms() {
     const navigate = useNavigate()
 
+    const [getUserTableData, { isLoading: verifyLoading, error: verifyError, isError: verifyIsError, data }] = useGetUserTableDataMutation();
+
     const { translate } = useLanguageData()
     const incomeOptions = generateIncomeOptions(translate);
     const trueFalseOptions = generateTrueFalseOptions(translate);
@@ -69,6 +72,8 @@ export default function SurveyForms() {
         status: false,
         data: []
     })
+
+    console.log("response rows 55", data);
     const [isLoading, setisLoading] = useState(false)
 
     const [filterData, setFilterData] = useState({
@@ -93,6 +98,12 @@ export default function SurveyForms() {
     const token = useSelector(state => state.auth.token)
 
     useEffect(() => {
+        if (data) {
+            setRows(data);            
+        }
+    }, [data]);
+
+    useEffect(() => {
         const user = verifyUser(token)
         setUserDetail(user)
         getActiveUsers()
@@ -109,15 +120,21 @@ export default function SurveyForms() {
 
     const getData = async () => {
         try {
-            const { isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, caste, cweEducation, startDate, endDate } = filterData
+            // const { isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, caste, cweEducation, startDate, endDate } = filterData
 
-            setisLoading(true)
-            const url = `${apiUrl}/users/allrecords?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&caste=${caste}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
+            // setisLoading(true)
+            // const url = `${apiUrl}/users/allrecords?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&caste=${caste}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
 
-            const response = await axios.get(url, { headers })
-            setRows(response.data)
-            setPage(0);
-            setisLoading(false)
+            // const response = await axios.get(url, { headers })
+            // log
+
+            // setRows(response.data)
+            // setPage(0);
+            // setisLoading(false)
+
+            await getUserTableData(filterData)
+
+
         } catch (error) {
             console.log("Error in Dashboard ", error);
         }
@@ -283,16 +300,13 @@ export default function SurveyForms() {
 
             {
                 <>
-                    {isLoading ? <Loader /> :
-                        rows.data.length < 1 ?
-                            <NoData msg="No Surveys Found" /> :
-                            rows.status &&
-                            <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                                <TableHeader tableCells={userDetail.userRole === "admin" ?
-                                    [...tableCells.slice(0, 5), { label: 'Field Agent', textAlign: "center" }, ...tableCells.slice(5)] :
-                                    tableCells}
-                                />
-
+                    {verifyLoading ? <Loader /> :
+                    rows.length < 1 ? <NoData msg="No Surveys Found" /> : rows.status &&
+                        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+                            <TableHeader tableCells={userDetail.userRole === "admin" ?
+                                [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :
+                                tableCells}
+                            />
                                 <TableBody>
                                     {(rowsPerPage > 0
                                         ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -345,17 +359,17 @@ export default function SurveyForms() {
                                         </TableRow>
                                     }
                                 </TableBody>
-                                {
-                                    (rows.status && rows.data.length > 10) &&
-                                    <CustomTablePagination
-                                        count={rows.data.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
-                                }
-                            </Table>
+                            {
+                                (rows.status && rows.data.length > 10) &&
+                                <CustomTablePagination
+                                    count={rows.data.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            }
+                        </Table>
                     }
                 </>}
         </TableContainer>
