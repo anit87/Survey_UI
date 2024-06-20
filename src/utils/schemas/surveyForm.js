@@ -17,8 +17,7 @@ export const surveyFormSchema = Yup.object().shape({
         .required('Please enter the required value.'),
     religion: Yup.string()
         .required('Please enter the required value.'),
-    caste: Yup.string()
-        .required('Please enter the required value.'),
+    caste: Yup.string(),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
     isParticipated: Yup.string()
@@ -112,8 +111,7 @@ export const surveyFormSchemaStep1 = Yup.object().shape({
         .required('Please enter the required value.'),
     religion: Yup.string()
         .required('Please enter the required value.'),
-    caste: Yup.string()
-        .required('Please enter the required value.'),
+    caste: Yup.string(),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
 
@@ -142,8 +140,7 @@ export const surveyFormSchemaStep2 = Yup.object().shape({
         .required('Please enter the required value.'),
     religion: Yup.string()
         .required('Please enter the required value.'),
-    caste: Yup.string()
-        .required('Please enter the required value.'),
+    caste: Yup.string(),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
     registeredVoter: Yup.string()
@@ -173,8 +170,7 @@ export const surveyFormSchemaStep3 = Yup.object().shape({
         .required('Please enter the required value.'),
     religion: Yup.string()
         .required('Please enter the required value.'),
-    caste: Yup.string()
-        .required('Please enter the required value.'),
+    caste: Yup.string(),
     cweEducation: Yup.string()
         .required('Please enter the required value.'),
     isParticipated: Yup.string()

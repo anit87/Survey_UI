@@ -13,6 +13,9 @@ export const signUpSchema = Yup.object().shape({
         .string()
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
         .required('Confirm Password is required'),
+    phoneNumber: Yup.string()
+        .length(10, 'Phone Number must be 10 characters')
+        .required('Phone Number is required'),
 });
 export const updateUserSchema = Yup.object().shape({
     displayName: Yup.string()
@@ -20,6 +23,9 @@ export const updateUserSchema = Yup.object().shape({
     email: Yup.string()
         .email('Invalid email')
         .required('Email is required'),
+    phoneNumber: Yup.string()
+        .length(10, 'Phone Number must be 10 characters')
+        .required('Phone Number is required'),
 });
 
 export const signInSchema = Yup.object().shape({

@@ -173,6 +173,17 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                         />
                                     </Grid>
 
+                                    <Grid item md={6} xs={12}>
+                                        <SelectInput
+                                            label={translate("EducationDetailsCWE")}
+                                            // label="Education Details of Chief Wage Earner (Head of the family)"
+                                            title='I would now like to know the education level of the Chief Wage Earner (CWE) of your household. By Chief Wage Earner, I mean the person who contributes the maximum to the household income'
+                                            id="chiefWageEarnereEducation"
+                                            name="cweEducation"
+                                            editable={Boolean(formsDetail)}
+                                            textValue={educationalOptions.find(option => option.value == formsDetail.cweEducation).label}
+                                        />
+                                    </Grid>
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
@@ -186,29 +197,19 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                         />
                                     </Grid>
 
-                                    <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            // label="Caste"
-                                            label={translate("Caste")}
-                                            title="Caste"
-                                            name="caste"
-                                            placeholder="Kindly Indicate Your Caste"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.caste ? casteOptions.find(option => option.value == formsDetail.caste).label : "Not Found"}
-                                        />
-                                    </Grid>
-
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label={translate("EducationDetailsCWE")}
-                                            // label="Education Details of Chief Wage Earner (Head of the family)"
-                                            title='I would now like to know the education level of the Chief Wage Earner (CWE) of your household. By Chief Wage Earner, I mean the person who contributes the maximum to the household income'
-                                            id="chiefWageEarnereEducation"
-                                            name="cweEducation"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={educationalOptions.find(option => option.value == formsDetail.cweEducation).label}
-                                        />
-                                    </Grid>
+                                    {formsDetail.religion == 1 &&
+                                        <Grid item md={6} xs={12}>
+                                            <TextInput
+                                                // label="Caste"
+                                                label={translate("Caste")}
+                                                title="Caste"
+                                                name="caste"
+                                                placeholder="Kindly Indicate Your Caste"
+                                                editable={Boolean(formsDetail)}
+                                                textValue={formsDetail.caste ? casteOptions.find(option => option.value == formsDetail.caste).label : "N/A"}
+                                            />
+                                        </Grid>
+                                    }
                                 </Grid>}
 
                                 {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -251,7 +252,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             textValue={governmentSchemesOptions.find(option => option.value == formsDetail.isParticipated).label}
                                         />
                                     </Grid>
-                                    
+
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput

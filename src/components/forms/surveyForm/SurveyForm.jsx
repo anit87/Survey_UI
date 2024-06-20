@@ -122,10 +122,12 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
         if (formId && formsDetail) {
             setSelectedFile({ name: formsDetail.voterIdImage });
             setSelectedLocationFile({ name: formsDetail.locationPicture });
+            const extractedVoterIdImg = formsDetail.ageGroupOfMembers.map(member => ({
+                name: member.voterIdImg
+            }));
+            setInputValues(extractedVoterIdImg);
         }
-
     }, [formId, formsDetail])
-
 
     return (
         <>
@@ -150,7 +152,10 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                         validateOnBlur={false}
                         validateOnChange={false}
                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
-                            if (activeStep !== 4) {
+                            if (activeStep === 1 && values.religion === 1 && !values.caste) {
+                                console.log("caste ", activeStep, " ", values.religion);
+                                setFieldError("caste", "Please Select Caste");
+                            } else if (activeStep !== 4) {
                                 setActiveStep(activeStep + 1);
                             } else if (activeStep === 4 && !values.ageGroupOfMembers[0].name) {
                                 setFieldError("ageGroupOfMembers", "Please Enter all Values");
@@ -280,15 +285,6 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label={translate("Religion")}
-                                            title="Kindly Select Your Religion"
-                                            id="religion"
-                                            name="religion"
-                                            options={religionOptions}
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
                                             label={translate("EducationDetailsCWE")}
                                             title='Education level of the Chief Wage Earner (CWE) of your household. Person who contributes the maximum to the household income'
                                             id="chiefWageEarnereEducation"
@@ -299,14 +295,25 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            label={translate("Caste")}
-                                            title="Caste"
-                                            id="caste"
-                                            name="caste"
-                                            options={casteOptions}
+                                            label={translate("Religion")}
+                                            title="Kindly Select Your Religion"
+                                            id="religion"
+                                            name="religion"
+                                            options={religionOptions}
                                         />
                                     </Grid>
 
+                                    {values.religion === 1 &&
+                                        < Grid item md={6} xs={12}>
+                                            <SelectInput
+                                                label={translate("Caste")}
+                                                title="Caste"
+                                                id="caste"
+                                                name="caste"
+                                                options={casteOptions}
+                                            />
+                                        </Grid>
+                                    }
                                 </Grid>}
 
                                 {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -337,8 +344,17 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                             />
                                         </div>
                                         {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
-                                        {selectedFile && <div className='my-2'><h6>{selectedFile.name}</h6> </div>}
+                                        {selectedFile && <div className='my-2'>
+                                            <h6 style={{ fontSize: '1rem', color: '#666' }}>{selectedFile.name}</h6>
+                                        </div>}
                                         {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""))} />}
+
+                                        {formId && formsDetail &&
+                                            < SmallImageCard
+                                                imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`}
+                                                onClick={() => window.open(`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                            />
+                                        }
 
                                     </Grid>
 
@@ -453,10 +469,15 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
 
                                                                 {(typeof inputValues[index] === "string") &&
                                                                     <div className='my-2'> <SmallImageCard imageUrl={inputValues[index]} /></div>
-                                                                    
                                                                 }
+
                                                                 {inputValues[index] &&
-                                                                    <div className='my-2'><h6>{inputValues[index].name}</h6> </div>
+                                                                    <div className='my-2'><h6 style={{ fontSize: '1rem', color: '#666' }}>{inputValues[index].name}</h6> </div>
+                                                                }
+                                                                {formId && formsDetail &&
+                                                                    <SmallImageCard
+                                                                        imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${item.voterIdImg || "Voter_Id_Image/no-image.png"}`}
+                                                                    />
                                                                 }
                                                             </Grid>
 
@@ -482,8 +503,13 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                             />
                                         </div>
                                         {capturedLocationFile && <div className='my-2'> <SmallImageCard imageUrl={capturedLocationFile} /></div>}
-                                        {selectedLocationFile && <div className='my-2'><h6>{selectedLocationFile.name}</h6> </div>}
+                                        {selectedLocationFile && <div className='my-2'><h6 style={{ fontSize: '1rem', color: '#666' }}>{selectedLocationFile.name}</h6> </div>}
                                         {isLocationCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedLocationFile(img), setisLocationCapturing(false), setSelectedLocationFile(""))} />}
+                                        {formId && formsDetail &&
+                                            <SmallImageCard
+                                                imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.locationPicture || "Voter_Id_Image/no-image.png"}`}
+                                            />
+                                        }
 
                                     </Grid>
 
