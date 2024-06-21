@@ -73,7 +73,6 @@ export default function SurveyForms() {
         data: []
     });
 
-    console.log("response rows 55", data);
     const [isLoading, setisLoading] = useState(false);
 
     const [filterData, setFilterData] = useState({
@@ -301,7 +300,7 @@ export default function SurveyForms() {
             {
                 <>
                     {verifyLoading ? <Loader /> :
-                        rows.length < 1 ? <NoData msg="No Surveys Found" /> : rows.status &&
+                        rows.data.length < 1 ? <NoData msg="No Surveys Found" /> : rows.status &&
                             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                                 <TableHeader tableCells={userDetail.userRole === "admin" ?
                                     [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :

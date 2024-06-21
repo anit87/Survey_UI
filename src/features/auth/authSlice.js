@@ -26,7 +26,6 @@ const authSlice = createSlice({
             state.data = null;
         },
         userToUpdate: (state, action) => {
-
             const data = {
                 _id: action.payload._id || "",
                 displayName: action.payload.displayName || "",
@@ -34,8 +33,11 @@ const authSlice = createSlice({
                 userRole: action.payload.userRole || "",
                 phoneNumber: action.payload.phoneNumber ||"",
                 reportingAgent: action.payload.reportingAgent ||"",
+                boothNumber: action.payload.boothNumber ||"",
+                constituency: action.payload.constituency ||"",
+                wardNumber: action.payload.wardNumber ||"",
             }
-            state.singleUser = data
+            state.singleUser = data;
         }
     },
     extraReducers: (builder) => {

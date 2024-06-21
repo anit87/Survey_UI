@@ -31,7 +31,7 @@ const SignIn = () => {
     } else {
       const resp = verifyUser();
       if (resp) {
-        console.log(resp);
+
         navigate("/surveys");
       }
     }

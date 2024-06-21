@@ -84,9 +84,8 @@ export default function SelectTextFields({ id, label, title, options, editable, 
     );
 }
 
-
 const SelectInput = ({ label, name, value, options, changeHandler }) => {
-    console.log("check name", label, name, value, options);
+
     return (
         <FormControl fullWidth >
             <Stack direction="row">

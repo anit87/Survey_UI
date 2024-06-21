@@ -59,7 +59,7 @@ const Navbar = () => {
                             </Link>
                         </li>
 
-                        {userDetail.userRole !== '3' &&
+                        {(userDetail.userRole == 'admin' || userDetail.userRole == 2) &&
                             <li className="nav-item">
                                 <Link to="/allusers" style={{ textDecoration: "none" }} >
                                     <div className='nav-link' style={{ color: "#ffffff" }}> All Users </div>

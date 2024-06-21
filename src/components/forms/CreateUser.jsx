@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Button, Box, Grid } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { Formik, Form, useFormikContext } from "formik";
+import { Formik, Form } from "formik";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { signUpSchema, updateUserSchema } from "../../utils/schemas/auth";
-import { fetchAuthData } from '../../features/auth/authSlice';
+import Alert from '../Alert';
 import TextInput from '../inputs/TextInput';
 import SelectInput from '../inputs/SelectInput';
-import Alert from '../Alert';
+import { fetchAuthData } from '../../features/auth/authSlice';
 import { verifyUser } from '../../utils/functions/verifyUser';
-import axios from 'axios';
+import { signUpSchema, updateUserSchema } from "../../utils/schemas/auth";
 import { userToUpdate as userToUpdateAction } from '../../features/auth/authSlice';
 import { constituencyOptions } from '../../utils/constants';
 
@@ -32,7 +32,6 @@ const CreateUser = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let { id } = useParams();
-    // const { values, submitForm } = useFormikContext();
     const { data, error, loading, msg, token, singleUser } = useSelector(state => state.auth);
 
     const [userRole, setUserRole] = useState("");
@@ -56,7 +55,6 @@ const CreateUser = () => {
             allAgents()
         }
     }, [])
-    // console.log("create user , UserRole", userRole);
 
     const allAgents = async () => {
         const resp = await axios.get(serverURL + '/agentslist');
@@ -83,11 +81,12 @@ const CreateUser = () => {
         confirmPassword: '',
         phoneNumber: id ? singleUser.phoneNumber : '',
         boothNumber: id ? singleUser.boothNumber : '',
+        constituency: id ? singleUser?.constituency : '',
         wardNumber: id ? singleUser.wardNumber : '',
         userRole: id ? singleUser.userRole : "2",
         reportingAgent: ""
     }
-    // console.log("singleUser", singleUser);
+
     return (
         <>
             <Alert open={alert} type={error ? "error" : "info"} msg={msg} onClose={() => setAlert(false)} />
@@ -194,7 +193,7 @@ const CreateUser = () => {
                                             />
                                         }
                                     </Grid>
-                                    
+
                                     {userRole === 'admin' && formik.values.userRole === '3' && !id && (
                                         <Grid item md={6} xs={12}>
                                             <SelectInput

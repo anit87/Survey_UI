@@ -4,20 +4,20 @@ import { Formik, Form, FieldArray } from "formik";
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
+
+import Alert from '../../Alert';
 import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput';
-import Alert from '../../Alert';
+import MultiSelectInput from '../../inputs/MultiSelectInput';
 import { verifyUser } from '../../../utils/functions/verifyUser';
-import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions, generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions } from '../../../utils/constants';
 import { getLocation } from '../../../utils/location/getLocation';
 import FileUpload from '../../inputs/FileUpload';
-import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
-
 import CameraCapture from '../../CameraCapture';
 import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
-import MultiSelectInput from '../../inputs/MultiSelectInput';
+import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
+import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
+import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions, generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions } from '../../../utils/constants';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/forms';
 
