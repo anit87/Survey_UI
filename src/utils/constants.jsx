@@ -158,7 +158,8 @@ export const generateCasteOptions = (t) => [
     { label: t("Caste.SC"), value: 5 },
     { label: t("Caste.ST"), value: 6 },
     { label: t("Caste.OBC"), value: 7 },
-    { label: t("Caste.Others"), value: 8 }
+    { label: t("Caste.Others"), value: 8 },
+    { label: t("Caste.Prefernottosay"), value: 9 }
 ]
 
 export const constituencyOptions = [
