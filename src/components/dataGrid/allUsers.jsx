@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import axios from 'axios';
-import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
 import { grey } from '@mui/material/colors'
+
+import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
 import { useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../loader';
 import NoData from '../NoData';
 import { userToUpdate } from '../../features/auth/authSlice';
-import { fetchUsersData } from '../../features/auth/usersSlice';
 import TableHeader from './TableHeader';
 
 const tableCells = [{ label: '' }, { label: 'S.No' }, { label: 'Name' }, { label: 'Phone' }, { label: 'Email' }, { label: 'Role' }, { label: '' }]

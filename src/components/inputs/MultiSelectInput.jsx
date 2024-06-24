@@ -7,7 +7,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import { useTheme } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import { useField } from "formik"
@@ -22,9 +21,8 @@ const MenuProps = {
         },
     },
 };
- 
-export default function MultiSelectInput({ label, value, changeHandler, setFieldValue, options,...props }) {
-    const theme = useTheme();
+
+export default function MultiSelectInput({ label, value, changeHandler, setFieldValue, options, ...props }) {
     const [field, meta] = useField(props);
 
     const handleChange = (event) => {
@@ -72,7 +70,6 @@ export default function MultiSelectInput({ label, value, changeHandler, setField
                     MenuProps={MenuProps}
                     error={Boolean(meta.touched && meta.error)}
                     helperText={Boolean(meta.touched && meta.error) ? meta.error : `   `}
-                    {...field} {...props}
                 >
                     {options.map((option) => (
                         <MenuItem key={option.value} value={option.value} >

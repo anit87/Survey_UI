@@ -68,7 +68,6 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
     const [selectedLocationFile, setSelectedLocationFile] = useState(null);
     const [capturedLocationFile, setcapturedLocationFile] = useState(null);
     const [isLocationCapturing, setisLocationCapturing] = useState(false);
-    const [selectedSchemes, setSelectedSchemes] = useState([]);
 
     const token = localStorage.getItem('surveyApp');
     const mydata = useSelector(state => state.auth);
@@ -131,10 +130,6 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
         }
     }, [formId, formsDetail])
 
-    const handleMultiChange = (newValues) => {
-        setSelectedSchemes(newValues);
-    };
-
     return (
         <>
             <Alert open={alert} type={!savedResp.status ? "error" : "info"} msg={savedResp.msg} onClose={() => setAlert(false)} />
@@ -160,6 +155,8 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
                             if (activeStep === 1 && values.religion === 1 && !values.caste) {
                                 setFieldError("caste", "Please Select Caste");
+                            }if (activeStep === 3 && !values.isParticipated) {
+                                setFieldError("isParticipated", "Please Select Government Schemes");
                             } else if (activeStep !== 4) {
                                 setActiveStep(activeStep + 1);
                             } else if (activeStep === 4 && !values.ageGroupOfMembers[0].name) {
@@ -386,9 +383,7 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                             <MultiSelectInput
                                                 label={translate('GovernmentSchemes')}
                                                 name="isParticipated"
-                                                // value={selectedSchemes}
                                                 value={formik.values.isParticipated}
-                                                // changeHandler={handleMultiChange}
                                                 options={governmentSchemesOptions}
                                                 setFieldValue={formik.setFieldValue}
                                             />
