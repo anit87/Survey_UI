@@ -57,7 +57,12 @@ const CreateUser = () => {
     }, [])
 
     const allAgents = async () => {
-        const resp = await axios.get(serverURL + '/agentslist');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem("surveyApp"),
+        };
+        
+        const resp = await axios.get(serverURL + '/agentslist', { headers });
         const data = resp.data.data;
         const newArr = data.map(obj => {
             return { label: obj.displayName, value: obj._id }
