@@ -329,7 +329,7 @@ export default function SurveyForms() {
                                             </TableCell>
                                             {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
                                                 <TableCell style={{ width: 160 }} align="center">
-                                                    {capitalizeFirstLetter(row?.userInfo?.displayName) || "Admin"}
+                                                    {capitalizeFirstLetter(row?.filledBy?.displayName) || "Admin"}
                                                 </TableCell>}
                                             <TableCell align="center">
                                                 {formatDate(row.date)}
