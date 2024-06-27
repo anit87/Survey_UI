@@ -153,32 +153,39 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                         validateOnBlur={false}
                         validateOnChange={false}
                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
-                            if (activeStep === 1 && values.religion === 1 && !values.caste) {
-                                setFieldError("caste", "Please Select Caste");
-                            }if (activeStep === 3 && !values.isParticipated) {
-                                setFieldError("isParticipated", "Please Select Government Schemes");
-                            } else if (activeStep !== 4) {
-                                setActiveStep(activeStep + 1);
-                            } else if (activeStep === 4 && !values.ageGroupOfMembers[0].name) {
-                                setFieldError("ageGroupOfMembers", "Please Enter all Values");
-                            } else {
-                                // const locat = await getLocation()
-                                const formData = objectToFormData(values)
-                                formData.append('voterIdImage', selectedFile);
-                                formData.append('voterIdImagee', capturedFile);
-                                formData.append('locationPicture', selectedLocationFile);
-                                formData.append('locationPicturee', capturedLocationFile);
-                                // formData.append('location', JSON.stringify(locat));
-                                formData.append('filledBy', userId);
-                                if (inputValues.length > 0) {
-                                    appendArrayToFormData(formData, 'voterIdImageMember', inputValues)
-                                }
+                            try {
+                                setSubmitting(true);
+                                if (activeStep === 1 && values.religion === 1 && !values.caste) {
+                                    setFieldError("caste", "Please Select Caste");
+                                } else if (activeStep === 3 && !values.isParticipated) {
+                                    setFieldError("isParticipated", "Please Select Government Schemes");
+                                } else if (activeStep !== 4) {
+                                    setActiveStep(activeStep + 1);
+                                } else if (activeStep === 4 && !values.ageGroupOfMembers[0].name) {
+                                    setFieldError("ageGroupOfMembers", "Please Enter all Values");
+                                } else {
+                                    // const locat = await getLocation()
+                                    const formData = objectToFormData(values)
+                                    formData.append('voterIdImage', selectedFile);
+                                    formData.append('voterIdImagee', capturedFile);
+                                    formData.append('locationPicture', selectedLocationFile);
+                                    formData.append('locationPicturee', capturedLocationFile);
+                                    // formData.append('location', JSON.stringify(locat));
+                                    formData.append('filledBy', userId);
+                                    if (inputValues.length > 0) {
+                                        appendArrayToFormData(formData, 'voterIdImageMember', inputValues)
+                                    }
 
-                                const resp = formId ? await axios.put(`${apiUrl}/${formId}`, formData) : await axios.post(apiUrl, formData);
-                                setSavedResp(resp.data);
-                                alertfn();
-                                resetForm();
-                                setActiveStep(0);
+                                    const resp = formId ? await axios.put(`${apiUrl}/${formId}`, formData) : await axios.post(apiUrl, formData);
+                                    setSavedResp(resp.data);
+                                    alertfn();
+                                    resetForm();
+                                    setActiveStep(0);
+                                }
+                            } catch (error) {
+                                console.error('Submission error:', error);
+                                // Optionally, set a global error message for the form
+                                setFieldError('submission', 'An error occurred during submission. Please try again.');
                                 setSubmitting(false);
                             }
                         }}
@@ -541,11 +548,15 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
 
                                     </Grid>}
                                     <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
-                                        {<Button variant='contained' style={{ textAlign: "right" }} type='submit'
-                                            sx={{ mt: 3, pl: 3, pr: 3 }}
-                                        >
-                                            {activeStep === 4 ? translate("Submit") : translate("Next")}
-                                        </Button>
+                                        {
+                                            <Button variant='contained'
+                                                type='submit'
+                                                disabled={activeStep === 4 && formik.isSubmitting}
+                                                style={{ textAlign: "right" }}
+                                                sx={{ mt: 3, pl: 3, pr: 3 }}
+                                            >
+                                                {activeStep === 4 ? translate("Submit") : translate("Next")}
+                                            </Button>
                                         }
                                     </div>
 

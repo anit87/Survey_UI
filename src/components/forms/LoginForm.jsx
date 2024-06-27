@@ -60,6 +60,8 @@ const SignIn = () => {
             .then((originalPromiseResult) => {
               if (originalPromiseResult.status) {
                 navigate("/surveys");
+              } else if (originalPromiseResult.status === false) {
+                alertfn();
               }
             })
             .catch((error) => {
