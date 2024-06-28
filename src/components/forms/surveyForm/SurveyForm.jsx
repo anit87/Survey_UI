@@ -4,6 +4,7 @@ import { Formik, Form, FieldArray } from "formik";
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
 import Alert from '../../Alert';
 import TextInput from '../../inputs/TextInput';
@@ -45,6 +46,7 @@ const FieldArrayRemoveIcon = ({ index, arrayHelpers, array, translate }) => {
 
 const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = null }) => {
     const theme = useTheme();
+    const navigate = useNavigate();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const { translate } = useLanguageData();
@@ -181,6 +183,7 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                     alertfn();
                                     resetForm();
                                     setActiveStep(0);
+                                    formId && navigate('/surveys');
                                 }
                             } catch (error) {
                                 console.error('Submission error:', error);
