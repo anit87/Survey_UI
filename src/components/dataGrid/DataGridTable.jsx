@@ -24,7 +24,7 @@ import TableHeader from './TableHeader';
 import { SelectInput } from '../inputs/SelectInput';
 import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants";
 import { useLanguageData } from '../../utils/LanguageContext';
-import { useGetUserTableDataMutation } from '../../features/auth/userDasbord';
+import { useGetSurveyFormsMutation } from '../../features/auth/userDasbord';
 
 const tableCells = [
     { label: 'S.No' },
@@ -56,24 +56,12 @@ const formatDate = (dateString) => {
 
 export default function SurveyForms() {
     const navigate = useNavigate();
-
-    const [getUserTableData, { isLoading: verifyLoading, error: verifyError, isError: verifyIsError, data }] = useGetUserTableDataMutation();
-
+    const token = useSelector(state => state.auth.token);
     const { translate } = useLanguageData();
-    const incomeOptions = generateIncomeOptions(translate);
-    const trueFalseOptions = generateTrueFalseOptions(translate);
-    const educationalOptions = generateEducationalOptions(translate);
-    const casteOptions = generateCasteOptions(translate);
-    const religionOptions = generatereligionOptions(translate);
 
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [rows, setRows] = useState({
-        status: false,
-        data: []
-    });
-
-    const [isLoading, setisLoading] = useState(false);
+    const [userDetail, setUserDetail] = useState({});
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const [filterData, setFilterData] = useState({
         birthdayDate: '',
@@ -84,7 +72,7 @@ export default function SurveyForms() {
         religion: '',
         caste: '',
         cweEducation: '',
-        startDate: '2023-08-01',
+        startDate: moment().subtract(1, 'months').format('YYYY-MM-DD'), // Setting defaultValue to today's date with previous month
         endDate: new Date().toISOString().slice(0, 10)
     });
 
@@ -93,23 +81,19 @@ export default function SurveyForms() {
         result: { agents: [], fieldAgents: [] }
     });
 
-    const [userDetail, setUserDetail] = useState({});
-    const token = useSelector(state => state.auth.token);
+    const [getSurveyForms, { isLoading: verifyLoading, data }] = useGetSurveyFormsMutation();
+
+    const incomeOptions = generateIncomeOptions(translate);
+    const trueFalseOptions = generateTrueFalseOptions(translate);
+    const educationalOptions = generateEducationalOptions(translate);
+    const casteOptions = generateCasteOptions(translate);
+    const religionOptions = generatereligionOptions(translate);
 
     useEffect(() => {
-        if (data) {
-            setRows(data);
-        }
-    }, [data]);
-
-    useEffect(() => {
-        const user = verifyUser(token)
-        setUserDetail(user)
-        getActiveUsers()
-    }, [])
-
-    useEffect(() => {
-        getData()
+        const user = verifyUser(token);
+        setUserDetail(user);
+        getActiveUsers();
+        getData();
     }, [filterData])
 
     const headers = {
@@ -119,18 +103,7 @@ export default function SurveyForms() {
 
     const getData = async () => {
         try {
-            // const { isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, caste, cweEducation, startDate, endDate } = filterData
-            // setisLoading(true)
-            // const url = `${apiUrl}/users/allrecords?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&caste=${caste}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
-
-            // const response = await axios.get(url, { headers })
-
-            // setRows(response.data)
-            // setPage(0);
-            // setisLoading(false)
-
-            await getUserTableData(filterData);
-
+            await getSurveyForms(filterData);
         } catch (error) {
             console.log("Error in Dashboard ", error);
         }
@@ -165,7 +138,7 @@ export default function SurveyForms() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.data.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (data?.data?.length || 0)) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -180,7 +153,7 @@ export default function SurveyForms() {
         setFilterData({
             ...filterData,
             [e.target.name]: e.target.value
-        })
+        });
     }
 
     return (
@@ -239,7 +212,7 @@ export default function SurveyForms() {
                 <DynamicDatePicker
                     label="Filled From"
                     name="startDate"
-                    defaultValue='2023-08-01'
+                    defaultValue={filterData.startDate}
                     minDate="2023-08-01"
                     filterData={filterData}
                     setFilterData={setFilterData}
@@ -297,7 +270,7 @@ export default function SurveyForms() {
             {
                 <>
                     {verifyLoading ? <Loader /> :
-                        rows.data.length < 1 ? <NoData msg="No Surveys Found" /> : rows.status &&
+                        (!data || data.data.length < 1) ? <NoData msg="No Surveys Found" /> : data.status &&
                             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
                                 <TableHeader tableCells={userDetail.userRole === "admin" ?
                                     [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :
@@ -305,8 +278,8 @@ export default function SurveyForms() {
                                 />
                                 <TableBody>
                                     {(rowsPerPage > 0
-                                        ? rows.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : rows.data
+                                        ? data.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : data.data
                                     ).map((row, i) => (
                                         <TableRow key={row._id}>
                                             <TableCell component="th" scope="row">
@@ -356,9 +329,9 @@ export default function SurveyForms() {
                                     }
                                 </TableBody>
                                 {
-                                    (rows.status && rows.data.length > 10) &&
+                                    (data.status && data.data.length > 10) &&
                                     <CustomTablePagination
-                                        count={rows.data.length}
+                                        count={data.data.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         onPageChange={handleChangePage}

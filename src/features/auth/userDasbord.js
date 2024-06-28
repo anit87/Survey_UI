@@ -17,7 +17,7 @@ export const userDashboard = createApi({
     tagTypes: ['users'],
     endpoints: (builder) => ({
 
-        getUserTableData: builder.mutation({
+        getSurveyForms: builder.mutation({
             query: (body) => ({
                 url: `users/allrecords`,
                 params: {
@@ -40,4 +40,4 @@ export const userDashboard = createApi({
     }),
 });
 
-export const {useGetUserTableDataMutation } = userDashboard;
+export const {useGetSurveyFormsMutation } = userDashboard;
