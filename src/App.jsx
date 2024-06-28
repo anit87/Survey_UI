@@ -1,18 +1,17 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import './App.css'
-import ProtectedRoute from "./components/ProtectedRoute"
-import LoginSignUp from './pages/LoginSignUp'
-import SignIn from './components/forms/LoginForm'
-import ResetPassword from './components/forms/ResetPassword'
-import Layout from './components/admin/ClippedDrawer'
-import CreateUser from './components/forms/CreateUser'
-import SurveyMultiStepForm from './components/forms/surveyForm/SurveyMultiSteps'
-import CollapsibleTable from './components/dataGrid/allUsers'
-import RecordsbyUser from './components/dataGrid/RecordsbyUser'
-import DataGridTable from './components/dataGrid/DataGridTable'
-
-import { LanguageProvider } from './utils/LanguageContext'
+import React from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './App.css';
+import ProtectedRoute from "./components/ProtectedRoute";
+import LoginSignUp from './pages/LoginSignUp';
+import SignIn from './components/forms/LoginForm';
+import ResetPassword from './components/forms/ResetPassword';
+import Layout from './components/admin/ClippedDrawer';
+import CreateUser from './components/forms/CreateUser';
+import SurveyMultiStepForm from './components/forms/surveyForm/SurveyMultiSteps';
+import CollapsibleTable from './components/dataGrid/allUsers';
+import RecordsbyUser from './components/dataGrid/RecordsbyUser';
+import DataGridTable from './components/dataGrid/DataGridTable';
+import { LanguageProvider } from './utils/LanguageContext';
 
 function App() {
   return (
@@ -40,4 +39,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

@@ -120,19 +120,16 @@ export default function SurveyForms() {
     const getData = async () => {
         try {
             // const { isOwnProperty, maritalStatus, monthlyHouseholdIncome, occupationStatus, religion, caste, cweEducation, startDate, endDate } = filterData
-
             // setisLoading(true)
             // const url = `${apiUrl}/users/allrecords?isOwnProperty=${isOwnProperty.toString() || ""}&maritalStatus=${maritalStatus || ""}&monthlyHouseholdIncome=${monthlyHouseholdIncome || ""}&occupationStatus=${occupationStatus}&religion=${religion}&caste=${caste}&cweEducation=${cweEducation}&startDate=${startDate}&endDate=${endDate}`
 
             // const response = await axios.get(url, { headers })
-            // log
 
             // setRows(response.data)
             // setPage(0);
             // setisLoading(false)
 
-            await getUserTableData(filterData)
-
+            await getUserTableData(filterData);
 
         } catch (error) {
             console.log("Error in Dashboard ", error);

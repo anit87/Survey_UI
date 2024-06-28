@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
@@ -12,28 +13,27 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import { grey } from '@mui/material/colors';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { grey } from '@mui/material/colors'
 
-import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
-import { useNavigate } from "react-router-dom"
 import Loader from '../loader';
 import NoData from '../NoData';
-import { userToUpdate } from '../../features/auth/authSlice';
 import TableHeader from './TableHeader';
+import { userToUpdate } from '../../features/auth/authSlice';
+import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
 
-const tableCells = [{ label: '' }, { label: 'S.No' }, { label: 'Name' }, { label: 'Phone' }, { label: 'Email' }, { label: 'Role' }, { label: '' }]
+const tableCells = [{ label: '' }, { label: 'S.No' }, { label: 'Name' }, { label: 'Phone' }, { label: 'Email' }, { label: 'Role' }, { label: '' }];
 
 const subText = grey[600];
 
-const apiUrl = import.meta.env.VITE_API_URL + '/users'
+const apiUrl = import.meta.env.VITE_API_URL + '/users';
 
-function Row(props) {
-  const { row, index, userDetail } = props;
+function Row({ row, index, userDetail }) {
+
   const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <React.Fragment>
@@ -64,8 +64,8 @@ function Row(props) {
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1, maxHeight: open ? '200px' : '0', overflow: 'hidden', transition: 'max-height 0.5s ease' }}>
-              {/* <Box sx={{ margin: 1 }}> */}
+              <Box sx={{ margin: 1, maxHeight: open ? '200px' : '0', overflow: 'hidden', transition: 'max-height 0.5s ease' }}>
+                {/* <Box sx={{ margin: 1 }}> */}
                 <Typography variant="h6" gutterBottom component="div">
                   {row.fieldUsers.length < 1
                     ? "No Field Agent"
@@ -111,34 +111,41 @@ function Row(props) {
 
 
 export default function CollapsibleTable() {
-  const navigate = useNavigate()
-  const { token } = useSelector(state => state.auth)
+  const navigate = useNavigate();
+  const { token } = useSelector(state => state.auth);
   const [users, setUsers] = useState({
     status: false,
     result: []
-  })
-  const [userDetail, setUserDetail] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
+  });
+  const [userDetail, setUserDetail] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getUsers()
+    getUsers();
   }, [])
 
   useEffect(() => {
-    const user = verifyUser(token)
-    setUserDetail(user)
+    const user = verifyUser(token);
+    setUserDetail(user);
   }, [])
 
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': localStorage.getItem("surveyApp"),
   };
+
   const getUsers = async () => {
-    setIsLoading(true)
-    const response = await axios.get(apiUrl, { headers })
-    setUsers(response.data)
-    setIsLoading(false)
-  }
+    try {
+      setIsLoading(true);
+      const response = await axios.get(apiUrl, { headers });
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <div className='d-flex justify-content-between m-3'>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
@@ -14,17 +14,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
-const TableHeader = ({tableCells}) => {
+const TableHeader = ({ tableCells }) => {
     return (
         <TableHead>
             <TableRow>
                 {
-                    tableCells.map((obj, index)=><StyledTableCell key={index} align={obj.textAlign||"left"}>{obj.label}</StyledTableCell>)
+                    tableCells.map((obj, index) => <StyledTableCell key={index} align={obj.textAlign || "left"}>{obj.label}</StyledTableCell>)
                 }
             </TableRow>
         </TableHead>
     )
 }
 
-export default TableHeader
-export {StyledTableCell}
+export default TableHeader;
+export { StyledTableCell };

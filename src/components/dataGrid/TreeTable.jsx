@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Button } from "react-bootstrap"
+import React, { useState } from 'react';
 import "./allUsers.css";
-import axios from 'axios';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -45,7 +43,6 @@ function TreeTable(props) {
 
                         </tr>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-
                             {row.fieldUsers.map((subcategory, i) => (
                                 <tr key={subcategory._id} className="subcategory-row">
                                     <td>{parseInt(i) + 1}</td>
@@ -62,8 +59,4 @@ function TreeTable(props) {
         </table>
     );
 }
-export default TreeTable
-
-
-
-{/* <TreeTable deleteFn={deleteFn} editFn={props.editFn} data={data} /> */ }
+export default TreeTable;
