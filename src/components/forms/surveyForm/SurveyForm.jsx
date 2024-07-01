@@ -19,6 +19,7 @@ import { useLanguageData } from '../../../utils/LanguageContext';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
 import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
 import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions, generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions } from '../../../utils/constants';
+import Loader from '../../loader';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/forms';
 
@@ -209,360 +210,365 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
 
                             return (
                                 < Form >
-                                    <br />
-                                    {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                    {formik.isSubmitting ? <Loader /> :
+                                        <div>
+                                            <br />
+                                            {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-                                        <Grid item md={6} xs={12}>
-                                            <TextInput
-                                                label={translate("ApplicantName")}
-                                                title="Please Enter Your Name"
-                                                name="respondentName"
-                                                type="text"
-                                                placeholder="Please Provide Your Full Name"
-                                            />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <TextInput
-                                                label={translate("Address")}
-                                                title="Please Enter Your Full Address"
-                                                name="address"
-                                                type="text"
-                                                placeholder="Enter Your Full Mailing Address Here"
-                                            />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <TextInput
-                                                label={translate('Pincode')}
-                                                title="Enter Your Area Pincode"
-                                                name="pincode"
-                                                type="number"
-                                                placeholder="454545"
-                                            />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <TextInput
-                                                label={translate('MobileNumber')}
-                                                title="Enter Your Mobile No"
-                                                name="mobileNo"
-                                                type="number"
-                                                placeholder="9874563210"
-                                            />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <SelectInput
-                                                label={translate('MaritalStatus')}
-                                                title="Are You Married?"
-                                                id="maritalStatus"
-                                                name="maritalStatus"
-                                                options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
-                                            />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <SelectInput
-                                                label={translate('OccupationStatus')}
-                                                title="Can You Please Tell Me Your Occupation Status?"
-                                                id="occupationStatus"
-                                                name="occupationStatus"
-                                                options={[
-                                                    { label: translate('Self-employed'), value: "1" },
-                                                    { label: translate('Full-time'), value: "2" },
-                                                    { label: translate('Part-time/freelancer'), value: "3" },
-                                                    { label: translate('Home maker'), value: "4" }
-                                                ]}
-                                            />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <SelectInput
-                                                label={translate('MHI')}
-                                                title="What is the Monthly Household Income (MHI)."
-                                                id="monthlyHouseholdIncome"
-                                                name="monthlyHouseholdIncome"
-                                                options={incomeOptions}
-                                            />
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <SelectInput
-                                                label={translate('OwnProperty')}
-                                                title="Is This Your Own Property?"
-                                                name="isOwnProperty"
-                                                id="isOwnProperty"
-                                                options={trueFalseOptions}
-                                            />
-                                        </Grid>
-                                    </Grid>}
-
-                                    {activeStep === 1 &&
-                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                            <Grid item md={6} xs={12}>
-                                                <TextInput
-                                                    label={translate("TotalMembers")}
-                                                    title="Total Number of Members in Your Family"
-                                                    name="totalMembers"
-                                                    type="number"
-                                                    placeholder="Total Members"
-                                                />
-                                            </Grid>
-
-                                            <Grid item md={6} xs={12}>
-                                                <SelectInput
-                                                    label={translate("EducationDetailsCWE")}
-                                                    title='Education level of the Chief Wage Earner (CWE) of your household. Person who contributes the maximum to the household income'
-                                                    id="chiefWageEarnereEducation"
-                                                    name="cweEducation"
-                                                    options={educationalOptions}
-                                                />
-                                            </Grid>
-
-                                            <Grid item md={6} xs={12}>
-                                                <SelectInput
-                                                    label={translate("Religion")}
-                                                    title="Kindly Select Your Religion"
-                                                    id="religion"
-                                                    name="religion"
-                                                    options={religionOptions}
-                                                />
-                                            </Grid>
-
-                                            {shouldRender &&
-                                                < Grid item md={6} xs={12}>
-                                                    <SelectInput
-                                                        label={translate("Caste")}
-                                                        title="Caste"
-                                                        id="caste"
-                                                        name="caste"
-                                                        options={casteOptions}
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate("ApplicantName")}
+                                                        title="Please Enter Your Name"
+                                                        name="respondentName"
+                                                        type="text"
+                                                        placeholder="Please Provide Your Full Name"
                                                     />
                                                 </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate("Address")}
+                                                        title="Please Enter Your Full Address"
+                                                        name="address"
+                                                        type="text"
+                                                        placeholder="Enter Your Full Mailing Address Here"
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate('Pincode')}
+                                                        title="Enter Your Area Pincode"
+                                                        name="pincode"
+                                                        type="number"
+                                                        placeholder="454545"
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate('MobileNumber')}
+                                                        title="Enter Your Mobile No"
+                                                        name="mobileNo"
+                                                        type="number"
+                                                        placeholder="9874563210"
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('MaritalStatus')}
+                                                        title="Are You Married?"
+                                                        id="maritalStatus"
+                                                        name="maritalStatus"
+                                                        options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('OccupationStatus')}
+                                                        title="Can You Please Tell Me Your Occupation Status?"
+                                                        id="occupationStatus"
+                                                        name="occupationStatus"
+                                                        options={[
+                                                            { label: translate('Self-employed'), value: "1" },
+                                                            { label: translate('Full-time'), value: "2" },
+                                                            { label: translate('Part-time/freelancer'), value: "3" },
+                                                            { label: translate('Home maker'), value: "4" }
+                                                        ]}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('MHI')}
+                                                        title="What is the Monthly Household Income (MHI)."
+                                                        id="monthlyHouseholdIncome"
+                                                        name="monthlyHouseholdIncome"
+                                                        options={incomeOptions}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('OwnProperty')}
+                                                        title="Is This Your Own Property?"
+                                                        name="isOwnProperty"
+                                                        id="isOwnProperty"
+                                                        options={trueFalseOptions}
+                                                    />
+                                                </Grid>
+                                            </Grid>}
+
+                                            {activeStep === 1 &&
+                                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                    <Grid item md={6} xs={12}>
+                                                        <TextInput
+                                                            label={translate("TotalMembers")}
+                                                            title="Total Number of Members in Your Family"
+                                                            name="totalMembers"
+                                                            type="number"
+                                                            placeholder="Total Members"
+                                                        />
+                                                    </Grid>
+
+                                                    <Grid item md={6} xs={12}>
+                                                        <SelectInput
+                                                            label={translate("EducationDetailsCWE")}
+                                                            title='Education level of the Chief Wage Earner (CWE) of your household. Person who contributes the maximum to the household income'
+                                                            id="chiefWageEarnereEducation"
+                                                            name="cweEducation"
+                                                            options={educationalOptions}
+                                                        />
+                                                    </Grid>
+
+                                                    <Grid item md={6} xs={12}>
+                                                        <SelectInput
+                                                            label={translate("Religion")}
+                                                            title="Kindly Select Your Religion"
+                                                            id="religion"
+                                                            name="religion"
+                                                            options={religionOptions}
+                                                        />
+                                                    </Grid>
+
+                                                    {shouldRender &&
+                                                        < Grid item md={6} xs={12}>
+                                                            <SelectInput
+                                                                label={translate("Caste")}
+                                                                title="Caste"
+                                                                id="caste"
+                                                                name="caste"
+                                                                options={casteOptions}
+                                                            />
+                                                        </Grid>
+                                                    }
+                                                </Grid>
                                             }
-                                        </Grid>
-                                    }
 
-                                    {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                            {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-                                        <Grid item md={6} xs={12}>
-                                            <SelectInput
-                                                label={translate('RegisteredVoter')}
-                                                title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
-                                                name="registeredVoter"
-                                                id="registeredVoter"
-                                                options={trueFalseOptions}
-                                            />
-                                        </Grid>
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('RegisteredVoter')}
+                                                        title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
+                                                        name="registeredVoter"
+                                                        id="registeredVoter"
+                                                        options={trueFalseOptions}
+                                                    />
+                                                </Grid>
 
-                                        <Grid item md={6} xs={12}>
-                                            <TextInput
-                                                label={translate("VoterID")}
-                                                title={translate('VoterIDPlaceholder')}
-                                                name="voterIdNumber"
-                                                type="text"
-                                                placeholder={translate('VoterIDPlaceholder')}
-                                            />
-                                            <div className='d-flex'>
-                                                <Button className='mx-2' type="button" onClick={() => setisCapturing(true)}>{translate('Capture')}</Button>
-                                                <FileUpload name="voterIdImage"
-                                                    onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)}
-                                                    selectedFile={selectedFile}
-                                                />
-                                            </div>
-                                            {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
-                                            {selectedFile && <div className='my-2'>
-                                                <h6 style={{ fontSize: '1rem', color: '#666' }}>{selectedFile.name}</h6>
-                                            </div>}
-                                            {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""))} />}
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate("VoterID")}
+                                                        title={translate('VoterIDPlaceholder')}
+                                                        name="voterIdNumber"
+                                                        type="text"
+                                                        placeholder={translate('VoterIDPlaceholder')}
+                                                    />
+                                                    <div className='d-flex'>
+                                                        <Button className='mx-2' type="button" onClick={() => setisCapturing(true)}>{translate('Capture')}</Button>
+                                                        <FileUpload name="voterIdImage"
+                                                            onInputChange={(event, newIndex) => handleInputChange(1, event, newIndex)}
+                                                            selectedFile={selectedFile}
+                                                        />
+                                                    </div>
+                                                    {capturedFile && <div className='my-2'> <SmallImageCard imageUrl={capturedFile} /></div>}
+                                                    {selectedFile && <div className='my-2'>
+                                                        <h6 style={{ fontSize: '1rem', color: '#666' }}>{selectedFile.name}</h6>
+                                                    </div>}
+                                                    {isCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedFile(img), setisCapturing(false), setSelectedFile(""))} />}
 
-                                            {formId && formsDetail &&
-                                                < SmallImageCard
-                                                    imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`}
-                                                    onClick={() => window.open(`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
-                                                />
-                                            }
+                                                    {formId && formsDetail &&
+                                                        < SmallImageCard
+                                                            imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`}
+                                                            onClick={() => window.open(`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                                        />
+                                                    }
 
-                                        </Grid>
+                                                </Grid>
 
-                                    </Grid>}
+                                            </Grid>}
 
-                                    {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                        <Grid item md={6} xs={12}>
-                                            <MultiSelectInput
-                                                label={translate('GovernmentSchemes')}
-                                                name="isParticipated"
-                                                value={formik.values.isParticipated}
-                                                options={governmentSchemesOptions}
-                                                setFieldValue={formik.setFieldValue}
-                                            />
-                                        </Grid>
+                                            {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                <Grid item md={6} xs={12}>
+                                                    <MultiSelectInput
+                                                        label={translate('GovernmentSchemes')}
+                                                        name="isParticipated"
+                                                        value={formik.values.isParticipated}
+                                                        options={governmentSchemesOptions}
+                                                        setFieldValue={formik.setFieldValue}
+                                                    />
+                                                </Grid>
 
-                                        {/* <SelectInput
+                                                {/* <SelectInput
                                             label={translate('GovernmentSchemes')}
                                             name="isParticipated"
                                             id="isParticipated"
                                             options={governmentSchemesOptions}
                                         /> */}
 
-                                        <Grid item md={6} xs={12}>
-                                            <SelectInput
-                                                label={translate("ApplicantsAge")}
-                                                title="Please Provide Your Age Based On Your Last Birthday."
-                                                id="birthdayDate"
-                                                name="birthdayDate"
-                                                options={ageOptions}
-                                            />
-                                        </Grid>
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate("ApplicantsAge")}
+                                                        title="Please Provide Your Age Based On Your Last Birthday."
+                                                        id="birthdayDate"
+                                                        name="birthdayDate"
+                                                        options={ageOptions}
+                                                    />
+                                                </Grid>
 
-                                        <Grid item md={6} xs={12}>
-                                            <SelectInput
-                                                label={translate(`Category`)}
-                                                name="categoryFallUnder"
-                                                id="categoryFallUnder"
-                                                options={categoryOptions}
-                                            />
-                                        </Grid>
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate(`Category`)}
+                                                        name="categoryFallUnder"
+                                                        id="categoryFallUnder"
+                                                        options={categoryOptions}
+                                                    />
+                                                </Grid>
 
-                                    </Grid>}
+                                            </Grid>}
 
-                                    {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                        <Grid item xs={12} sx={{ mt: 1 }}>
-                                            <FieldArray
-                                                name="ageGroupOfMembers"
-                                                render={arrayHelpers => (
-                                                    <div>
-                                                        <FieldArrayAddIcon
-                                                            label={translate("Information on Family Members")}
-                                                            arrayHelpers={arrayHelpers}
-                                                            object={{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }}
+                                            {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                                <Grid item xs={12} sx={{ mt: 1 }}>
+                                                    <FieldArray
+                                                        name="ageGroupOfMembers"
+                                                        render={arrayHelpers => (
+                                                            <div>
+                                                                <FieldArrayAddIcon
+                                                                    label={translate("Information on Family Members")}
+                                                                    arrayHelpers={arrayHelpers}
+                                                                    object={{ name: '', age: '', gender: "", assembly: "", voterId: "", voterIdNum: "", voterIdImg: "" }}
+                                                                />
+                                                                {formik.values.ageGroupOfMembers.map((item, index) => (
+                                                                    <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+
+                                                                        <Grid item md={1} xs={12} style={{ display: "flex" }}>
+                                                                            <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={formik.values.ageGroupOfMembers} translate={translate} />
+                                                                        </Grid>
+
+                                                                        <Grid item md={2} xs={12}>
+                                                                            <TextInput
+                                                                                label={translate("Members Name")}
+                                                                                name={`ageGroupOfMembers[${index}].name`}
+                                                                                type="text"
+                                                                                placeholder={translate("Members Name")}
+                                                                            />
+                                                                        </Grid>
+
+                                                                        <Grid item md={1} xs={12}>
+                                                                            <TextInput
+                                                                                label={translate("Age")}
+                                                                                name={`ageGroupOfMembers[${index}].age`}
+                                                                                type="number"
+                                                                                placeholder={translate("Age")}
+                                                                            />
+                                                                        </Grid>
+
+                                                                        <Grid item md={1} xs={12}>
+                                                                            <SelectInput
+                                                                                label={translate("Gender")}
+                                                                                id={`ageGroupOfMembers[${index}].gender`}
+                                                                                name={`ageGroupOfMembers[${index}].gender`}
+                                                                                options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
+                                                                            />
+                                                                        </Grid>
+
+                                                                        <Grid item md={2} xs={12}>
+                                                                            <SelectInput
+                                                                                label={translate("Assembly/Constituency")}
+                                                                                name={`ageGroupOfMembers[${index}].assembly`}
+                                                                                id={`ageGroupOfMembers[${index}].assembly`}
+                                                                                options={constituencyOptions}
+                                                                            />
+                                                                        </Grid>
+
+                                                                        <Grid item md={2} xs={12}>
+                                                                            <SelectInput
+                                                                                label={translate("VoterID")}
+                                                                                id={`ageGroupOfMembers[${index}].voterId`}
+                                                                                name={`ageGroupOfMembers[${index}].voterId`}
+                                                                                options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
+                                                                            />
+                                                                        </Grid>
+
+                                                                        <Grid item md={2} xs={12}>
+                                                                            <TextInput
+                                                                                label={translate("Voter ID Number")}
+                                                                                name={`ageGroupOfMembers[${index}].voterIdNum`}
+                                                                                type="text"
+                                                                                placeholder={translate("Voter ID Number")}
+                                                                            />
+
+                                                                            <div className='d-flex'>
+                                                                                <Button sx={{ mx: 2 }} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>{translate('Capture')}</Button>
+                                                                                <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
+                                                                            </div>
+
+                                                                            {(typeof inputValues[index] === "string") &&
+                                                                                <div className='my-2'> <SmallImageCard imageUrl={inputValues[index]} /></div>
+                                                                            }
+
+                                                                            {inputValues[index] &&
+                                                                                <div className='my-2'><h6 style={{ fontSize: '1rem', color: '#666' }}>{inputValues[index].name}</h6> </div>
+                                                                            }
+                                                                            {formId && formsDetail &&
+                                                                                <SmallImageCard
+                                                                                    imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${item.voterIdImg || "Voter_Id_Image/no-image.png"}`}
+                                                                                />
+                                                                            }
+                                                                        </Grid>
+
+                                                                        {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
+
+                                                                        {(isCapturing && capturingIndex === index) &&
+                                                                            <CameraCapture setcapturedFile={(img) => (handleInputChange(2, null, capturingIndex, img), setisCapturing(false))} />
+                                                                        }
+                                                                    </Grid>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>{translate('Picture of the location')}</Typography>
+                                                    <div className='d-flex'>
+                                                        <Button className='mx-2' type="button" onClick={() => setisLocationCapturing(true)}>{translate('Capture')}</Button>
+                                                        <FileUpload name="locationPicture"
+                                                            onInputChange={(event, newIndex) => handleInputChange(3, event, newIndex)}
+                                                            selectedFile={selectedLocationFile}
                                                         />
-                                                        {formik.values.ageGroupOfMembers.map((item, index) => (
-                                                            <Grid key={index} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-
-                                                                <Grid item md={1} xs={12} style={{ display: "flex" }}>
-                                                                    <FieldArrayRemoveIcon index={index} arrayHelpers={arrayHelpers} array={formik.values.ageGroupOfMembers} translate={translate} />
-                                                                </Grid>
-
-                                                                <Grid item md={2} xs={12}>
-                                                                    <TextInput
-                                                                        label={translate("Members Name")}
-                                                                        name={`ageGroupOfMembers[${index}].name`}
-                                                                        type="text"
-                                                                        placeholder={translate("Members Name")}
-                                                                    />
-                                                                </Grid>
-
-                                                                <Grid item md={1} xs={12}>
-                                                                    <TextInput
-                                                                        label={translate("Age")}
-                                                                        name={`ageGroupOfMembers[${index}].age`}
-                                                                        type="number"
-                                                                        placeholder={translate("Age")}
-                                                                    />
-                                                                </Grid>
-
-                                                                <Grid item md={1} xs={12}>
-                                                                    <SelectInput
-                                                                        label={translate("Gender")}
-                                                                        id={`ageGroupOfMembers[${index}].gender`}
-                                                                        name={`ageGroupOfMembers[${index}].gender`}
-                                                                        options={[{ label: "Male", value: "male" }, { label: "Female", value: "female" }]}
-                                                                    />
-                                                                </Grid>
-
-                                                                <Grid item md={2} xs={12}>
-                                                                    <SelectInput
-                                                                        label={translate("Assembly/Constituency")}
-                                                                        name={`ageGroupOfMembers[${index}].assembly`}
-                                                                        id={`ageGroupOfMembers[${index}].assembly`}
-                                                                        options={constituencyOptions}
-                                                                    />
-                                                                </Grid>
-
-                                                                <Grid item md={2} xs={12}>
-                                                                    <SelectInput
-                                                                        label={translate("VoterID")}
-                                                                        id={`ageGroupOfMembers[${index}].voterId`}
-                                                                        name={`ageGroupOfMembers[${index}].voterId`}
-                                                                        options={[{ label: "Yes", value: 1 }, { label: "No", value: 0 }]}
-                                                                    />
-                                                                </Grid>
-
-                                                                <Grid item md={2} xs={12}>
-                                                                    <TextInput
-                                                                        label={translate("Voter ID Number")}
-                                                                        name={`ageGroupOfMembers[${index}].voterIdNum`}
-                                                                        type="text"
-                                                                        placeholder={translate("Voter ID Number")}
-                                                                    />
-
-                                                                    <div className='d-flex'>
-                                                                        <Button sx={{ mx: 2 }} type="button" onClick={() => (setisCapturing(true), setCapturingIndex(index))}>{translate('Capture')}</Button>
-                                                                        <FileUpload index={index} onInputChange={(event, newIndex) => handleInputChange(2, event, newIndex)} />
-                                                                    </div>
-
-                                                                    {(typeof inputValues[index] === "string") &&
-                                                                        <div className='my-2'> <SmallImageCard imageUrl={inputValues[index]} /></div>
-                                                                    }
-
-                                                                    {inputValues[index] &&
-                                                                        <div className='my-2'><h6 style={{ fontSize: '1rem', color: '#666' }}>{inputValues[index].name}</h6> </div>
-                                                                    }
-                                                                    {formId && formsDetail &&
-                                                                        <SmallImageCard
-                                                                            imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${item.voterIdImg || "Voter_Id_Image/no-image.png"}`}
-                                                                        />
-                                                                    }
-                                                                </Grid>
-
-                                                                {isSmallScreen ? <Box sx={{ borderBottom: 1 }} /> : ""}
-
-                                                                {(isCapturing && capturingIndex === index) &&
-                                                                    <CameraCapture setcapturedFile={(img) => (handleInputChange(2, null, capturingIndex, img), setisCapturing(false))} />
-                                                                }
-                                                            </Grid>
-                                                        ))}
                                                     </div>
-                                                )}
-                                            />
-                                        </Grid>
+                                                    {capturedLocationFile && <div className='my-2'> <SmallImageCard imageUrl={capturedLocationFile} /></div>}
+                                                    {selectedLocationFile && <div className='my-2'><h6 style={{ fontSize: '1rem', color: '#666' }}>{selectedLocationFile.name}</h6> </div>}
+                                                    {isLocationCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedLocationFile(img), setisLocationCapturing(false), setSelectedLocationFile(""))} />}
+                                                    {formId && formsDetail &&
+                                                        <SmallImageCard
+                                                            imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.locationPicture || "Voter_Id_Image/no-image.png"}`}
+                                                        />
+                                                    }
 
-                                        <Grid item md={6} xs={12}>
-                                            <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>{translate('Picture of the location')}</Typography>
-                                            <div className='d-flex'>
-                                                <Button className='mx-2' type="button" onClick={() => setisLocationCapturing(true)}>{translate('Capture')}</Button>
-                                                <FileUpload name="locationPicture"
-                                                    onInputChange={(event, newIndex) => handleInputChange(3, event, newIndex)}
-                                                    selectedFile={selectedLocationFile}
-                                                />
+                                                </Grid>
+                                                
+
+                                            </Grid>}
                                             </div>
-                                            {capturedLocationFile && <div className='my-2'> <SmallImageCard imageUrl={capturedLocationFile} /></div>}
-                                            {selectedLocationFile && <div className='my-2'><h6 style={{ fontSize: '1rem', color: '#666' }}>{selectedLocationFile.name}</h6> </div>}
-                                            {isLocationCapturing && <CameraCapture setcapturedFile={(img) => (setcapturedLocationFile(img), setisLocationCapturing(false), setSelectedLocationFile(""))} />}
-                                            {formId && formsDetail &&
-                                                <SmallImageCard
-                                                    imageUrl={`${import.meta.env.VITE_API_URL}/uploads/${formsDetail.locationPicture || "Voter_Id_Image/no-image.png"}`}
-                                                />
-                                            }
-
-                                        </Grid>
-
-                                    </Grid>}
-                                    <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
-                                        {
-                                            <Button variant='contained'
-                                                type='submit'
-                                                disabled={activeStep === 4 && formik.isSubmitting}
-                                                style={{ textAlign: "right" }}
-                                                sx={{ mt: 3, pl: 3, pr: 3 }}
-                                            >
-                                                {activeStep === 4 ? translate("Submit") : translate("Next")}
-                                            </Button>
-                                        }
-                                    </div>
-
+                                    }
+                                            <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
+                                                {
+                                                    <Button variant='contained'
+                                                        type='submit'
+                                                        disabled={activeStep === 4 && formik.isSubmitting}
+                                                        style={{ textAlign: "right" }}
+                                                        sx={{ mt: 3, pl: 3, pr: 3 }}
+                                                    >
+                                                        {activeStep === 4 ? translate("Submit") : translate("Next")}
+                                                    </Button>
+                                                }
+                                            </div>
+                                        
                                 </Form>
                             )
                         }}
