@@ -22,6 +22,7 @@ import NoData from '../NoData';
 import TableHeader from './TableHeader';
 import { userToUpdate } from '../../features/auth/authSlice';
 import { verifyUser, capitalizeFirstLetter } from '../../utils/functions/verifyUser';
+import CustomTablePagination from '../TablePaginationActions';
 
 const tableCells = [{ label: '' }, { label: 'S.No' }, { label: 'Name' }, { label: 'Phone' }, { label: 'Email' }, { label: 'Role' }, { label: '' }];
 
@@ -119,6 +120,8 @@ export default function CollapsibleTable() {
   });
   const [userDetail, setUserDetail] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     getUsers();
@@ -146,6 +149,16 @@ export default function CollapsibleTable() {
     }
   };
 
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <>
       <div className='d-flex justify-content-between m-3'>
@@ -160,15 +173,29 @@ export default function CollapsibleTable() {
       {isLoading ? <Loader /> :
         <TableContainer component={Paper}>
           {
-            users.result.length < 1 ?
+            users?.result.length < 1 ?
               <NoData msg="No User Found" /> :
               <Table aria-label="collapsible table">
                 <TableHeader tableCells={tableCells} />
                 <TableBody>
-                  {users.status && users.result.map((row, index) => (
+                  {(rowsPerPage > 0
+                    ? users?.result.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : users?.result
+                  ).map((row, index) => (
                     <Row key={row._id} row={row} index={index} userDetail={userDetail} />
                   ))}
                 </TableBody>
+
+                {
+                  (users?.status && users?.result.length > 10) &&
+                  <CustomTablePagination
+                    count={users?.result.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                }
               </Table>
           }
         </TableContainer>
