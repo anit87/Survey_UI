@@ -9,6 +9,21 @@ export const generateTrueFalseOptions = (translate) => [
         value: 0
     }
 ]
+export const generateVotedLastElectionOptions = (translate) => [
+    { label: translate("PleaseSelect"), value: "" },
+    {
+        label: translate("Yes"),
+        value: 1
+    },
+    {
+        label: translate("No"),
+        value: 0
+    },
+    {
+        label: translate("Caste.Prefernottosay"),
+        value: 2
+    }
+]
 
 export const occupationOptios = [
     { label: "Please Select", value: "" },

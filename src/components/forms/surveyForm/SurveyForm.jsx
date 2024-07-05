@@ -18,7 +18,7 @@ import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
 import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
-import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions, generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions } from '../../../utils/constants';
+import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions, generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions, generateVotedLastElectionOptions } from '../../../utils/constants';
 import Loader from '../../loader';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/forms';
@@ -53,6 +53,7 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
     const { translate } = useLanguageData();
     const incomeOptions = generateIncomeOptions(translate);
     const trueFalseOptions = generateTrueFalseOptions(translate);
+    const votedLastElectionOptions = generateVotedLastElectionOptions(translate);
     const educationalOptions = generateEducationalOptions(translate);
     const casteOptions = generateCasteOptions(translate);
     const religionOptions = generatereligionOptions(translate);
@@ -389,6 +390,14 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
 
                                                 </Grid>
 
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('votedLastElection')} name="votedLastElection"
+                                                        id="votedLastElection"
+                                                        options={votedLastElectionOptions}
+                                                    />
+                                                </Grid>
+
                                             </Grid>}
 
                                             {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -402,12 +411,14 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                     />
                                                 </Grid>
 
-                                                {/* <SelectInput
-                                            label={translate('GovernmentSchemes')}
-                                            name="isParticipated"
-                                            id="isParticipated"
-                                            options={governmentSchemesOptions}
-                                        /> */}
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate(`Category`)}
+                                                        name="categoryFallUnder"
+                                                        id="categoryFallUnder"
+                                                        options={categoryOptions}
+                                                    />
+                                                </Grid>
 
                                                 <Grid item md={6} xs={12}>
                                                     <SelectInput
@@ -420,11 +431,21 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                 </Grid>
 
                                                 <Grid item md={6} xs={12}>
-                                                    <SelectInput
-                                                        label={translate(`Category`)}
-                                                        name="categoryFallUnder"
-                                                        id="categoryFallUnder"
-                                                        options={categoryOptions}
+                                                    <TextInput
+                                                        label={translate("dateOfBirth")}
+                                                        title={translate('dateOfBirth')}
+                                                        name="dateOfBirth"
+                                                        type="date"
+                                                        placeholder={translate('dateOfBirth')}
+                                                    />
+                                                </Grid>
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate("weddingDate")}
+                                                        title={translate('weddingDate')}
+                                                        name="weddingDate"
+                                                        type="date"
+                                                        placeholder={translate('weddingDate')}
                                                     />
                                                 </Grid>
 
@@ -551,24 +572,24 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                     }
 
                                                 </Grid>
-                                                
+
 
                                             </Grid>}
-                                            </div>
+                                        </div>
                                     }
-                                            <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
-                                                {
-                                                    <Button variant='contained'
-                                                        type='submit'
-                                                        disabled={activeStep === 4 && formik.isSubmitting}
-                                                        style={{ textAlign: "right" }}
-                                                        sx={{ mt: 3, pl: 3, pr: 3 }}
-                                                    >
-                                                        {activeStep === 4 ? translate("Submit") : translate("Next")}
-                                                    </Button>
-                                                }
-                                            </div>
-                                        
+                                    <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
+                                        {
+                                            <Button variant='contained'
+                                                type='submit'
+                                                disabled={activeStep === 4 && formik.isSubmitting}
+                                                style={{ textAlign: "right" }}
+                                                sx={{ mt: 3, pl: 3, pr: 3 }}
+                                            >
+                                                {activeStep === 4 ? translate("Submit") : translate("Next")}
+                                            </Button>
+                                        }
+                                    </div>
+
                                 </Form>
                             )
                         }}

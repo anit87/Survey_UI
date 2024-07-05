@@ -5,7 +5,7 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput';
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import DataTable from '../../dataGrid/DataTable';
-import { generategovernmentSchemesOptions, generatecategoryOptions, generatereligionOptions, generateCasteOptions, generateIncomeOptions, occupationOptios, generateEducationalOptions, generateTrueFalseOptions, generateageOptions } from '../../../utils/constants';
+import { generategovernmentSchemesOptions, generateVotedLastElectionOptions, generatecategoryOptions, generatereligionOptions, generateCasteOptions, generateIncomeOptions, occupationOptios, generateEducationalOptions, generateTrueFalseOptions, generateageOptions } from '../../../utils/constants';
 import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
 
@@ -21,6 +21,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
     const governmentSchemesOptions = generategovernmentSchemesOptions(translate);
     const ageOptions = generateageOptions(translate);
     const categoryOptions = generatecategoryOptions(translate);
+    const votedLastElectionOptions = generateVotedLastElectionOptions(translate);
 
     const [userId, setUserId] = useState(" ");
     let [counter, setCounter] = useState(0);
@@ -239,6 +240,18 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             onClick={() => window.open(`${apiUrl}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
                                         />
                                     </Grid>
+
+                                    <Grid item md={6} xs={12}>
+                                        <SelectInput
+                                            label={translate('votedLastElection')}
+                                            name="votedLastElection"
+                                            id="votedLastElection"
+                                            options={votedLastElectionOptions}
+                                            editable={Boolean(formsDetail)}
+                                            textValue={votedLastElectionOptions?.find(option => option.value == formsDetail?.votedLastElection)?.label}
+                                        />
+                                    </Grid>
+
                                 </Grid>}
 
                                 {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -277,6 +290,25 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             textValue={categoryOptions.find(option => option.value == formsDetail.categoryFallUnder).label}
                                         />
                                     </Grid>
+
+                                    <Grid item md={6} xs={12}>
+                                        <TextInput
+                                            label={translate("dateOfBirth")}
+                                            name="dateOfBirth"
+                                            editable={Boolean(formsDetail)}
+                                            textValue={formsDetail?.dateOfBirth?.slice(0,10)}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} xs={12}>
+                                        <TextInput
+                                            label={translate("weddingDate")}
+                                            name="weddingDate"
+                                            editable={Boolean(formsDetail)}
+                                            textValue={formsDetail?.weddingDate?.slice(0,10)}
+                                        />
+                                    </Grid>
+
+
                                 </Grid>}
 
                                 {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
