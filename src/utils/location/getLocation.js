@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const GoogleApiKey = 'AIzaSyDmvz3A-BAjR77dy4PsaoHJC15mUdffLSA'
+const googleApiKey = import.meta.env.VITE_GoogleApiKey;
 
 export const getLocation = () => {
     return new Promise((resolve, reject) => {
@@ -8,7 +8,7 @@ export const getLocation = () => {
             const { latitude, longitude } = position.coords;
             axios
                 .get(
-                    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GoogleApiKey}`
+                    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleApiKey}`
                 )
                 .then((response) => {
                     if (response.data.status === 'OK') {

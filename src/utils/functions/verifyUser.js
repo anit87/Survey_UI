@@ -1,9 +1,8 @@
 import jwt from "jwt-decode";
-
-const localtoken = localStorage.getItem("surveyApp");
 const secret = import.meta.env.VITE_JWT_SECRET_KEY;
 
 export const verifyUser = function (mytoken) {
+    const localtoken = localStorage.getItem("surveyApp");
     try {
         const token = mytoken || localtoken;
         const decoded = jwt(token, secret);
