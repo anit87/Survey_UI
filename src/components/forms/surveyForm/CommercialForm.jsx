@@ -18,6 +18,12 @@ import Loader from '../../loader';
 const CommercialForm = () => {
     const { translate } = useLanguageData();
     const establishmentOptions = generateEstablishmentOptions(translate);
+    const initialValues = {
+        establishmentName: '',
+        establishmentType: '',
+        natureOfBusiness: '',
+        contactPerson: ''
+    }
     return (
         <>
             <Toolbar />
@@ -27,6 +33,7 @@ const CommercialForm = () => {
             <Container maxWidth="fixed">
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
+                        initialValues={initialValues}
                         onSubmit={async (values) => {
                             console.log(values);
                         }}
@@ -51,8 +58,8 @@ const CommercialForm = () => {
                                                 <Grid item md={6} xs={12}>
                                                     <SelectInput
                                                         label={translate('TypeOfEstablishment')}
-                                                        id="establishmentTypes"
-                                                        name="establishmentTypes"
+                                                        id="establishmentType"
+                                                        name="establishmentType"
                                                         options={establishmentOptions}
                                                     />
                                                 </Grid>
@@ -78,6 +85,17 @@ const CommercialForm = () => {
                                             </Grid>
                                         </div>
                                     }
+                                    <div className='d-flex flex-row-reverse bd-highlight' style={{ float: "right" }}>
+                                        {
+                                            <Button variant='contained'
+                                                type='submit'
+                                                style={{ textAlign: "right" }}
+                                                sx={{ mt: 3, pl: 3, pr: 3 }}
+                                            >
+                                                Submit
+                                            </Button>
+                                        }
+                                    </div>
                                 </Form>
                             )
                         }}
