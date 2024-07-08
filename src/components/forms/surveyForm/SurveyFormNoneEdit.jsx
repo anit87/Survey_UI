@@ -55,7 +55,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             type="text"
                                             placeholder="Please Provide Your Full Name"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail ? formsDetail.respondentName : ""}
+                                            textValue={formsDetail ? formsDetail?.respondentName : ""}
 
                                         />
                                     </Grid>
@@ -68,7 +68,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             type="text"
                                             placeholder="Enter Your Full Mailing Address Here"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail ? formsDetail.address : ""}
+                                            textValue={formsDetail ? formsDetail?.address : ""}
                                         />
                                     </Grid>
 
@@ -80,7 +80,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             type="number"
                                             placeholder="454545"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail ? formsDetail.pincode : ""}
+                                            textValue={formsDetail ? formsDetail?.pincode : ""}
                                         />
                                     </Grid>
 
@@ -92,7 +92,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             type="number"
                                             placeholder="9874563210"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail ? formsDetail.mobileNo : ""}
+                                            textValue={formsDetail ? formsDetail?.mobileNo : ""}
                                         />
                                     </Grid>
 
@@ -104,7 +104,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             name="maritalStatus"
                                             options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail ? formsDetail.maritalStatus == 1 ? translate('Single') : translate("Married") : ""}
+                                            textValue={formsDetail ? formsDetail?.maritalStatus == 1 ? translate('Single') : translate("Married") : ""}
                                         />
                                     </Grid>
 
@@ -115,7 +115,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="occupationStatus"
                                             name="occupationStatus"
                                             editable={Boolean(formsDetail)}
-                                            textValue={translate(occupationOptios.find(option => option.value == (formsDetail.occupationStatus || "")).label)}
+                                            textValue={translate(occupationOptios.find(option => option.value == (formsDetail?.occupationStatus || "")).label)}
                                         />
                                     </Grid>
 
@@ -126,7 +126,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="monthlyHouseholdIncome"
                                             name="monthlyHouseholdIncome"
                                             editable={Boolean(formsDetail)}
-                                            textValue={incomeOptions.find(option => option.value == (formsDetail.monthlyHouseholdIncome || "")).label}
+                                            textValue={incomeOptions.find(option => option.value == (formsDetail?.monthlyHouseholdIncome || "")).label}
                                         />
                                     </Grid>
 
@@ -137,11 +137,11 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             name="isOwnProperty"
                                             id="isOwnProperty"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.isOwnProperty ? "Yes" : formsDetail.isOwnProperty == 1 ? "Yes" : "No"}
+                                            textValue={formsDetail?.isOwnProperty ? "Yes" : formsDetail?.isOwnProperty == 1 ? "Yes" : "No"}
                                         />
                                     </Grid>
 
-                                    {formsDetail.location && <Grid item md={6} xs={12}>
+                                    {formsDetail?.location && <Grid item md={6} xs={12}>
                                         <TextInput
                                             label={translate("Location")}
                                             title=""
@@ -149,11 +149,11 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             type="text"
                                             placeholder=""
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.location.location}
+                                            textValue={formsDetail?.location.location}
                                         />
                                         <SmallImageCard
-                                            imageUrl={`${apiUrl}/uploads/${formsDetail.locationPicture || "Voter_Id_Image/no-image.png"}`}
-                                            onClick={() => window.open(`${apiUrl}/uploads/${formsDetail.locationPicture || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                            imageUrl={`${apiUrl}/uploads/${formsDetail?.locationPicture || "Voter_Id_Image/no-image.png"}`}
+                                            onClick={() => window.open(`${apiUrl}/uploads/${formsDetail?.locationPicture || "Voter_Id_Image/no-image.png"}`, '_blank')}
                                         />
                                     </Grid>}
 
@@ -170,7 +170,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             type="number"
                                             placeholder="Total Members"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.totalMembers}
+                                            textValue={formsDetail?.totalMembers}
                                         />
                                     </Grid>
 
@@ -182,32 +182,30 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="chiefWageEarnereEducation"
                                             name="cweEducation"
                                             editable={Boolean(formsDetail)}
-                                            textValue={educationalOptions.find(option => option.value == formsDetail.cweEducation).label}
+                                            textValue={educationalOptions.find(option => option.value == formsDetail?.cweEducation).label}
                                         />
                                     </Grid>
 
                                     <Grid item md={6} xs={12}>
                                         <SelectInput
-                                            // label="Religion"
                                             label={translate("Religion")}
                                             title="Kindly Select Your Religion"
                                             id="religion"
                                             name="religion"
                                             editable={Boolean(formsDetail)}
-                                            textValue={religionOptions.find(option => option.value == formsDetail.religion).label}
+                                            textValue={religionOptions.find(option => option.value == formsDetail?.religion).label}
                                         />
                                     </Grid>
 
-                                    {formsDetail.religion == 1 &&
+                                    {formsDetail?.religion == 1 &&
                                         <Grid item md={6} xs={12}>
                                             <TextInput
-                                                // label="Caste"
                                                 label={translate("Caste")}
                                                 title="Caste"
                                                 name="caste"
                                                 placeholder="Kindly Indicate Your Caste"
                                                 editable={Boolean(formsDetail)}
-                                                textValue={formsDetail.caste ? casteOptions.find(option => option.value == formsDetail.caste).label : "N/A"}
+                                                textValue={formsDetail?.caste ? casteOptions.find(option => option.value == formsDetail?.caste).label : "N/A"}
                                             />
                                         </Grid>
                                     }
@@ -222,7 +220,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="registeredVoter"
                                             options={trueFalseOptions}
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.registeredVoter == true ? translate("Yes") : translate("No")}
+                                            textValue={formsDetail?.registeredVoter == true ? translate("Yes") : translate("No")}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
@@ -232,12 +230,12 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             type="number"
                                             placeholder="Please Provide Your Voter ID Number"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail.voterIdNumber || "N/A"}
+                                            textValue={formsDetail?.voterIdNumber || "N/A"}
                                         />
 
                                         <SmallImageCard
-                                            imageUrl={`${apiUrl}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`}
-                                            onClick={() => window.open(`${apiUrl}/uploads/${formsDetail.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                            imageUrl={`${apiUrl}/uploads/${formsDetail?.voterIdImage || "Voter_Id_Image/no-image.png"}`}
+                                            onClick={() => window.open(`${apiUrl}/uploads/${formsDetail?.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
                                         />
                                     </Grid>
 
@@ -248,7 +246,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="votedLastElection"
                                             options={votedLastElectionOptions}
                                             editable={Boolean(formsDetail)}
-                                            textValue={votedLastElectionOptions?.find(option => option.value == formsDetail?.votedLastElection)?.label}
+                                            textValue={formsDetail?.votedLastElection ? votedLastElectionOptions?.find(option => option.value == formsDetail?.votedLastElection)?.label : 'N/A'}
                                         />
                                     </Grid>
 
@@ -263,7 +261,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             options={trueFalseOptions}
                                             editable={Boolean(formsDetail)}
                                             textValue={governmentSchemesOptions
-                                                .filter(scheme => formsDetail.isParticipated.includes(scheme.value))
+                                                .filter(scheme => formsDetail?.isParticipated.includes(scheme.value))
                                                 .map(scheme => scheme.label)
                                                 .join(', ')}
                                         />
@@ -276,7 +274,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="birthdayDate"
                                             name="birthdayDate"
                                             editable={Boolean(formsDetail)}
-                                            textValue={ageOptions.find(option => option.value == (formsDetail.birthdayDate || "")).label}
+                                            textValue={ageOptions.find(option => option.value == (formsDetail?.birthdayDate || "")).label}
                                         />
                                     </Grid>
 
@@ -287,7 +285,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             id="categoryFallUnder"
                                             options={categoryOptions}
                                             editable={Boolean(formsDetail)}
-                                            textValue={categoryOptions.find(option => option.value == formsDetail.categoryFallUnder).label}
+                                            textValue={categoryOptions.find(option => option.value == formsDetail?.categoryFallUnder).label}
                                         />
                                     </Grid>
 
@@ -296,7 +294,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             label={translate("dateOfBirth")}
                                             name="dateOfBirth"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail?.dateOfBirth?.slice(0,10)}
+                                            textValue={formsDetail?.dateOfBirth ? formsDetail?.dateOfBirth?.slice(0, 10) : 'N/A'}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
@@ -304,7 +302,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             label={translate("weddingDate")}
                                             name="weddingDate"
                                             editable={Boolean(formsDetail)}
-                                            textValue={formsDetail?.weddingDate?.slice(0,10)}
+                                            textValue={formsDetail?.weddingDate ? formsDetail?.weddingDate?.slice(0, 10) : 'N/A'}
                                         />
                                     </Grid>
 
@@ -312,7 +310,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                 </Grid>}
 
                                 {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                    <DataTable formsDetail={formsDetail.ageGroupOfMembers} />
+                                    <DataTable formsDetail={formsDetail?.ageGroupOfMembers} />
                                 </Grid>}
 
                             </Form>
