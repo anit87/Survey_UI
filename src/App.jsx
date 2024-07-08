@@ -12,27 +12,30 @@ import CollapsibleTable from './components/dataGrid/allUsers';
 import RecordsbyUser from './components/dataGrid/RecordsbyUser';
 import DataGridTable from './components/dataGrid/DataGridTable';
 import { LanguageProvider } from './utils/LanguageContext';
+import { ModeProvider } from './utils/ModeContext';
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <LanguageProvider>
-          <Routes>
-            <Route path='/' element={<ProtectedRoute><LoginSignUp /></ProtectedRoute>}>
-              <Route index element={<SignIn />} />
-              <Route path='/' element={<SignIn />} />
-              <Route path='/reset' element={<ResetPassword />} />
-            </Route>
-            <Route path='/form' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
-            <Route path='/form/:formId' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
-            <Route path='/formdetail/:id' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
-            <Route path='/allusers' element={<ProtectedRoute><Layout><CollapsibleTable /></Layout></ProtectedRoute>} />
-            <Route path='/allRecords/:id' element={<ProtectedRoute><Layout><RecordsbyUser /></Layout></ProtectedRoute>} />
-            <Route path='/createuser' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />
-            <Route path='/createuser/:id' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />
-            <Route path='/surveys' element={<ProtectedRoute><Layout><DataGridTable /></Layout></ProtectedRoute>} />
-          </Routes>
+          <ModeProvider>
+            <Routes>
+              <Route path='/' element={<ProtectedRoute><LoginSignUp /></ProtectedRoute>}>
+                <Route index element={<SignIn />} />
+                <Route path='/' element={<SignIn />} />
+                <Route path='/reset' element={<ResetPassword />} />
+              </Route>
+              <Route path='/form' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
+              <Route path='/form/:formId' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
+              <Route path='/formdetail/:id' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
+              <Route path='/allusers' element={<ProtectedRoute><Layout><CollapsibleTable /></Layout></ProtectedRoute>} />
+              <Route path='/allRecords/:id' element={<ProtectedRoute><Layout><RecordsbyUser /></Layout></ProtectedRoute>} />
+              <Route path='/createuser' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />
+              <Route path='/createuser/:id' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />
+              <Route path='/surveys' element={<ProtectedRoute><Layout><DataGridTable /></Layout></ProtectedRoute>} />
+            </Routes>
+          </ModeProvider>
         </LanguageProvider>
       </BrowserRouter>
     </>

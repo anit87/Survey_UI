@@ -6,6 +6,7 @@ import flag from '../assets/flag.png';
 import './Navbar.css';
 import { verifyUser } from '../utils/functions/verifyUser';
 import { useLanguageData } from '../utils/LanguageContext';
+import { modes, useModeData } from '../utils/ModeContext';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -13,6 +14,8 @@ import Select from '@mui/material/Select';
 
 const Navbar = () => {
     const { changeLanguage, language } = useLanguageData();
+    const { mode, changeMode } = useModeData();
+
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
     const [userDetail, setUserDetail] = useState({});
@@ -26,10 +29,12 @@ const Navbar = () => {
         changeLanguage(language);
     }, [changeLanguage, language]);
 
+    const handleModeChange = (e) => {
+        changeMode(e.target.value);
+    };
+
     const handleLanguageChange = (e) => {
         changeLanguage(e.target.value);
-        // const newLanguage = e.target.checked ? 'fr' : 'en';
-        // changeLanguage(newLanguage);
     };
 
     return (
@@ -76,20 +81,6 @@ const Navbar = () => {
                         }
                     </ul>
                     <form className="d-flex align-items-center">
-                        {/* Language Switch */}
-                        {/* <div className="form-check form-switch language-switch">
-                            <input
-                                className="form-check-input"
-                                type="checkbox"
-                                role="switch"
-                                id="switchSizeLarge"
-                                onChange={handleLanguageChange}
-                                checked={language === 'fr'}
-                            />
-                            <label className="form-check-label ms-2" htmlFor="switchSizeLarge" style={{ width: '70px' }}>
-                                {language === 'en' ? 'English' : 'Kannada'}
-                            </label>
-                        </div> */}
                         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                             <InputLabel id="demo-select-small-label"></InputLabel>
                             <Select
@@ -102,6 +93,21 @@ const Navbar = () => {
                             >
                                 <MenuItem value={'en'}>English</MenuItem>
                                 <MenuItem value={'fr'}>Kannada</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                            <InputLabel id="demo-select-small-label"></InputLabel>
+                            <Select
+                                labelId="demo-select-small-label"
+                                id="demo-select-small"
+                                value={mode}
+                                label=""
+                                onChange={handleModeChange}
+                                style={{ color: '#ffffff' }}
+                            >
+                                <MenuItem value={modes.residential}>Residential</MenuItem>
+                                <MenuItem value={modes.commercial}>Commercial</MenuItem>
                             </Select>
                         </FormControl>
 

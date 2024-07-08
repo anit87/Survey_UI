@@ -24,6 +24,7 @@ import TableHeader from './TableHeader';
 import { SelectInput } from '../inputs/SelectInput';
 import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants";
 import { useLanguageData } from '../../utils/LanguageContext';
+import { useModeData } from '../../utils/ModeContext';
 import { useGetSurveyFormsMutation } from '../../features/auth/userDasbord';
 
 const tableCells = [
@@ -58,6 +59,7 @@ export default function SurveyForms() {
     const navigate = useNavigate();
     const token = useSelector(state => state.auth.token);
     const { translate } = useLanguageData();
+    const { mode } = useModeData();
 
     const [userDetail, setUserDetail] = useState({});
     const [page, setPage] = useState(0);
