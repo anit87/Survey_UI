@@ -11,8 +11,9 @@ import { Button } from '@mui/material';
 import NoData from "../NoData";
 import Loader from '../loader';
 import TableHeader, { StyledTableCell } from './TableHeader';
+import { modes, useModeData } from '../../utils/ModeContext';
 
-const apiUrl = import.meta.env.VITE_API_URL + '/users/records';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -22,6 +23,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const RecordsbyUser = () => {
   const { id } = useParams();
+  const { mode } = useModeData();
   const navigate = useNavigate();
   const [formsDetail, setFormsDetail] = useState({ data: [], user: { displayName: "" } });
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +31,7 @@ const RecordsbyUser = () => {
 
   useEffect(() => {
     fetchUserRecords();
-  }, [id]);
+  }, [id, mode]);
 
   const headers = {
     'Content-Type': 'application/json',
@@ -38,8 +40,9 @@ const RecordsbyUser = () => {
 
   const fetchUserRecords = async () => {
     setIsLoading(true);
+    const url = mode === modes.residential ? '/users/records' : '/commercial/filledbyuser';
     try {
-      const response = await axios.post(apiUrl, { id }, { headers });
+      const response = await axios.post(apiUrl + url, { id }, { headers });
       setFormsDetail(response.data);
     } catch (err) {
       setError('Failed to fetch data');
@@ -48,18 +51,37 @@ const RecordsbyUser = () => {
     }
   };
 
+  const getTableCellContent = (row, residentialValue, commercialValue) => {
+    return mode === modes.residential ? row[residentialValue] : row[commercialValue];
+  };
+
+  const getMaritalStatus = (row) => {
+    if (mode === modes.residential) {
+      return row.maritalStatus === 1 ? 'Single' : 'Married';
+    }
+    return row.contactPerson;
+  };
+
   const tableCells = [
     { label: 'S.No' },
     { label: 'Respondent Name' },
     { label: 'Mobile No' },
     { label: 'Pincode' },
     { label: 'Marital Status' },
-    { label: '' }
+    { label: '' },
+  ];
+
+  const commercialTableCells = [
+    { label: 'S.No' },
+    { label: 'Establishment Name' },
+    { label: 'Establishment Type' },
+    { label: 'Business Nature' },
+    { label: 'Contact person' }
   ];
 
   return (
     <>
-      <h6 style={{ fontSize: "20px", fontWeight: "600" }}>{`Surveys By ${formsDetail.user.displayName}`}</h6>
+      <h6 style={{ fontSize: '20px', fontWeight: '600' }}>{`Surveys By ${formsDetail.user.displayName}`}</h6>
       <TableContainer component={Paper}>
         {isLoading ? (
           <Loader />
@@ -69,7 +91,7 @@ const RecordsbyUser = () => {
           <NoData msg="No Surveys Found" />
         ) : (
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
-            <TableHeader tableCells={tableCells} />
+            <TableHeader tableCells={mode === modes.residential ? tableCells : commercialTableCells} />
             <TableBody>
               {formsDetail.data.map((row, i) => (
                 <StyledTableRow key={row._id}>
@@ -77,23 +99,27 @@ const RecordsbyUser = () => {
                     {i + 1}
                   </StyledTableCell>
                   <StyledTableCell scope="row">
-                    {row.respondentName}
+                    {getTableCellContent(row, 'respondentName', 'establishmentName')}
                   </StyledTableCell>
-                  <StyledTableCell>{row.mobileNo}</StyledTableCell>
-                  <StyledTableCell>{row.pincode}</StyledTableCell>
-                  <StyledTableCell>{row.maritalStatus === 1 ? "Single" : "Married"}</StyledTableCell>
-                  <StyledTableCell>
-                    <Button onClick={() => navigate(`/formdetail/${row._id}`)}>View</Button>
-                  </StyledTableCell>
+                  <StyledTableCell>{getTableCellContent(row, 'mobileNo', 'establishmentType')}</StyledTableCell>
+                  <StyledTableCell>{getTableCellContent(row, 'pincode', 'natureOfBusiness')}</StyledTableCell>
+                  <StyledTableCell>{getMaritalStatus(row)}</StyledTableCell>
+                  {mode === modes.residential &&
+                    < StyledTableCell >
+                      <Button onClick={() => navigate(`/formdetail/${row._id}`)}>View</Button>
+                    </StyledTableCell>
+                  }
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         )}
-        <Button sx={{ m: 4 }} variant='contained' onClick={() => navigate(-1)}>Back</Button>
-      </TableContainer>
+        <Button sx={{ m: 4 }} variant="contained" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+      </TableContainer >
     </>
   );
-}
+};
 
 export default RecordsbyUser;

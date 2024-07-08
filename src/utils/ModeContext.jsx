@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+
 const ModeContext = createContext();
 
 export const useModeData = () => useContext(ModeContext);
-export const modes = { residential: 'residential', commercial: 'commercial' }
+export const modes = { residential: 'residential', commercial: 'commercial' };
 
 const ModeProvider = ({ children }) => {
     const storedMode = localStorage.getItem("mode");
