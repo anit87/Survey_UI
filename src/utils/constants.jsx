@@ -181,3 +181,14 @@ export const constituencyOptions = [
     { label: "Govindraj Nagar", value: 1 },
     { label: "Vijay Nagar", value: 2 }
 ]
+
+export const generateEstablishmentOptions = (t) => [
+    { label: t("PleaseSelect"), value: "" },
+    { label: t("Establishment.NGO"), value: 1 },
+    { label: t("Establishment.EducationalInstitutions"), value: 2 },
+    { label: t("Establishment.Medical"), value: 3 },
+    { label: t("Establishment.GeneralStore/supermarket"), value: 4 },
+    { label: t("Establishment.MeatShop"), value: 5 },
+    { label: t("Establishment.Spa/Hair/Skin"), value: 6 },
+    { label: t("Establishment.SmallShops"), value: 7 },
+]

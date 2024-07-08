@@ -18,7 +18,18 @@ import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
 import { objectToFormData, appendArrayToFormData } from '../../../utils/functions/objectToFormData';
 import { surveyFormSchema, surveyFormSchemaStep0, surveyFormSchemaStep1, surveyFormSchemaStep2, surveyFormSchemaStep3 } from '../../../utils/schemas/surveyForm';
-import { generateageOptions, generateIncomeOptions, generateTrueFalseOptions, generateEducationalOptions, generategovernmentSchemesOptions, generatecategoryOptions, generateCasteOptions, generatereligionOptions, constituencyOptions, generateVotedLastElectionOptions } from '../../../utils/constants';
+import {
+    generateageOptions,
+    generateIncomeOptions,
+    generateTrueFalseOptions,
+    generateEducationalOptions,
+    generategovernmentSchemesOptions,
+    generatecategoryOptions,
+    generateCasteOptions,
+    generatereligionOptions,
+    constituencyOptions,
+    generateVotedLastElectionOptions
+} from '../../../utils/constants';
 import Loader from '../../loader';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/forms';

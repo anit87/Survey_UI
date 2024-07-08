@@ -74,7 +74,7 @@ const Navbar = () => {
                         {
                             userDetail.userRole !== 'admin' &&
                             <li className="nav-item">
-                                <Link to="/form" style={{ textDecoration: "none" }} >
+                                <Link to={mode === modes.commercial ? "/commercial" : "/form"} style={{ textDecoration: "none" }} >
                                     <div className='nav-link' style={{ color: "#ffffff" }}> Survey Form </div>
                                 </Link>
                             </li>

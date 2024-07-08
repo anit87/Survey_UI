@@ -13,6 +13,7 @@ import RecordsbyUser from './components/dataGrid/RecordsbyUser';
 import DataGridTable from './components/dataGrid/DataGridTable';
 import { LanguageProvider } from './utils/LanguageContext';
 import { ModeProvider } from './utils/ModeContext';
+import CommercialForm from './components/forms/surveyForm/CommercialForm';
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
                 <Route path='/reset' element={<ResetPassword />} />
               </Route>
               <Route path='/form' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
+              <Route path='/commercial' element={<ProtectedRoute><Layout><CommercialForm /></Layout></ProtectedRoute>} />
+
               <Route path='/form/:formId' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
               <Route path='/formdetail/:id' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
               <Route path='/allusers' element={<ProtectedRoute><Layout><CollapsibleTable /></Layout></ProtectedRoute>} />
