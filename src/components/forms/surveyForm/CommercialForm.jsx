@@ -14,9 +14,11 @@ import { useLanguageData } from '../../../utils/LanguageContext';
 import { surveyFormSchema } from '../../../utils/schemas/surveyForm';
 import { generateEstablishmentOptions } from '../../../utils/constants';
 import Loader from '../../loader';
+import { usePostcomercialFormMutation } from '../../../features/auth/commercial';
 
 const CommercialForm = () => {
     const { translate } = useLanguageData();
+    const [postcomercialForm] = usePostcomercialFormMutation()
     const establishmentOptions = generateEstablishmentOptions(translate);
     const initialValues = {
         establishmentName: '',
@@ -35,7 +37,12 @@ const CommercialForm = () => {
                     <Formik
                         initialValues={initialValues}
                         onSubmit={async (values) => {
-                            console.log(values);
+                            try {
+                                await postcomercialForm(values)
+                                
+                            } catch (error) {
+                                
+                            }
                         }}
                     >
                         {(formik) => {
