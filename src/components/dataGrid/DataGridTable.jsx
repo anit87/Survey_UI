@@ -26,6 +26,7 @@ import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, genera
 import { useLanguageData } from '../../utils/LanguageContext';
 import { useModeData } from '../../utils/ModeContext';
 import { useGetSurveyFormsMutation } from '../../features/auth/userDasbord';
+import { useGetCommercialsurveyQuery } from '../../features/auth/commercial';
 
 const tableCells = [
     { label: 'S.No' },
@@ -33,6 +34,16 @@ const tableCells = [
     { label: 'Mobile No', textAlign: "center" },
     { label: 'Pincode', textAlign: "center" },
     { label: 'Marital Status', textAlign: "center" },
+    { label: 'Created Date', textAlign: "center" },
+    { label: '' }
+]
+
+const commercialCells = [
+    { label: 'S.No' },
+    { label: 'Establishment Name' },
+    { label: 'Establishment Type', textAlign: "center" },
+    { label: 'Business Nature', textAlign: "center" },
+    { label: 'Contact person', textAlign: "center" },
     { label: 'Created Date', textAlign: "center" },
     { label: '' }
 ]
@@ -58,8 +69,14 @@ const formatDate = (dateString) => {
 export default function SurveyForms() {
     const navigate = useNavigate();
     const token = useSelector(state => state.auth.token);
+    const modeSelection = localStorage.getItem("mode");
     const { translate } = useLanguageData();
-    const { mode } = useModeData();
+    // const {commercialSurvey} = useGetCommercialsurveyQuery()
+    const { data: commercialSurvey, isLoading: isSettingsLoading } = useGetCommercialsurveyQuery();
+
+
+    console.log("777777777777777", commercialSurvey?.data);
+
 
     const [userDetail, setUserDetail] = useState({});
     const [page, setPage] = useState(0);
@@ -96,7 +113,7 @@ export default function SurveyForms() {
         setUserDetail(user);
         getActiveUsers();
         getData();
-    }, [filterData])
+    }, [filterData, commercialSurvey])
 
     const headers = {
         'Content-Type': 'application/json',
@@ -274,11 +291,20 @@ export default function SurveyForms() {
                     {verifyLoading ? <Loader /> :
                         (!data || data.data.length < 1) ? <NoData msg="No Surveys Found" /> : data.status &&
                             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                                <TableHeader tableCells={userDetail.userRole === "admin" ?
-                                    [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :
-                                    tableCells}
+                                <TableHeader
+                                    tableCells={
+                                        modeSelection === "residential" ?
+                                            (userDetail.userRole === "admin" ?
+                                                [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :
+                                                tableCells) :
+                                            modeSelection === "commercial" ?
+                                                (userDetail.userRole === "admin" ?
+                                                    [...commercialCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...commercialCells.slice(5)] :
+                                                    commercialCells) :
+                                                tableCells
+                                    }
                                 />
-                                <TableBody>
+                                {modeSelection === "residential" ? <TableBody>
                                     {(rowsPerPage > 0
                                         ? data.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         : data.data
@@ -329,7 +355,61 @@ export default function SurveyForms() {
                                             <TableCell colSpan={6} />
                                         </TableRow>
                                     }
-                                </TableBody>
+                                </TableBody> :
+                                    modeSelection === "commercial" &&
+                                    <TableBody>
+                                        {(rowsPerPage > 0
+                                            ? commercialSurvey?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            : commercialSurvey?.data
+                                        ).map((row, i) => (
+                                            <TableRow key={row._id}>
+                                                <TableCell component="th" scope="row">
+                                                    {parseInt(i) + 1}
+                                                </TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    {row.establishmentName}
+                                                </TableCell>
+                                                <TableCell style={{ width: 160 }} align="center">
+                                                    {row.establishmentType}
+                                                </TableCell>
+                                                <TableCell style={{ width: 160 }} align="center">
+                                                    {row.natureOfBusiness}
+                                                </TableCell>
+                                                <TableCell style={{ width: 160 }} align="center">
+                                                    {row.contactPerson}
+                                                </TableCell>
+                                                {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
+                                                    <TableCell style={{ width: 160 }} align="center">
+                                                        {capitalizeFirstLetter(row?.filledBy?.displayName) || "Admin"}
+                                                    </TableCell>}
+                                                <TableCell align="center">
+                                                    {formatDate(row.date)}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {/* <IconButton color="primary" aria-label="add to shopping cart"
+                                                        onClick={() => navigate(`/formdetail/${row._id}`)}
+                                                    >
+                                                        <VisibilityIcon />
+                                                    </IconButton> */}
+
+                                                    {userDetail.userRole === "admin" &&
+                                                        <IconButton color="primary" aria-label="add to shopping cart"
+                                                            onClick={() => navigate(`/form/${row._id}`)}
+                                                        >
+                                                            <EditTwoToneIcon />
+                                                        </IconButton>
+                                                    }
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                        {
+                                            emptyRows > 0 &&
+                                            <TableRow style={{ height: 53 * emptyRows }}>
+                                                <TableCell colSpan={6} />
+                                            </TableRow>
+                                        }
+                                    </TableBody>
+                                }
                                 {
                                     (data.status && data.data.length > 10) &&
                                     <CustomTablePagination
