@@ -23,7 +23,7 @@ export const comercial = createApi({
                 body,
             }),
             transformResponse: (response, meta, arg) => response,
-            transformErrorResponse: (response, meta, arg) => response.data || response.error,
+            transformErrorResponse: (response, meta, arg) => response.data,
             invalidatesTags: ['commercial'],
         }),
     }),

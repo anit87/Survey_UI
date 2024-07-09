@@ -19,11 +19,14 @@ const CommercialForm = () => {
     const { translate } = useLanguageData();
     let { formId } = useParams();
     const navigate = useNavigate();
-    const [postcomercialForm] = usePostcomercialFormMutation()
+    const [postcomercialForm, { data, isError, isLoading, error }] = usePostcomercialFormMutation();
+    console.log("----------------", data, "--------err-----------", error);
     const establishmentOptions = generateEstablishmentOptions(translate);
 
     const [formsDetail, setFormsDetail] = useState(null);
-    const [isLoading, setisLoading] = useState(false);
+    const [isFormLoading, setisFormLoading] = useState(false);
+    const [savedResp, setSavedResp] = useState({});
+    const [alert, setAlert] = useState(false);
 
     const initialValues = {
         establishmentName: formsDetail ? formsDetail.establishmentName : '',
@@ -31,6 +34,12 @@ const CommercialForm = () => {
         natureOfBusiness: formsDetail ? formsDetail.natureOfBusiness : '',
         contactPerson: formsDetail ? formsDetail.contactPerson : '',
     }
+
+    console.log("check resp", savedResp);
+
+    const alertfn = () => {
+        setTimeout(() => setAlert(true), 1000);
+    };
 
     useEffect(() => {
         if (formId) {
@@ -40,18 +49,19 @@ const CommercialForm = () => {
 
     const getFormDetail = async (formKey) => {
         try {
-            setisLoading(true)
+            setisFormLoading(true)
             const response = await axios.post(apiUrl, { id: formKey });
             setFormsDetail(response.data.data);
         } catch (error) {
             console.error('Error fetching form details:', error);
         } finally {
-            setisLoading(false);
+            setisFormLoading(false);
         }
     };
 
     return (
         <>
+            <Alert open={alert} type={isError ? "error" : "info"} msg={isError ? error?.msg : data?.msg} onClose={() => setAlert(false)} />
             <Toolbar />
             <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Sahaya Hasta</h6>
             <br />
@@ -63,11 +73,12 @@ const CommercialForm = () => {
                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
                             try {
                                 setSubmitting(true);
-                                await postcomercialForm(values)
-                                formId && navigate('/surveys');
-
+                                await postcomercialForm(values).unwrap()
+                                alertfn()
+                                formId && navigate('/surveys')
                             } catch (error) {
                                 console.error('Submission error:', error);
+                                alertfn()
                             } finally {
                                 setSubmitting(false);
                             }
@@ -139,7 +150,7 @@ const CommercialForm = () => {
                                                 sx={{ mt: 3, pl: 3, pr: 3 }}
                                                 disabled={formik.isSubmitting}
                                             >
-                                                Submit
+                                                {formId ? "Update" : "Submit"}
                                             </Button>
                                         }
                                     </div>
