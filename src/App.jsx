@@ -28,10 +28,12 @@ function App() {
                 <Route path='/reset' element={<ResetPassword />} />
               </Route>
               <Route path='/form' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
-              <Route path='/commercial' element={<ProtectedRoute><Layout><CommercialForm /></Layout></ProtectedRoute>} />
-
               <Route path='/form/:formId' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
               <Route path='/formdetail/:id' element={<ProtectedRoute><SurveyMultiStepForm /></ProtectedRoute>} />
+
+              <Route path='/commercial' element={<ProtectedRoute><Layout><CommercialForm /></Layout></ProtectedRoute>} />
+              <Route path='/commercial/:formId' element={<ProtectedRoute><Layout><CommercialForm /></Layout></ProtectedRoute>} />
+
               <Route path='/allusers' element={<ProtectedRoute><Layout><CollapsibleTable /></Layout></ProtectedRoute>} />
               <Route path='/allRecords/:id' element={<ProtectedRoute><Layout><RecordsbyUser /></Layout></ProtectedRoute>} />
               <Route path='/createuser' element={<ProtectedRoute><Layout><CreateUser /></Layout></ProtectedRoute>} />

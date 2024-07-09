@@ -16,11 +16,6 @@ export const comercial = createApi({
     }),
     tagTypes: ['commercial'],
     endpoints: (builder) => ({
-        getCommercialsurvey: builder.query({
-            query: (body) => `commercial`,
-            providesTags: (result, error, id) => [{ type: 'commercial' }],
-        }),
-        
         postcomercialForm: builder.mutation({
             query: (body) => ({
                 url: `commercial`,
@@ -31,8 +26,7 @@ export const comercial = createApi({
             transformErrorResponse: (response, meta, arg) => response.data || response.error,
             invalidatesTags: ['commercial'],
         }),
-
     }),
 });
 
-export const { usePostcomercialFormMutation, useGetCommercialsurveyQuery } = comercial;
+export const { usePostcomercialFormMutation } = comercial;

@@ -12,6 +12,8 @@ import NoData from "../NoData";
 import Loader from '../loader';
 import TableHeader, { StyledTableCell } from './TableHeader';
 import { modes, useModeData } from '../../utils/ModeContext';
+import { useLanguageData } from '../../utils/LanguageContext';
+import { maritalOptions, generateEstablishmentOptions } from '../../utils/constants';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -25,6 +27,9 @@ const RecordsbyUser = () => {
   const { id } = useParams();
   const { mode } = useModeData();
   const navigate = useNavigate();
+  const { translate } = useLanguageData();
+  const establishmentOptions = generateEstablishmentOptions(translate);
+
   const [formsDetail, setFormsDetail] = useState({ data: [], user: { displayName: "" } });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -51,13 +56,20 @@ const RecordsbyUser = () => {
     }
   };
 
+  const getEstablishmentType = (value) => {
+    return establishmentOptions.find(item => item.value == value).label
+  };
+
   const getTableCellContent = (row, residentialValue, commercialValue) => {
+    if (mode !== modes.residential && commercialValue === 'establishmentType' && row.establishmentType) {
+      return getEstablishmentType(row['establishmentType'])
+    }
     return mode === modes.residential ? row[residentialValue] : row[commercialValue];
   };
 
   const getMaritalStatus = (row) => {
     if (mode === modes.residential) {
-      return row.maritalStatus === 1 ? 'Single' : 'Married';
+      return maritalOptions.find(item => row?.maritalStatus == item.value)?.label;
     }
     return row.contactPerson;
   };

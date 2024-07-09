@@ -24,9 +24,8 @@ import TableHeader from './TableHeader';
 import { SelectInput } from '../inputs/SelectInput';
 import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants";
 import { useLanguageData } from '../../utils/LanguageContext';
-import { useModeData } from '../../utils/ModeContext';
+import { modes, useModeData } from '../../utils/ModeContext';
 import { useGetSurveyFormsMutation } from '../../features/auth/userDasbord';
-import { useGetCommercialsurveyQuery } from '../../features/auth/commercial';
 
 const tableCells = [
     { label: 'S.No' },
@@ -69,13 +68,8 @@ const formatDate = (dateString) => {
 export default function SurveyForms() {
     const navigate = useNavigate();
     const token = useSelector(state => state.auth.token);
-    const modeSelection = localStorage.getItem("mode");
+    const { mode } = useModeData();
     const { translate } = useLanguageData();
-    // const {commercialSurvey} = useGetCommercialsurveyQuery()
-    const { data: commercialSurvey, isLoading: isSettingsLoading } = useGetCommercialsurveyQuery();
-
-
-    console.log("777777777777777", commercialSurvey?.data);
 
 
     const [userDetail, setUserDetail] = useState({});
@@ -112,17 +106,21 @@ export default function SurveyForms() {
         const user = verifyUser(token);
         setUserDetail(user);
         getActiveUsers();
-        getData();
-    }, [filterData, commercialSurvey])
+    }, [])
+
+    useEffect(() => {
+        let endpoint = mode === modes.residential ? 'users/allrecords' : 'commercial'
+        getData(endpoint);
+    }, [filterData, mode])
 
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': localStorage.getItem("surveyApp"),
     };
 
-    const getData = async () => {
+    const getData = async (endpoint) => {
         try {
-            await getSurveyForms(filterData);
+            await getSurveyForms({ ...filterData, endpoint });
         } catch (error) {
             console.log("Error in Dashboard ", error);
         }
@@ -175,6 +173,12 @@ export default function SurveyForms() {
         });
     }
 
+    const baseHeaders = mode === modes.residential ? tableCells : commercialCells;
+    const tableHeaders = userDetail.userRole === 'admin'
+        ? [...baseHeaders.slice(0, 5), { label: 'Supervisor', textAlign: 'center' }, ...baseHeaders.slice(5)]
+        : baseHeaders
+        ;
+
     return (
         <TableContainer component={Paper}>
 
@@ -196,118 +200,110 @@ export default function SurveyForms() {
                 </>
             }
 
-            <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >Smart Filters</h6>
+            {mode === modes.residential &&
+                <>
+                    <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >Smart Filters</h6>
 
-            <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={{ xs: 1, sm: 2, md: 4 }}
-                sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
-            >
+                    <Stack
+                        direction={{ xs: 'column', sm: 'row' }}
+                        spacing={{ xs: 1, sm: 2, md: 4 }}
+                        sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
+                    >
 
-                <SelectInput
-                    label="Filter By Marital Status"
-                    name="maritalStatus"
-                    options={maritalOptions}
-                    value={filterData.maritalStatus}
-                    changeHandler={(e) => changeHandler(e)}
-                />
+                        <SelectInput
+                            label="Filter By Marital Status"
+                            name="maritalStatus"
+                            options={maritalOptions}
+                            value={filterData.maritalStatus}
+                            changeHandler={(e) => changeHandler(e)}
+                        />
 
-                <SelectInput
-                    label="Filter By Income"
-                    name="monthlyHouseholdIncome"
-                    options={incomeOptions}
-                    value={filterData.monthlyHouseholdIncome}
-                    changeHandler={(e) => changeHandler(e)}
-                />
+                        <SelectInput
+                            label="Filter By Income"
+                            name="monthlyHouseholdIncome"
+                            options={incomeOptions}
+                            value={filterData.monthlyHouseholdIncome}
+                            changeHandler={(e) => changeHandler(e)}
+                        />
 
-                <SelectInput
-                    label="Own Property"
-                    name="isOwnProperty"
-                    options={trueFalseOptions}
-                    value={filterData.isOwnProperty}
-                    changeHandler={(e) => changeHandler(e)}
-                />
+                        <SelectInput
+                            label="Own Property"
+                            name="isOwnProperty"
+                            options={trueFalseOptions}
+                            value={filterData.isOwnProperty}
+                            changeHandler={(e) => changeHandler(e)}
+                        />
 
-                <DynamicDatePicker
-                    label="Filled From"
-                    name="startDate"
-                    defaultValue={filterData.startDate}
-                    minDate="2023-08-01"
-                    filterData={filterData}
-                    setFilterData={setFilterData}
-                />
+                        <DynamicDatePicker
+                            label="Filled From"
+                            name="startDate"
+                            defaultValue={filterData.startDate}
+                            minDate="2023-08-01"
+                            filterData={filterData}
+                            setFilterData={setFilterData}
+                        />
 
-            </Stack>
+                    </Stack>
 
-            <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={{ xs: 1, sm: 2, md: 4 }}
-                sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
-            >
-                <FormControl fullWidth >
-                    <SelectInput
-                        label="Religion"
-                        name="religion"
-                        options={religionOptions}
-                        value={filterData.religion}
-                        changeHandler={(e) => changeHandler(e)}
-                    />
-                    <SelectInput
-                        label="Caste"
-                        name="caste"
-                        options={casteOptions}
-                        value={filterData.caste}
-                        changeHandler={(e) => changeHandler(e)}
-                    />
-                </FormControl>
+                    <Stack
+                        direction={{ xs: 'column', sm: 'row' }}
+                        spacing={{ xs: 1, sm: 2, md: 4 }}
+                        sx={{ mt: 1, mb: 1, ml: 1, mr: 1 }}
+                    >
+                        <FormControl fullWidth >
+                            <SelectInput
+                                label="Religion"
+                                name="religion"
+                                options={religionOptions}
+                                value={filterData.religion}
+                                changeHandler={(e) => changeHandler(e)}
+                            />
+                            <SelectInput
+                                label="Caste"
+                                name="caste"
+                                options={casteOptions}
+                                value={filterData.caste}
+                                changeHandler={(e) => changeHandler(e)}
+                            />
+                        </FormControl>
 
-                <SelectInput
-                    label="Occupation Status"
-                    name="occupationStatus"
-                    options={occupationOptios}
-                    value={filterData.occupationStatus}
-                    changeHandler={(e) => changeHandler(e)}
-                />
+                        <SelectInput
+                            label="Occupation Status"
+                            name="occupationStatus"
+                            options={occupationOptios}
+                            value={filterData.occupationStatus}
+                            changeHandler={(e) => changeHandler(e)}
+                        />
 
-                <SelectInput
-                    label="Education Of Chief Wage Earner"
-                    name="cweEducation"
-                    options={educationalOptions}
-                    value={filterData.cweEducation}
-                    changeHandler={(e) => changeHandler(e)}
-                />
+                        <SelectInput
+                            label="Education Of Chief Wage Earner"
+                            name="cweEducation"
+                            options={educationalOptions}
+                            value={filterData.cweEducation}
+                            changeHandler={(e) => changeHandler(e)}
+                        />
 
-                <DynamicDatePicker
-                    label="Upto"
-                    name="endDate"
-                    minDate={filterData.startDate}
-                    filterData={filterData}
-                    setFilterData={setFilterData}
-                />
-            </Stack>
+                        <DynamicDatePicker
+                            label="Upto"
+                            name="endDate"
+                            minDate={filterData.startDate}
+                            filterData={filterData}
+                            setFilterData={setFilterData}
+                        />
+                    </Stack>
+                </>
+            }
 
             {
                 <>
                     {verifyLoading ? <Loader /> :
-                        (!data || data.data.length < 1) ? <NoData msg="No Surveys Found" /> : data.status &&
+                        (!data || data.length < 1) ? <NoData msg="No Surveys Found" /> :
                             <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-                                <TableHeader
-                                    tableCells={
-                                        modeSelection === "residential" ?
-                                            (userDetail.userRole === "admin" ?
-                                                [...tableCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...tableCells.slice(5)] :
-                                                tableCells) :
-                                            modeSelection === "commercial" ?
-                                                (userDetail.userRole === "admin" ?
-                                                    [...commercialCells.slice(0, 5), { label: 'Supervisor', textAlign: "center" }, ...commercialCells.slice(5)] :
-                                                    commercialCells) :
-                                                tableCells
-                                    }
-                                />
-                                {modeSelection === "residential" ? <TableBody>
+                                <TableHeader tableCells={tableHeaders} />
+                                <TableBody>
                                     {(rowsPerPage > 0
-                                        ? data.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        : data.data
+                                        ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        : data
                                     ).map((row, i) => (
                                         <TableRow key={row._id}>
                                             <TableCell component="th" scope="row">
@@ -333,15 +329,17 @@ export default function SurveyForms() {
                                                 {formatDate(row.date)}
                                             </TableCell>
                                             <TableCell align="center">
-                                                <IconButton color="primary" aria-label="add to shopping cart"
-                                                    onClick={() => navigate(`/formdetail/${row._id}`)}
-                                                >
-                                                    <VisibilityIcon />
-                                                </IconButton>
+                                                {mode === modes.residential && 
+                                                    <IconButton color="primary" aria-label="add to shopping cart"
+                                                        onClick={() => navigate(`/formdetail/${row._id}`)}
+                                                    >
+                                                        <VisibilityIcon />
+                                                    </IconButton>
+                                                }
 
                                                 {userDetail.userRole === "admin" &&
                                                     <IconButton color="primary" aria-label="add to shopping cart"
-                                                        onClick={() => navigate(`/form/${row._id}`)}
+                                                        onClick={() => navigate(`/${(mode === modes.residential) ? 'form' : 'commercial'}/${row._id}`)}
                                                     >
                                                         <EditTwoToneIcon />
                                                     </IconButton>
@@ -355,65 +353,11 @@ export default function SurveyForms() {
                                             <TableCell colSpan={6} />
                                         </TableRow>
                                     }
-                                </TableBody> :
-                                    modeSelection === "commercial" &&
-                                    <TableBody>
-                                        {(rowsPerPage > 0
-                                            ? commercialSurvey?.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            : commercialSurvey?.data
-                                        ).map((row, i) => (
-                                            <TableRow key={row._id}>
-                                                <TableCell component="th" scope="row">
-                                                    {parseInt(i) + 1}
-                                                </TableCell>
-                                                <TableCell component="th" scope="row">
-                                                    {row.establishmentName}
-                                                </TableCell>
-                                                <TableCell style={{ width: 160 }} align="center">
-                                                    {row.establishmentType}
-                                                </TableCell>
-                                                <TableCell style={{ width: 160 }} align="center">
-                                                    {row.natureOfBusiness}
-                                                </TableCell>
-                                                <TableCell style={{ width: 160 }} align="center">
-                                                    {row.contactPerson}
-                                                </TableCell>
-                                                {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                                                    <TableCell style={{ width: 160 }} align="center">
-                                                        {capitalizeFirstLetter(row?.filledBy?.displayName) || "Admin"}
-                                                    </TableCell>}
-                                                <TableCell align="center">
-                                                    {formatDate(row.date)}
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    {/* <IconButton color="primary" aria-label="add to shopping cart"
-                                                        onClick={() => navigate(`/formdetail/${row._id}`)}
-                                                    >
-                                                        <VisibilityIcon />
-                                                    </IconButton> */}
-
-                                                    {userDetail.userRole === "admin" &&
-                                                        <IconButton color="primary" aria-label="add to shopping cart"
-                                                            onClick={() => navigate(`/form/${row._id}`)}
-                                                        >
-                                                            <EditTwoToneIcon />
-                                                        </IconButton>
-                                                    }
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                        {
-                                            emptyRows > 0 &&
-                                            <TableRow style={{ height: 53 * emptyRows }}>
-                                                <TableCell colSpan={6} />
-                                            </TableRow>
-                                        }
-                                    </TableBody>
-                                }
+                                </TableBody>
                                 {
-                                    (data.status && data.data.length > 10) &&
+                                    (data.length > 10) &&
                                     <CustomTablePagination
-                                        count={data.data.length}
+                                        count={data.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         onPageChange={handleChangePage}

@@ -1,31 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Typography, Container, Button, Stack, IconButton, Toolbar } from "@mui/material";
-import { Formik, Form, FieldArray } from "formik";
-import { AddCircle, RemoveCircle } from '@mui/icons-material';
+import { Box, Grid, Container, Button, Toolbar } from "@mui/material";
+import { Formik, Form } from "formik";
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 
 import Alert from '../../Alert';
 import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput';
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import { useLanguageData } from '../../../utils/LanguageContext';
-import { surveyFormSchema } from '../../../utils/schemas/surveyForm';
 import { generateEstablishmentOptions } from '../../../utils/constants';
 import Loader from '../../loader';
 import { usePostcomercialFormMutation } from '../../../features/auth/commercial';
 
+const apiUrl = import.meta.env.VITE_API_URL + '/commercial/getForm';
+
 const CommercialForm = () => {
     const { translate } = useLanguageData();
+    let { formId } = useParams();
+    const navigate = useNavigate();
     const [postcomercialForm] = usePostcomercialFormMutation()
     const establishmentOptions = generateEstablishmentOptions(translate);
+
+    const [formsDetail, setFormsDetail] = useState(null);
+    const [isLoading, setisLoading] = useState(false);
+
     const initialValues = {
-        establishmentName: '',
-        establishmentType: '',
-        natureOfBusiness: '',
-        contactPerson: ''
+        establishmentName: formsDetail ? formsDetail.establishmentName : '',
+        establishmentType: formsDetail ? formsDetail.establishmentType : '',
+        natureOfBusiness: formsDetail ? formsDetail.natureOfBusiness : '',
+        contactPerson: formsDetail ? formsDetail.contactPerson : '',
     }
+
+    useEffect(() => {
+        if (formId) {
+            getFormDetail(formId);
+        }
+    }, [formId]);
+
+    const getFormDetail = async (formKey) => {
+        try {
+            setisLoading(true)
+            const response = await axios.post(apiUrl, { id: formKey });
+            setFormsDetail(response.data.data);
+        } catch (error) {
+            console.error('Error fetching form details:', error);
+        } finally {
+            setisLoading(false);
+        }
+    };
+
     return (
         <>
             <Toolbar />
@@ -36,16 +60,31 @@ const CommercialForm = () => {
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
                         initialValues={initialValues}
-                        onSubmit={async (values) => {
+                        onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
                             try {
+                                setSubmitting(true);
                                 await postcomercialForm(values)
-                                
+                                formId && navigate('/surveys');
+
                             } catch (error) {
-                                
+                                console.error('Submission error:', error);
+                            } finally {
+                                setSubmitting(false);
                             }
                         }}
                     >
                         {(formik) => {
+                            const { setFieldValue } = formik;
+
+                            useEffect(() => {
+                                if (formId && formsDetail) {
+                                    setFieldValue("establishmentName", formsDetail?.establishmentName);
+                                    setFieldValue("establishmentType", formsDetail?.establishmentType);
+                                    setFieldValue("natureOfBusiness", formsDetail?.natureOfBusiness);
+                                    setFieldValue("contactPerson", formsDetail?.contactPerson);
+                                    setFieldValue("formId", formId);
+                                }
+                            }, [formId, formsDetail, setFieldValue]);
                             return (
                                 < Form >
                                     {formik.isSubmitting ? <Loader /> :
@@ -98,6 +137,7 @@ const CommercialForm = () => {
                                                 type='submit'
                                                 style={{ textAlign: "right" }}
                                                 sx={{ mt: 3, pl: 3, pr: 3 }}
+                                                disabled={formik.isSubmitting}
                                             >
                                                 Submit
                                             </Button>

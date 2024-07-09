@@ -19,7 +19,7 @@ export const userDashboard = createApi({
 
         getSurveyForms: builder.mutation({
             query: (body) => ({
-                url: `users/allrecords`,
+                url: body.endpoint,
                 params: {
                     isOwnProperty: body.isOwnProperty.toString(),
                     maritalStatus: body.maritalStatus,
@@ -33,11 +33,11 @@ export const userDashboard = createApi({
                 },
                 method: 'GET',
             }),
-            transformResponse: (response, meta, arg) => response,
+            transformResponse: (response, meta, arg) => response.data,
             transformErrorResponse: (response, meta, arg) => response.data || response.error,
             invalidatesTags: ['Users'],
         }),
     }),
 });
 
-export const {useGetSurveyFormsMutation } = userDashboard;
+export const { useGetSurveyFormsMutation } = userDashboard;
