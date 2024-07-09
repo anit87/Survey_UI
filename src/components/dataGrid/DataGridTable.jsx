@@ -30,20 +30,20 @@ import { useGetSurveyFormsMutation } from '../../features/auth/userDasbord';
 const tableCells = [
     { label: 'S.No' },
     { label: 'Respondent Name' },
-    { label: 'Mobile No', textAlign: "center" },
-    { label: 'Pincode', textAlign: "center" },
-    { label: 'Marital Status', textAlign: "center" },
-    { label: 'Created Date', textAlign: "center" },
+    { label: 'Mobile No' },
+    { label: 'Pincode' },
+    { label: 'Marital Status' },
+    { label: 'Created Date' },
     { label: '' }
 ]
 
 const commercialCells = [
     { label: 'S.No' },
     { label: 'Establishment Name' },
-    { label: 'Establishment Type', textAlign: "center" },
-    { label: 'Business Nature', textAlign: "center" },
-    { label: 'Contact person', textAlign: "center" },
-    { label: 'Created Date', textAlign: "center" },
+    { label: 'Establishment Type' },
+    { label: 'Business Nature' },
+    { label: 'Contact person' },
+    { label: 'Created Date' },
     { label: '' }
 ]
 
@@ -176,7 +176,7 @@ export default function SurveyForms() {
 
     const baseHeaders = mode === modes.residential ? tableCells : commercialCells;
     const tableHeaders = userDetail.userRole === 'admin'
-        ? [...baseHeaders.slice(0, 5), { label: 'Supervisor', textAlign: 'center' }, ...baseHeaders.slice(5)]
+        ? [...baseHeaders.slice(0, 5), { label: 'Supervisor' }, ...baseHeaders.slice(5)]
         : baseHeaders
         ;
 
@@ -313,7 +313,7 @@ export default function SurveyForms() {
                                             <TableCell component="th" scope="row">
                                                 {mode === modes.residential ? row.respondentName : row.establishmentName}
                                             </TableCell>
-                                            <TableCell style={{ width: 160 }} align="center">
+                                            <TableCell style={{ width: 160 }}>
                                                 {
                                                     mode === modes.residential ?
                                                         row.mobileNo :
@@ -321,21 +321,21 @@ export default function SurveyForms() {
 
                                                 }
                                             </TableCell>
-                                            <TableCell style={{ width: 160 }} align="center">
+                                            <TableCell style={{ width: 160 }}>
                                                 {mode === modes.residential ? row.pincode : row.natureOfBusiness}
                                             </TableCell>
-                                            <TableCell style={{ width: 160 }} align="center">
+                                            <TableCell style={{ width: 160 }}>
                                                 {mode === modes.residential ? (row.maritalStatus === 1 ? "Single" : "Married") : row.contactPerson}
                                             </TableCell>
                                             {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
-                                                <TableCell style={{ width: 160 }} align="center">
+                                                <TableCell style={{ width: 160 }}>
                                                     {capitalizeFirstLetter(row?.filledBy?.displayName) || "Admin"}
                                                 </TableCell>
                                             }
-                                            <TableCell align="center">
+                                            <TableCell>
                                                 {formatDate(row.date)}
                                             </TableCell>
-                                            <TableCell align="center">
+                                            <TableCell>
                                                 {mode === modes.residential &&
                                                     <IconButton color="primary" aria-label="add to shopping cart"
                                                         onClick={() => navigate(`/formdetail/${row._id}`)}

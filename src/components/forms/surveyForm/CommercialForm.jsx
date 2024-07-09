@@ -20,7 +20,7 @@ const CommercialForm = () => {
     let { formId } = useParams();
     const navigate = useNavigate();
     const [postcomercialForm, { data, isError, isLoading, error }] = usePostcomercialFormMutation();
-    console.log("----------------", data, "--------err-----------", error);
+
     const establishmentOptions = generateEstablishmentOptions(translate);
 
     const [formsDetail, setFormsDetail] = useState(null);
@@ -73,12 +73,13 @@ const CommercialForm = () => {
                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
                             try {
                                 setSubmitting(true);
-                                await postcomercialForm(values).unwrap()
-                                alertfn()
+                                await postcomercialForm(values).unwrap();
+                                alertfn();
+                                resetForm();
                                 formId && navigate('/surveys')
                             } catch (error) {
                                 console.error('Submission error:', error);
-                                alertfn()
+                                alertfn();
                             } finally {
                                 setSubmitting(false);
                             }
