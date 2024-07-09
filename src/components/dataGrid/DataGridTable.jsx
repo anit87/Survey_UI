@@ -22,7 +22,7 @@ import Loader from '../loader';
 import NoData from '../NoData';
 import TableHeader from './TableHeader';
 import { SelectInput } from '../inputs/SelectInput';
-import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions } from "../../utils/constants";
+import { generateIncomeOptions, maritalOptions, generateTrueFalseOptions, generateEducationalOptions, generatereligionOptions, occupationOptios, generateCasteOptions, generateEstablishmentOptions } from "../../utils/constants";
 import { useLanguageData } from '../../utils/LanguageContext';
 import { modes, useModeData } from '../../utils/ModeContext';
 import { useGetSurveyFormsMutation } from '../../features/auth/userDasbord';
@@ -101,6 +101,7 @@ export default function SurveyForms() {
     const educationalOptions = generateEducationalOptions(translate);
     const casteOptions = generateCasteOptions(translate);
     const religionOptions = generatereligionOptions(translate);
+    const establishmentOptions = generateEstablishmentOptions(translate);
 
     useEffect(() => {
         const user = verifyUser(token);
@@ -310,26 +311,32 @@ export default function SurveyForms() {
                                                 {parseInt(i) + 1}
                                             </TableCell>
                                             <TableCell component="th" scope="row">
-                                                {row.respondentName}
+                                                {mode === modes.residential ? row.respondentName : row.establishmentName}
                                             </TableCell>
                                             <TableCell style={{ width: 160 }} align="center">
-                                                {row.mobileNo}
+                                                {
+                                                    mode === modes.residential ?
+                                                        row.mobileNo :
+                                                        establishmentOptions.find(item => item.value == row?.establishmentType)?.label
+
+                                                }
                                             </TableCell>
                                             <TableCell style={{ width: 160 }} align="center">
-                                                {row.pincode}
+                                                {mode === modes.residential ? row.pincode : row.natureOfBusiness}
                                             </TableCell>
                                             <TableCell style={{ width: 160 }} align="center">
-                                                {row.maritalStatus === 1 ? "Single" : "Married"}
+                                                {mode === modes.residential ? (row.maritalStatus === 1 ? "Single" : "Married") : row.contactPerson}
                                             </TableCell>
                                             {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
                                                 <TableCell style={{ width: 160 }} align="center">
                                                     {capitalizeFirstLetter(row?.filledBy?.displayName) || "Admin"}
-                                                </TableCell>}
+                                                </TableCell>
+                                            }
                                             <TableCell align="center">
                                                 {formatDate(row.date)}
                                             </TableCell>
                                             <TableCell align="center">
-                                                {mode === modes.residential && 
+                                                {mode === modes.residential &&
                                                     <IconButton color="primary" aria-label="add to shopping cart"
                                                         onClick={() => navigate(`/formdetail/${row._id}`)}
                                                     >
