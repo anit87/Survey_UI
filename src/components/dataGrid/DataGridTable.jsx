@@ -106,7 +106,7 @@ export default function SurveyForms() {
     useEffect(() => {
         const user = verifyUser(token);
         setUserDetail(user);
-        getActiveUsers();
+        getActiveUsers(user);
     }, [])
 
     useEffect(() => {
@@ -126,29 +126,42 @@ export default function SurveyForms() {
             console.log("Error in Dashboard ", error);
         }
     }
-    const getActiveUsers = async () => {
+    const getActiveUsers = async (userInfo) => {
         try {
-            const result = await axios.get(`${apiUrl}/users/getlastform`, { headers })
-            const agents = await Promise.all(result.data.result.agents.map(obj => {
-                let userStatus = false
-                if (obj.surveys.length < 1) {
-                    return { ...obj, userStatus }
+            if (userInfo.userRole !== 'admin' && userInfo.userRole !== '2') {
+                return setActiveAgents({ status: false, result: { agents: [], fieldAgents: [] } });
+            }
+
+            let agents = [];
+            const result = await axios.get(`${apiUrl}/users/getlastform`, { headers });
+
+            if (userInfo.userRole === 'admin') {
+                agents = await Promise.all(result?.data?.result?.agents?.map(obj => {
+                    let userStatus = false;
+                    const allFilledForms = [...obj?.surveys, ...obj?.lastCommercial];
+
+                    if (allFilledForms.length < 1) {
+                        return { ...obj, userStatus };
+                    } else {
+                        allFilledForms.sort((a, b) => new Date(b.date) - new Date(a.date));
+                        userStatus = isAgentActive(allFilledForms[0].date);
+                        return { ...obj, userStatus };
+                    }
+                }))
+            }
+            const fieldAgents = await Promise.all(result?.data?.result?.fieldAgents?.map(obj => {
+                let userStatus = false;
+                const allFilledForms = [...obj?.surveys, ...obj?.lastCommercial];
+                if (allFilledForms.length < 1) {
+                    return { ...obj, userStatus };
                 } else {
-                    userStatus = isAgentActive(obj.surveys[0].date)
-                    return { ...obj, userStatus }
-                }
-            }))
-            const fieldAgents = await Promise.all(result.data.result.fieldAgents.map(obj => {
-                let userStatus = false
-                if (obj.surveys.length < 1) {
-                    return { ...obj, userStatus }
-                } else {
-                    userStatus = isAgentActive(obj.surveys[0].date)
-                    return { ...obj, userStatus }
+                    allFilledForms.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    userStatus = isAgentActive(allFilledForms[0].date);
+                    return { ...obj, userStatus };
                 }
             }))
 
-            setActiveAgents({ status: true, result: { agents, fieldAgents } })
+            setActiveAgents({ status: true, result: { agents, fieldAgents } });
         } catch (error) {
             console.log(error)
         }
@@ -196,7 +209,7 @@ export default function SurveyForms() {
             {userDetail.userRole === "2" &&
                 <>
                     <h6 className='m-4' style={{ fontSize: "20px", fontWeight: "bold" }} >
-                        {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj => userDetail.id === obj.creatorId.toString()).filter(obj => obj.userStatus).length}`}
+                        {`Active Field Agents: ${activeAgents.result.fieldAgents.filter(obj => obj.userStatus).length}`}
                     </h6>
                 </>
             }

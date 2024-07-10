@@ -25,7 +25,6 @@ const CommercialForm = () => {
 
     const [formsDetail, setFormsDetail] = useState(null);
     const [isFormLoading, setisFormLoading] = useState(false);
-    const [savedResp, setSavedResp] = useState({});
     const [alert, setAlert] = useState(false);
 
     const initialValues = {
@@ -34,8 +33,6 @@ const CommercialForm = () => {
         natureOfBusiness: formsDetail ? formsDetail.natureOfBusiness : '',
         contactPerson: formsDetail ? formsDetail.contactPerson : '',
     }
-
-    console.log("check resp", savedResp);
 
     const alertfn = () => {
         setTimeout(() => setAlert(true), 1000);
