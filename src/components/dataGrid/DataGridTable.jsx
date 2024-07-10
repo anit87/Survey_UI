@@ -169,7 +169,7 @@ export default function SurveyForms() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (data?.data?.length || 0)) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (data?.length)) : 0;
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
