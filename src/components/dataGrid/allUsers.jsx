@@ -62,7 +62,7 @@ function Row({ row, index, userDetail }) {
         </TableCell>
       </TableRow>
       {row.userRole !== "fielduser" &&
-        <TableRow>
+        <TableRow className='user_fieldagent'>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1, maxHeight: open ? '200px' : '0', overflow: 'hidden', transition: 'max-height 0.5s ease' }}>
