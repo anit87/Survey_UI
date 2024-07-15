@@ -135,6 +135,10 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
         maritalStatus: formsDetail ? formsDetail.maritalStatus : '',
         occupationStatus: formsDetail ? formsDetail.occupationStatus : '',
         monthlyHouseholdIncome: formsDetail ? formsDetail.monthlyHouseholdIncome : '',
+        isCelebrities: formsDetail ? formsDetail?.isCelebrities : '',
+        boothNumber: formsDetail ? formsDetail?.boothNumber : '',
+        constituency: formsDetail ? formsDetail?.constituency : '',
+        wardNumber: formsDetail ? formsDetail?.wardNumber : '',
     }
 
     useEffect(() => {
@@ -228,93 +232,50 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                     {formik.isSubmitting ? <Loader /> :
                                         <div>
                                             <br />
-                                            {activeStep === 0 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                            {activeStep === 0 &&
+                                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-                                                <Grid item md={6} xs={12}>
-                                                    <TextInput
-                                                        label={translate("ApplicantName")}
-                                                        title="Please Enter Your Name"
-                                                        name="respondentName"
-                                                        type="text"
-                                                        placeholder="Please Provide Your Full Name"
-                                                    />
-                                                </Grid>
+                                                    <Grid item md={6} xs={12}>
+                                                        <TextInput
+                                                            label={translate("ApplicantName")}
+                                                            title="Please Enter Your Name"
+                                                            name="respondentName"
+                                                            type="text"
+                                                            placeholder="Please Provide Your Full Name"
+                                                        />
+                                                    </Grid>
 
-                                                <Grid item md={6} xs={12}>
-                                                    <TextInput
-                                                        label={translate("Address")}
-                                                        title="Please Enter Your Full Address"
-                                                        name="address"
-                                                        type="text"
-                                                        placeholder="Enter Your Full Mailing Address Here"
-                                                    />
-                                                </Grid>
+                                                    <Grid item md={6} xs={12}>
+                                                        <TextInput
+                                                            label={translate("Address")}
+                                                            title="Please Enter Your Full Address"
+                                                            name="address"
+                                                            type="text"
+                                                            placeholder="Enter Your Full Mailing Address Here"
+                                                        />
+                                                    </Grid>
 
-                                                <Grid item md={6} xs={12}>
-                                                    <TextInput
-                                                        label={translate('Pincode')}
-                                                        title="Enter Your Area Pincode"
-                                                        name="pincode"
-                                                        type="number"
-                                                        placeholder="454545"
-                                                    />
-                                                </Grid>
+                                                    <Grid item md={6} xs={12}>
+                                                        <TextInput
+                                                            label={translate('Pincode')}
+                                                            title="Enter Your Area Pincode"
+                                                            name="pincode"
+                                                            type="number"
+                                                            placeholder="454545"
+                                                        />
+                                                    </Grid>
 
-                                                <Grid item md={6} xs={12}>
-                                                    <TextInput
-                                                        label={translate('MobileNumber')}
-                                                        title="Enter Your Mobile No"
-                                                        name="mobileNo"
-                                                        type="number"
-                                                        placeholder="9874563210"
-                                                    />
+                                                    <Grid item md={6} xs={12}>
+                                                        <TextInput
+                                                            label={translate('MobileNumber')}
+                                                            title="Enter Your Mobile No"
+                                                            name="mobileNo"
+                                                            type="number"
+                                                            placeholder="9874563210"
+                                                        />
+                                                    </Grid>
                                                 </Grid>
-
-                                                <Grid item md={6} xs={12}>
-                                                    <SelectInput
-                                                        label={translate('MaritalStatus')}
-                                                        title="Are You Married?"
-                                                        id="maritalStatus"
-                                                        name="maritalStatus"
-                                                        options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
-                                                    />
-                                                </Grid>
-
-                                                <Grid item md={6} xs={12}>
-                                                    <SelectInput
-                                                        label={translate('OccupationStatus')}
-                                                        title="Can You Please Tell Me Your Occupation Status?"
-                                                        id="occupationStatus"
-                                                        name="occupationStatus"
-                                                        options={[
-                                                            { label: translate('Self-employed'), value: "1" },
-                                                            { label: translate('Full-time'), value: "2" },
-                                                            { label: translate('Part-time/freelancer'), value: "3" },
-                                                            { label: translate('Home maker'), value: "4" }
-                                                        ]}
-                                                    />
-                                                </Grid>
-
-                                                <Grid item md={6} xs={12}>
-                                                    <SelectInput
-                                                        label={translate('MHI')}
-                                                        title="What is the Monthly Household Income (MHI)."
-                                                        id="monthlyHouseholdIncome"
-                                                        name="monthlyHouseholdIncome"
-                                                        options={incomeOptions}
-                                                    />
-                                                </Grid>
-
-                                                <Grid item md={6} xs={12}>
-                                                    <SelectInput
-                                                        label={translate('OwnProperty')}
-                                                        title="Is This Your Own Property?"
-                                                        name="isOwnProperty"
-                                                        id="isOwnProperty"
-                                                        options={trueFalseOptions}
-                                                    />
-                                                </Grid>
-                                            </Grid>}
+                                            }
 
                                             {activeStep === 1 &&
                                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -375,6 +336,59 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                 </Grid>
 
                                                 <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('votedLastElection')} name="votedLastElection"
+                                                        id="votedLastElection"
+                                                        options={votedLastElectionOptions}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('MaritalStatus')}
+                                                        title="Are You Married?"
+                                                        id="maritalStatus"
+                                                        name="maritalStatus"
+                                                        options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('OccupationStatus')}
+                                                        title="Can You Please Tell Me Your Occupation Status?"
+                                                        id="occupationStatus"
+                                                        name="occupationStatus"
+                                                        options={[
+                                                            { label: translate('Self-employed'), value: "1" },
+                                                            { label: translate('Full-time'), value: "2" },
+                                                            { label: translate('Part-time/freelancer'), value: "3" },
+                                                            { label: translate('Home maker'), value: "4" }
+                                                        ]}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('MHI')}
+                                                        title="What is the Monthly Household Income (MHI)."
+                                                        id="monthlyHouseholdIncome"
+                                                        name="monthlyHouseholdIncome"
+                                                        options={incomeOptions}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label={translate('OwnProperty')}
+                                                        title="Is This Your Own Property?"
+                                                        name="isOwnProperty"
+                                                        id="isOwnProperty"
+                                                        options={trueFalseOptions}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
                                                     <TextInput
                                                         label={translate("VoterID")}
                                                         title={translate('VoterIDPlaceholder')}
@@ -402,14 +416,6 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                         />
                                                     }
 
-                                                </Grid>
-
-                                                <Grid item md={6} xs={12}>
-                                                    <SelectInput
-                                                        label={translate('votedLastElection')} name="votedLastElection"
-                                                        id="votedLastElection"
-                                                        options={votedLastElectionOptions}
-                                                    />
                                                 </Grid>
 
                                             </Grid>}
@@ -460,6 +466,32 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                         name="weddingDate"
                                                         type="date"
                                                         placeholder={translate('weddingDate')}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label="Booth Number"
+                                                        name="boothNumber"
+                                                        type="text"
+                                                        placeholder="Enter Booth Number"
+                                                    />
+                                                </Grid>
+                                                <Grid item md={6} xs={12}>
+                                                    <SelectInput
+                                                        label="Constituency"
+                                                        title="Choose Constituency"
+                                                        name="constituency"
+                                                        id="constituency"
+                                                        options={constituencyOptions}
+                                                    />
+                                                </Grid>
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label="Ward Number"
+                                                        name="wardNumber"
+                                                        type="number"
+                                                        placeholder="Enter Ward Number"
                                                     />
                                                 </Grid>
 
@@ -568,6 +600,15 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                 </Grid>
 
                                                 <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate('IsCelebrities')}
+                                                        name="isCelebrities"
+                                                        type="text"
+                                                        placeholder=""
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
                                                     <Typography variant="h6" style={{ fontSize: "14px", fontWeight: "bold", textAlign: "left" }} gutterBottom>{translate('Picture of the location')}</Typography>
                                                     <div className='d-flex'>
                                                         <Button className='mx-2' type="button" onClick={() => setisLocationCapturing(true)}>{translate('Capture')}</Button>
@@ -586,7 +627,6 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
                                                     }
 
                                                 </Grid>
-
 
                                             </Grid>}
                                         </div>

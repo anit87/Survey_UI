@@ -34,7 +34,7 @@
     "EducationDetails.LiterateNoFormal": "ಅಕ್ಷರಸ್ಥರು ಆದರೆ ಔಪಾಚಾರಿಕ ಶಿಕ್ಷಣವಿಲ್ಲ (0-4 ವರ್ಷ)",
     "EducationDetails.School59": "ಶಾಲೆ (5-9 ವರ್ಷ)",
     "EducationDetails.SSC/HSC": "ಪ್ರೌಡಶಾಲೆ (SSC/HSC)",
-    "EducationDetails.Undergraduate": "ಪದವಿಪೂರ್ವ ",
+    "EducationDetails.Graduate": "ಪದವಿಧರ",
     "EducationDetails.Postgraduate": "ಸ್ನಾತಕೋತ್ತರ  ಪದವಿ ",
     "EducationDetails.Professional": "ವೃತ್ತಿಪರ (ವಕೀಲ / ವೈದ್ಯರು / ಇತ್ಯಾದಿ )",
     "Caste": "ಜಾತಿ *",
@@ -96,5 +96,6 @@
     "NameOfTheEstablishment": "ಸ್ಥಾಪನೆಯ ಹೆಸರು",
     "TypeOfEstablishment": "ಸ್ಥಾಪನೆಯ ಪ್ರಕಾರ",
     "NatureOfBusiness": "ವ್ಯವಹಾರದ ಸ್ವರೂಪ",
-    "ContactPersonName": "ವ್ಯಕ್ತಿಯ ಹೆಸರು ಸಂಪರ್ಕಿಸಿ"
+    "ContactPersonName": "ವ್ಯಕ್ತಿಯ ಹೆಸರು ಸಂಪರ್ಕಿಸಿ",
+    "IsCelebrities": "ಕುಟುಂಬದಲ್ಲಿ ಸೆಲೆಬ್ರಿಟಿಗಳು, ಪ್ರಭಾವಿಗಳು, ಕ್ರೀಡಾಪಟುಗಳು ಇದ್ದಾರೆಯೇ?"
 }

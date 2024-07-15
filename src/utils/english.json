@@ -34,7 +34,7 @@
     "EducationDetails.LiterateNoFormal": "Literate but no formal education (0-4 years)",
     "EducationDetails.School59": "School 5-9 years",
     "EducationDetails.SSC/HSC": "SSC/HSC",
-    "EducationDetails.Undergraduate": "Undergraduate",
+    "EducationDetails.Graduate": "Graduate",
     "EducationDetails.Postgraduate": "Postgraduate",
     "EducationDetails.Professional": "Professional (Lawyer, Doctor, CA)",
     "Caste": "Caste *",
@@ -96,5 +96,6 @@
     "NameOfTheEstablishment": "Name of the establishment",
     "TypeOfEstablishment": "Type of establishment",
     "NatureOfBusiness": "Nature of business",
-    "ContactPersonName": "Contact person name"
+    "ContactPersonName": "Contact person name",
+    "IsCelebrities": "Is there any celebrities, influencers, sports persons in the family?"
 }

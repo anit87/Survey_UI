@@ -43,6 +43,7 @@ const commercialCells = [
     { label: 'Establishment Type' },
     { label: 'Business Nature' },
     { label: 'Contact person' },
+    { label: 'Contact Number' },
     { label: 'Created Date' },
     { label: '' }
 ]
@@ -324,7 +325,7 @@ export default function SurveyForms() {
                                                 {parseInt(i) + 1}
                                             </TableCell>
                                             <TableCell component="th" scope="row">
-                                                {mode === modes.residential ? row.respondentName : row.establishmentName}
+                                                {mode === modes.residential ? row.respondentName : (row.establishmentName || 'N/A')}
                                             </TableCell>
                                             <TableCell style={{ width: 160 }}>
                                                 {
@@ -335,14 +336,19 @@ export default function SurveyForms() {
                                                 }
                                             </TableCell>
                                             <TableCell style={{ width: 160 }}>
-                                                {mode === modes.residential ? row.pincode : row.natureOfBusiness}
+                                                {mode === modes.residential ? row.pincode : (row.natureOfBusiness || 'N/A')}
                                             </TableCell>
                                             <TableCell style={{ width: 160 }}>
-                                                {mode === modes.residential ? (row.maritalStatus === 1 ? "Single" : "Married") : row.contactPerson}
+                                                {mode === modes.residential ? (row.maritalStatus === 1 ? "Single" : "Married") : (row.contactPerson || 'N/A')}
                                             </TableCell>
                                             {(userDetail.userRole != '3' && userDetail.userRole != '2') &&
                                                 <TableCell style={{ width: 160 }}>
                                                     {capitalizeFirstLetter(row?.filledBy?.displayName) || "Admin"}
+                                                </TableCell>
+                                            }
+                                            {mode === modes.commercial &&
+                                                <TableCell style={{ width: 160 }}>
+                                                    {row.contactNumber || 'N/A'}
                                                 </TableCell>
                                             }
                                             <TableCell>

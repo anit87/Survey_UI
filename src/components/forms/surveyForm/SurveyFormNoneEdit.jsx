@@ -5,7 +5,7 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput';
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import DataTable from '../../dataGrid/DataTable';
-import { generategovernmentSchemesOptions, generateVotedLastElectionOptions, generatecategoryOptions, generatereligionOptions, generateCasteOptions, generateIncomeOptions, occupationOptios, generateEducationalOptions, generateTrueFalseOptions, generateageOptions } from '../../../utils/constants';
+import { generategovernmentSchemesOptions, generateVotedLastElectionOptions, generatecategoryOptions, generatereligionOptions, generateCasteOptions, generateIncomeOptions, occupationOptios, generateEducationalOptions, generateTrueFalseOptions, generateageOptions, constituencyOptions } from '../../../utils/constants';
 import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
 
@@ -96,51 +96,6 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                         />
                                     </Grid>
 
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label={translate('MaritalStatus')}
-                                            title="Are You Married?"
-                                            id="maritalStatus"
-                                            name="maritalStatus"
-                                            options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail ? formsDetail?.maritalStatus == 1 ? translate('Single') : translate("Married") : ""}
-                                        />
-                                    </Grid>
-
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label={translate('OccupationStatus')}
-                                            title="Can You Please Tell Me Your Occupation Status?"
-                                            id="occupationStatus"
-                                            name="occupationStatus"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={translate(occupationOptios.find(option => option.value == (formsDetail?.occupationStatus || "")).label)}
-                                        />
-                                    </Grid>
-
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label={translate('MHI')}
-                                            title="What is the Monthly Household Income (MHI)."
-                                            id="monthlyHouseholdIncome"
-                                            name="monthlyHouseholdIncome"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={incomeOptions.find(option => option.value == (formsDetail?.monthlyHouseholdIncome || "")).label}
-                                        />
-                                    </Grid>
-
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label={translate('OwnProperty')}
-                                            title="Is This Your Own Property?"
-                                            name="isOwnProperty"
-                                            id="isOwnProperty"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail?.isOwnProperty ? "Yes" : formsDetail?.isOwnProperty == 1 ? "Yes" : "No"}
-                                        />
-                                    </Grid>
-
                                     {formsDetail?.location && <Grid item md={6} xs={12}>
                                         <TextInput
                                             label={translate("Location")}
@@ -211,46 +166,94 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                     }
                                 </Grid>}
 
-                                {activeStep === 2 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label={translate('RegisteredVoter')}
-                                            title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
-                                            name="registeredVoter"
-                                            id="registeredVoter"
-                                            options={trueFalseOptions}
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail?.registeredVoter == true ? translate("Yes") : translate("No")}
-                                        />
-                                    </Grid>
-                                    <Grid item md={6} xs={12}>
-                                        <TextInput
-                                            label={translate("VoterID")}
-                                            name="voterIdNumber"
-                                            type="number"
-                                            placeholder="Please Provide Your Voter ID Number"
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail?.voterIdNumber || "N/A"}
-                                        />
+                                {activeStep === 2 &&
+                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                        <Grid item md={6} xs={12}>
+                                            <SelectInput
+                                                label={translate('RegisteredVoter')}
+                                                title="Are You a Registered Voter in This Assembly Constituency, i.e. Is Your Name Listed in the Voters List?"
+                                                name="registeredVoter"
+                                                id="registeredVoter"
+                                                options={trueFalseOptions}
+                                                editable={Boolean(formsDetail)}
+                                                textValue={formsDetail?.registeredVoter == true ? translate("Yes") : translate("No")}
+                                            />
+                                        </Grid>
 
-                                        <SmallImageCard
-                                            imageUrl={`${apiUrl}/uploads/${formsDetail?.voterIdImage || "Voter_Id_Image/no-image.png"}`}
-                                            onClick={() => window.open(`${apiUrl}/uploads/${formsDetail?.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
-                                        />
-                                    </Grid>
+                                        <Grid item md={6} xs={12}>
+                                            <SelectInput
+                                                label={translate('votedLastElection')}
+                                                name="votedLastElection"
+                                                id="votedLastElection"
+                                                options={votedLastElectionOptions}
+                                                editable={Boolean(formsDetail)}
+                                                textValue={formsDetail?.votedLastElection ? votedLastElectionOptions?.find(option => option.value == formsDetail?.votedLastElection)?.label : 'N/A'}
+                                            />
+                                        </Grid>
 
-                                    <Grid item md={6} xs={12}>
-                                        <SelectInput
-                                            label={translate('votedLastElection')}
-                                            name="votedLastElection"
-                                            id="votedLastElection"
-                                            options={votedLastElectionOptions}
-                                            editable={Boolean(formsDetail)}
-                                            textValue={formsDetail?.votedLastElection ? votedLastElectionOptions?.find(option => option.value == formsDetail?.votedLastElection)?.label : 'N/A'}
-                                        />
-                                    </Grid>
+                                        <Grid item md={6} xs={12}>
+                                            <SelectInput
+                                                label={translate('MaritalStatus')}
+                                                title="Are You Married?"
+                                                id="maritalStatus"
+                                                name="maritalStatus"
+                                                options={[{ label: translate('Single'), value: "1" }, { label: translate('Married'), value: "2" }]}
+                                                editable={Boolean(formsDetail)}
+                                                textValue={formsDetail ? formsDetail?.maritalStatus == 1 ? translate('Single') : translate("Married") : ""}
+                                            />
+                                        </Grid>
 
-                                </Grid>}
+                                        <Grid item md={6} xs={12}>
+                                            <SelectInput
+                                                label={translate('OccupationStatus')}
+                                                title="Can You Please Tell Me Your Occupation Status?"
+                                                id="occupationStatus"
+                                                name="occupationStatus"
+                                                editable={Boolean(formsDetail)}
+                                                textValue={translate(occupationOptios.find(option => option.value == (formsDetail?.occupationStatus || "")).label)}
+                                            />
+                                        </Grid>
+
+                                        <Grid item md={6} xs={12}>
+                                            <SelectInput
+                                                label={translate('MHI')}
+                                                title="What is the Monthly Household Income (MHI)."
+                                                id="monthlyHouseholdIncome"
+                                                name="monthlyHouseholdIncome"
+                                                editable={Boolean(formsDetail)}
+                                                textValue={incomeOptions.find(option => option.value == (formsDetail?.monthlyHouseholdIncome || "")).label}
+                                            />
+                                        </Grid>
+
+                                        <Grid item md={6} xs={12}>
+                                            <SelectInput
+                                                label={translate('OwnProperty')}
+                                                title="Is This Your Own Property?"
+                                                name="isOwnProperty"
+                                                id="isOwnProperty"
+                                                editable={Boolean(formsDetail)}
+                                                textValue={formsDetail?.isOwnProperty ? "Yes" : formsDetail?.isOwnProperty == 1 ? "Yes" : "No"}
+                                            />
+                                        </Grid>
+
+                                        <Grid item md={6} xs={12}>
+                                            <TextInput
+                                                label={translate("VoterID")}
+                                                name="voterIdNumber"
+                                                type="number"
+                                                placeholder="Please Provide Your Voter ID Number"
+                                                editable={Boolean(formsDetail)}
+                                                textValue={formsDetail?.voterIdNumber || "N/A"}
+                                            />
+
+                                            <SmallImageCard
+                                                imageUrl={`${apiUrl}/uploads/${formsDetail?.voterIdImage || "Voter_Id_Image/no-image.png"}`}
+                                                onClick={() => window.open(`${apiUrl}/uploads/${formsDetail?.voterIdImage || "Voter_Id_Image/no-image.png"}`, '_blank')}
+                                            />
+                                        </Grid>
+
+                                    </Grid>
+                                }
 
                                 {activeStep === 3 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                                     <Grid item md={6} xs={12}>
@@ -303,6 +306,33 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             name="weddingDate"
                                             editable={Boolean(formsDetail)}
                                             textValue={formsDetail?.weddingDate ? formsDetail?.weddingDate?.slice(0, 10) : 'N/A'}
+                                        />
+                                    </Grid>
+
+                                    <Grid item md={6} xs={12}>
+                                        <TextInput
+                                            label="Booth Number"
+                                            name="boothNumber"
+                                            editable={Boolean(formsDetail)}
+                                            textValue={formsDetail?.boothNumber ? formsDetail?.boothNumber : 'N/A'}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} xs={12}>
+                                        <SelectInput
+                                            label="Constituency"
+                                            title="Choose Constituency"
+                                            name="constituency"
+                                            id="constituency"
+                                            editable={Boolean(formsDetail)}
+                                            textValue={constituencyOptions.find(option => option.value == formsDetail?.constituency).label}
+                                        />
+                                    </Grid>
+                                    <Grid item md={6} xs={12}>
+                                        <TextInput
+                                            label="Ward Number"
+                                            name="wardNumber"
+                                            editable={Boolean(formsDetail)}
+                                            textValue={formsDetail?.wardNumber ? formsDetail?.wardNumber : 'N/A'}
                                         />
                                     </Grid>
 

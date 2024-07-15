@@ -85,9 +85,6 @@ const CreateUser = () => {
         password: '',
         confirmPassword: '',
         phoneNumber: id ? singleUser.phoneNumber : '',
-        boothNumber: id ? singleUser.boothNumber : '',
-        constituency: id ? singleUser?.constituency : '',
-        wardNumber: id ? singleUser.wardNumber : '',
         userRole: id ? singleUser.userRole : "2",
         reportingAgent: ""
     }
@@ -209,37 +206,6 @@ const CreateUser = () => {
                                             />
                                         </Grid>
                                     )}
-
-
-                                    {((userRole === 'admin' && formik.values.userRole === '3') || userRole === '2') &&
-                                        <>
-                                            <Grid item md={6} xs={12}>
-                                                <TextInput
-                                                    label="Booth Number"
-                                                    name="boothNumber"
-                                                    type="text"
-                                                    placeholder="Enter Booth Number"
-                                                />
-                                            </Grid>
-                                            <Grid item md={6} xs={12}>
-                                                <SelectInput
-                                                    label="Constituency"
-                                                    title="Choose Constituency"
-                                                    name="constituency"
-                                                    id="constituency"
-                                                    options={constituencyOptions}
-                                                />
-                                            </Grid>
-                                            <Grid item md={6} xs={12}>
-                                                <TextInput
-                                                    label="Ward Number"
-                                                    name="wardNumber"
-                                                    type="number"
-                                                    placeholder="Enter Ward Number"
-                                                />
-                                            </Grid>
-                                        </>
-                                    }
                                 </Grid>
                                 <Button variant='contained' type='submit' sx={{ mt: 3, mb: 2, mr: 2 }} >{id ? "Update" : "Create"}</Button>
                                 <Button variant='contained' type='button' onClick={() => navigate("/allusers")} sx={{ mt: 3, mb: 2 }} >Cancel</Button>

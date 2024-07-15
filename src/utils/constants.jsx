@@ -104,7 +104,7 @@ export const generateEducationalOptions = (t) => [
         value: 4
     },
     {
-        label: t("EducationDetails.Undergraduate"),
+        label: t("EducationDetails.Graduate"),
         value: 5
     },
     {

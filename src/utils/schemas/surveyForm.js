@@ -1,4 +1,14 @@
-import * as Yup from 'yup'
+import * as Yup from 'yup';
+
+export const commercialFormSchema = Yup.object().shape({
+    establishmentName: Yup.string(),
+    establishmentType: Yup.string()
+        .required('Type Of Establishment is a required'),
+    natureOfBusiness: Yup.string(),
+    contactPerson: Yup.string(),
+    contactNumber: Yup.string()
+        .length(10, 'Contact number must be 10 characters'),
+});
 
 export const surveyFormSchema = Yup.object().shape({
     respondentName: Yup.string()
@@ -79,15 +89,6 @@ export const surveyFormSchemaStep0 = Yup.object().shape({
     mobileNo: Yup.string()
         .length(10, 'Mobile Number must be 10 characters')
         .required('Mobile Number is required'),
-    isOwnProperty: Yup.string()
-        .required('Please enter the required value.'),
-    maritalStatus: Yup.string()
-        .required('Please enter the required value.'),
-    occupationStatus: Yup.string()
-        .required('Please enter the required value.'),
-    monthlyHouseholdIncome: Yup.string()
-        .required('Please enter the required value.'),
-
 });
 export const surveyFormSchemaStep1 = Yup.object().shape({
     respondentName: Yup.string()
@@ -100,14 +101,6 @@ export const surveyFormSchemaStep1 = Yup.object().shape({
     mobileNo: Yup.string()
         .length(10, 'Mobile Number must be 10 characters')
         .required('Mobile Number is required'),
-    isOwnProperty: Yup.string()
-        .required('Please enter the required value.'),
-    maritalStatus: Yup.string()
-        .required('Please enter the required value.'),
-    occupationStatus: Yup.string()
-        .required('Please enter the required value.'),
-    monthlyHouseholdIncome: Yup.string()
-        .required('Please enter the required value.'),
     totalMembers: Yup.number()
         .required('Please enter the required value.'),
     religion: Yup.string()

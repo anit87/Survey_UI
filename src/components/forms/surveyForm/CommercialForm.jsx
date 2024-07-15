@@ -12,6 +12,7 @@ import { useLanguageData } from '../../../utils/LanguageContext';
 import { generateEstablishmentOptions } from '../../../utils/constants';
 import Loader from '../../loader';
 import { usePostcomercialFormMutation } from '../../../features/auth/commercial';
+import { commercialFormSchema } from '../../../utils/schemas/surveyForm';
 
 const apiUrl = import.meta.env.VITE_API_URL + '/commercial/getForm';
 
@@ -32,6 +33,7 @@ const CommercialForm = () => {
         establishmentType: formsDetail ? formsDetail.establishmentType : '',
         natureOfBusiness: formsDetail ? formsDetail.natureOfBusiness : '',
         contactPerson: formsDetail ? formsDetail.contactPerson : '',
+        contactNumber: formsDetail ? formsDetail.contactNumber : '',
     }
 
     const alertfn = () => {
@@ -67,6 +69,7 @@ const CommercialForm = () => {
                 <Box sx={{ height: '100%', mt: 1 }} >
                     <Formik
                         initialValues={initialValues}
+                        validationSchema={commercialFormSchema}
                         onSubmit={async (values, { setSubmitting, resetForm, setFieldError }) => {
                             try {
                                 setSubmitting(true);
@@ -91,6 +94,7 @@ const CommercialForm = () => {
                                     setFieldValue("establishmentType", formsDetail?.establishmentType);
                                     setFieldValue("natureOfBusiness", formsDetail?.natureOfBusiness);
                                     setFieldValue("contactPerson", formsDetail?.contactPerson);
+                                    setFieldValue("contactNumber", formsDetail?.contactNumber);
                                     setFieldValue("formId", formId);
                                 }
                             }, [formId, formsDetail, setFieldValue]);
@@ -133,6 +137,15 @@ const CommercialForm = () => {
                                                         label={translate('ContactPersonName')}
                                                         name="contactPerson"
                                                         type="text"
+                                                        placeholder="Contact Person Name"
+                                                    />
+                                                </Grid>
+
+                                                <Grid item md={6} xs={12}>
+                                                    <TextInput
+                                                        label={translate('contactNumber')}
+                                                        name="contactNumber"
+                                                        type="number"
                                                         placeholder="Contact Person Name"
                                                     />
                                                 </Grid>
