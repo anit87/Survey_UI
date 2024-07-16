@@ -20,7 +20,7 @@ export const generateVotedLastElectionOptions = (translate) => [
         value: 0
     },
     {
-        label: translate("Caste.Prefernottosay"),
+        label: translate("PreferNotToSay"),
         value: 2
     }
 ]
@@ -174,13 +174,13 @@ export const generateCasteOptions = (t) => [
     { label: t("Caste.ST"), value: 6 },
     { label: t("Caste.OBC"), value: 7 },
     { label: t("Caste.Others"), value: 8 },
-    { label: t("Caste.Prefernottosay"), value: 9 }
+    { label: t("PreferNotToSay"), value: 9 }
 ]
 
 export const generateConstituencyOptions = (t) => [
     { label: t("Govindraj Nagar"), value: 1 },
     { label: t("Vijay Nagar"), value: 2 },
-    { label: t("Caste.Prefernottosay"), value: 3 },
+    { label: t("PreferNotToSay"), value: 3 },
 ]
 
 export const generateEstablishmentOptions = (t) => [

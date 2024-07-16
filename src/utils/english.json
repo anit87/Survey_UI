@@ -46,7 +46,7 @@
     "Caste.ST": "ST",
     "Caste.OBC": "OBC",
     "Caste.Others": "Others",
-    "Caste.Prefernottosay": "Prefer not to say.",
+    "PreferNotToSay": "Prefer not to say.",
     "RegisteredVoter": "Is The Applicant A Registered Voter In This Assembly Constituency *",
     "VoterID": "Voter ID",
     "VoterIDPlaceholder": "Please Provide Your Voter ID Number",
