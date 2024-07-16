@@ -12,7 +12,6 @@ import { fetchAuthData } from '../../features/auth/authSlice';
 import { verifyUser } from '../../utils/functions/verifyUser';
 import { signUpSchema, updateUserSchema } from "../../utils/schemas/auth";
 import { userToUpdate as userToUpdateAction } from '../../features/auth/authSlice';
-import { constituencyOptions } from '../../utils/constants';
 
 const apiUrl = `/auth/signup`;
 const serverURL = import.meta.env.VITE_API_URL + '/users';

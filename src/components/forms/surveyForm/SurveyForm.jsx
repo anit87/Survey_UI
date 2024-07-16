@@ -27,7 +27,7 @@ import {
     generatecategoryOptions,
     generateCasteOptions,
     generatereligionOptions,
-    constituencyOptions,
+    generateConstituencyOptions,
     generateVotedLastElectionOptions
 } from '../../../utils/constants';
 import Loader from '../../loader';
@@ -68,6 +68,7 @@ const SurveyForm = ({ activeStep, setActiveStep, formsDetail = null, formId = nu
     const educationalOptions = generateEducationalOptions(translate);
     const casteOptions = generateCasteOptions(translate);
     const religionOptions = generatereligionOptions(translate);
+    const constituencyOptions = generateConstituencyOptions(translate);
     const governmentSchemesOptions = generategovernmentSchemesOptions(translate);
     const ageOptions = generateageOptions(translate);
     const categoryOptions = generatecategoryOptions(translate);

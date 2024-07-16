@@ -5,9 +5,21 @@ import TextInput from '../../inputs/TextInput';
 import SelectInput from '../../inputs/SelectInput';
 import { verifyUser } from '../../../utils/functions/verifyUser';
 import DataTable from '../../dataGrid/DataTable';
-import { generategovernmentSchemesOptions, generateVotedLastElectionOptions, generatecategoryOptions, generatereligionOptions, generateCasteOptions, generateIncomeOptions, occupationOptios, generateEducationalOptions, generateTrueFalseOptions, generateageOptions, constituencyOptions } from '../../../utils/constants';
 import SmallImageCard from '../../SmallImageCard';
 import { useLanguageData } from '../../../utils/LanguageContext';
+import {
+    generategovernmentSchemesOptions,
+    generateVotedLastElectionOptions,
+    generatecategoryOptions,
+    generatereligionOptions,
+    generateCasteOptions,
+    generateIncomeOptions,
+    occupationOptios,
+    generateEducationalOptions,
+    generateTrueFalseOptions,
+    generateageOptions,
+    generateConstituencyOptions
+} from '../../../utils/constants';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -20,6 +32,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
     const religionOptions = generatereligionOptions(translate);
     const governmentSchemesOptions = generategovernmentSchemesOptions(translate);
     const ageOptions = generateageOptions(translate);
+    const constituencyOptions = generateConstituencyOptions(translate);
     const categoryOptions = generatecategoryOptions(translate);
     const votedLastElectionOptions = generateVotedLastElectionOptions(translate);
 
@@ -324,7 +337,7 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
                                             name="constituency"
                                             id="constituency"
                                             editable={Boolean(formsDetail)}
-                                            textValue={constituencyOptions.find(option => option.value == formsDetail?.constituency).label}
+                                            textValue={constituencyOptions?.find(option => option.value == formsDetail?.constituency)?.label}
                                         />
                                     </Grid>
                                     <Grid item md={6} xs={12}>
@@ -339,9 +352,21 @@ const SurveyForm = ({ activeStep, formId, formsDetail }) => {
 
                                 </Grid>}
 
-                                {activeStep === 4 && <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                                    <DataTable formsDetail={formsDetail?.ageGroupOfMembers} />
-                                </Grid>}
+                                {activeStep === 4 &&
+                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                                        <Grid item md={6} xs={12}>
+                                            <TextInput
+                                                label='Is there any celebrities, influencers, sports persons in the family?'
+                                                name="isCelebrities"
+                                                editable={Boolean(formsDetail)}
+                                                textValue={formsDetail?.isCelebrities ? formsDetail?.isCelebrities : 'N/A'}
+                                            />
+                                        </Grid>
+                                        
+                                        <DataTable formsDetail={formsDetail?.ageGroupOfMembers} />
+
+                                    </Grid>
+                                }
 
                             </Form>
                         )}

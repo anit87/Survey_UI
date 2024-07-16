@@ -177,9 +177,10 @@ export const generateCasteOptions = (t) => [
     { label: t("Caste.Prefernottosay"), value: 9 }
 ]
 
-export const constituencyOptions = [
-    { label: "Govindraj Nagar", value: 1 },
-    { label: "Vijay Nagar", value: 2 }
+export const generateConstituencyOptions = (t) => [
+    { label: t("Govindraj Nagar"), value: 1 },
+    { label: t("Vijay Nagar"), value: 2 },
+    { label: t("Caste.Prefernottosay"), value: 3 },
 ]
 
 export const generateEstablishmentOptions = (t) => [
