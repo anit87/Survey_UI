@@ -37,6 +37,7 @@ export const userDashboard = createApi({
             transformResponse: (response, meta, arg) => response,
             transformErrorResponse: (response, meta, arg) => response.data || response.error,
             invalidatesTags: ['Users'],
+            keepUnusedDataFor: 5,
         }),
     }),
 });
