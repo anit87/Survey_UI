@@ -255,7 +255,7 @@ export default function SurveyForms() {
                     >
 
                         <h6 style={{ fontSize: "20px", fontWeight: "bold" }} >Smart Filters</h6>
-                        <Button variant="outlined" onClick={() => setFilterData(initialState)} >Reset</Button>
+                        <Button variant="contained" size='small' onClick={() => setFilterData(initialState)} >Reset</Button>
                     </Stack>
 
                     <Stack
