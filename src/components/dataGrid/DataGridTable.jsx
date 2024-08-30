@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { Stack, FormControl, IconButton, Button } from '@mui/material';
+import { Stack, IconButton, Button } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,10 +13,10 @@ import Pagination from '@mui/material/Pagination';
 
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyUser';
 import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
+import { capitalizeFirstLetter, verifyUser } from '../../utils/functions/verifyUser';
 import DynamicDatePicker from '../inputs/DynamicDatePicker';
 import Loader from '../loader';
 import NoData from '../NoData';
@@ -127,8 +127,6 @@ export default function SurveyForms() {
         limit: rowsPerPage,
         endpoint: mode === modes.residential ? 'users/allrecords' : 'commercial/allrecords'
     });
-    // await getSurveyForms({ ...filterData, endpoint, limit: rowsPerPage, page });
-    // const [getSurveyForms, { isLoading: verifyLoading, data: formsData }] = useGetSurveyFormsQuery();
 
     const incomeOptions = generateIncomeOptions(translate);
     const trueFalseOptions = generateTrueFalseOptions(translate);
@@ -147,15 +145,6 @@ export default function SurveyForms() {
         setUserDetail(user);
         getActiveUsers(user);
     }, [])
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         let endpoint = mode === modes.residential ? 'users/allrecords' : 'commercial'
-    //         await getSurveyForms({ ...filterData, endpoint, limit: rowsPerPage, page });
-    //     };
-
-    //     fetchData();
-    // }, [filterData, mode, page]);
 
     const headers = {
         'Content-Type': 'application/json',
